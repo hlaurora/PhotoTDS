@@ -27,7 +27,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class EntradaOK {
+public class Entrada {
 
 	private JFrame frmEntrada;
 	private JPasswordField passwordField;
@@ -45,7 +45,7 @@ public class EntradaOK {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					EntradaOK window = new EntradaOK();
+					Entrada window = new Entrada();
 					window.frmEntrada.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -57,7 +57,7 @@ public class EntradaOK {
 	/**
 	 * Create the application.
 	 */
-	public EntradaOK() {
+	public Entrada() {
 		initialize();
 	}
 
@@ -90,7 +90,7 @@ public class EntradaOK {
 		
 		JLabel lblPhotoTDS = new JLabel("PhotoTDS");
 		lblPhotoTDS.setForeground(new Color(134, 46, 150));
-		lblPhotoTDS.setIcon(new ImageIcon(EntradaOK.class.getResource("/imagenes/logo.png")));
+		lblPhotoTDS.setIcon(new ImageIcon(Entrada.class.getResource("/imagenes/logo.png")));
 		lblPhotoTDS.setFont(new Font("HP Simplified Hans", Font.PLAIN, 35));
 		panelTitulo.add(lblPhotoTDS);
 	}
@@ -182,7 +182,7 @@ public class EntradaOK {
 			}
 		});*/
 		
-		/*
+		
 		btnCrearCuenta.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -190,7 +190,7 @@ public class EntradaOK {
 				window.frmRegistro.setVisible(true);
 				frmEntrada.dispose();
 			}
-		});*/
+		});
 		
 		btnCrearCuenta.setMaximumSize(new Dimension(350, 40));
 		btnCrearCuenta.setPreferredSize(new Dimension(200, 23));
