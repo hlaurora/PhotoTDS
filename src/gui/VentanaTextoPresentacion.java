@@ -22,7 +22,7 @@ import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class TextoPresentacion {
+public class VentanaTextoPresentacion {
 
 	public JFrame frmPresentacion;
 	public Color Lila = new Color(134, 46, 150);
@@ -48,7 +48,7 @@ public class TextoPresentacion {
 	/**
 	 * Create the application.
 	 */
-	public TextoPresentacion() {
+	public VentanaTextoPresentacion() {
 		initialize();
 	}
 

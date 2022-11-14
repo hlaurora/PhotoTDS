@@ -27,7 +27,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class Entrada {
+public class VentanaEntrada {
 
 	private JFrame frmEntrada;
 	private JPasswordField passwordField;
@@ -45,7 +45,7 @@ public class Entrada {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Entrada window = new Entrada();
+					VentanaEntrada window = new VentanaEntrada();
 					window.frmEntrada.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -57,7 +57,7 @@ public class Entrada {
 	/**
 	 * Create the application.
 	 */
-	public Entrada() {
+	public VentanaEntrada() {
 		initialize();
 	}
 
@@ -90,7 +90,7 @@ public class Entrada {
 		
 		JLabel lblPhotoTDS = new JLabel("PhotoTDS");
 		lblPhotoTDS.setForeground(new Color(134, 46, 150));
-		lblPhotoTDS.setIcon(new ImageIcon(Entrada.class.getResource("/imagenes/logo.png")));
+		lblPhotoTDS.setIcon(new ImageIcon(VentanaEntrada.class.getResource("/imagenes/logo.png")));
 		lblPhotoTDS.setFont(new Font("HP Simplified Hans", Font.PLAIN, 35));
 		panelTitulo.add(lblPhotoTDS);
 	}
@@ -186,7 +186,7 @@ public class Entrada {
 		btnCrearCuenta.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Registro window = new Registro();
+				VentanaRegistro window = new VentanaRegistro();
 				window.frmRegistro.setVisible(true);
 				frmEntrada.dispose();
 			}

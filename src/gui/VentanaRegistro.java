@@ -18,7 +18,7 @@ import javax.swing.border.TitledBorder;
 /*
 @SuppressWarnings("serial")
 public class Registro extends JDialog {*/
-public class Registro {
+public class VentanaRegistro {
 
 	public JFrame frmRegistro;
 	private JTextField textEmail;
@@ -39,7 +39,7 @@ public class Registro {
 		//Registro window = new Registro();
 		//window.frmRegistro.setVisible(true);
 	}*/
-	public Registro(){
+	public VentanaRegistro(){
 		//super("Registro Usuario");
 		//this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		//this.setResizable(false);
@@ -109,7 +109,7 @@ public class Registro {
 		
 		JLabel lblPhotoTDS = new JLabel("PhotoTDS");
 		lblPhotoTDS.setForeground(new Color(134, 46, 150));
-		lblPhotoTDS.setIcon(new ImageIcon(Registro.class.getResource("/imagenes/logo.png")));
+		lblPhotoTDS.setIcon(new ImageIcon(VentanaRegistro.class.getResource("/imagenes/logo.png")));
 		lblPhotoTDS.setFont(new Font("HP Simplified Hans", Font.PLAIN, 35));
 		panelTitulo.add(lblPhotoTDS);
 	}
@@ -282,7 +282,7 @@ public class Registro {
 		btnPresentacion.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				TextoPresentacion window = new TextoPresentacion();
+				VentanaTextoPresentacion window = new VentanaTextoPresentacion();
 				window.frmPresentacion.setVisible(true);
 			}
 		});
