@@ -233,20 +233,21 @@ public class VentanaRegistro {
 		panelDate.add(lblDate);
 		
 		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.setPreferredSize(new Dimension(100, 25));
+		dateChooser.setPreferredSize(new Dimension(115, 23));
 		panelDate.add(dateChooser);
 		
-		JPanel panelFecha = new JPanel();
-		panelFecha.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		GridBagConstraints gbc_panelFecha = new GridBagConstraints();
-		gbc_panelFecha.gridwidth = 4;
-		gbc_panelFecha.insets = new Insets(0, 0, 5, 5);
-		gbc_panelFecha.fill = GridBagConstraints.BOTH;
-		gbc_panelFecha.gridx = 1;
-		gbc_panelFecha.gridy = 7;
-		panelDatos.add(panelFecha, gbc_panelFecha);
+		JPanel panelFoto = new JPanel();
+		panelFoto.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		GridBagConstraints gbc_panelFoto = new GridBagConstraints();
+		gbc_panelFoto.gridwidth = 4;
+		gbc_panelFoto.insets = new Insets(0, 0, 5, 5);
+		gbc_panelFoto.fill = GridBagConstraints.BOTH;
+		gbc_panelFoto.gridx = 1;
+		gbc_panelFoto.gridy = 7;
+		panelDatos.add(panelFoto, gbc_panelFoto);
 		
 		JButton btnElegirFoto = new JButton("+");
+		btnElegirFoto.setPreferredSize(new Dimension(43, 23));
 		btnElegirFoto.setFont(btnFont);
 		btnElegirFoto.setForeground(Lila);
 		btnElegirFoto.addMouseListener(new MouseAdapter() {
@@ -259,8 +260,8 @@ public class VentanaRegistro {
 		
 		JLabel lblAñadirFoto = new JLabel("Añadir foto del usuario(opcional)");
 		lblAñadirFoto.setFont(lblFont);
-		panelFecha.add(lblAñadirFoto);
-		panelFecha.add(btnElegirFoto);
+		panelFoto.add(lblAñadirFoto);
+		panelFoto.add(btnElegirFoto);
 		
 		JPanel panelPresentacion = new JPanel();
 		panelPresentacion.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -272,11 +273,12 @@ public class VentanaRegistro {
 		gbc_panelPresentacion.gridy = 8;
 		panelDatos.add(panelPresentacion, gbc_panelPresentacion);
 		
-		JLabel lblPresentacion = new JLabel("Añadir presentación(opcional)");
+		JLabel lblPresentacion = new JLabel("Añadir presentación (opcional)");
 		lblPresentacion.setFont(lblFont);
 		panelPresentacion.add(lblPresentacion);
 		
 		JButton btnPresentacion = new JButton("...");
+		btnPresentacion.setPreferredSize(new Dimension(50, 23));
 		btnPresentacion.setFont(btnFont);
 		btnPresentacion.setForeground(Lila);
 		btnPresentacion.addMouseListener(new MouseAdapter() {
