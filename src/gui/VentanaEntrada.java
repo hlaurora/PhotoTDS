@@ -7,6 +7,7 @@ import java.awt.Font;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -22,10 +23,12 @@ import java.awt.Component;
 import javax.swing.Box;
 import javax.swing.border.EtchedBorder;
 
+import controlador.Controlador;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class VentanaEntrada {
 
@@ -153,6 +156,7 @@ public class VentanaEntrada {
 		gbc_btnIniciarSesion.gridx = 1;
 		gbc_btnIniciarSesion.gridy = 5;
 		panelInicioSesion.add(btnIniciarSesion, gbc_btnIniciarSesion);
+		addManejadorBotonIniciarSesion(btnIniciarSesion);
 	}
 	
 	private void crearPanelSur() {
@@ -172,26 +176,7 @@ public class VentanaEntrada {
 		Component rigidArea_2 = Box.createRigidArea(new Dimension(20, 20));
 		panelSur.add(rigidArea_2);
 		
-		JButton btnCrearCuenta = new JButton("Crear una cuenta");
-		/*
-		btnCrearCuenta.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Registro window = new Registro();
-				window.frmRegistro.setVisible(true);
-				frmEntrada.dispose();
-			}
-		});*/
-		
-		
-		btnCrearCuenta.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				VentanaRegistro window = new VentanaRegistro();
-				window.frmRegistro.setVisible(true);
-				frmEntrada.dispose();
-			}
-		});
-		
+		JButton btnCrearCuenta = new JButton("Crear una cuenta");				
 		btnCrearCuenta.setMaximumSize(new Dimension(350, 40));
 		btnCrearCuenta.setPreferredSize(new Dimension(200, 23));
 		btnCrearCuenta.setSize(new Dimension(500, 23));
@@ -200,8 +185,41 @@ public class VentanaEntrada {
 		btnCrearCuenta.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panelSur.add(btnCrearCuenta);
 		
+		addManejadorBotonCrearCuenta(btnCrearCuenta);
+		
 		Component rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
 		panelSur.add(rigidArea_1);	
 	}
+	
+	private void addManejadorBotonIniciarSesion(JButton btnIniciarSesion) {
+		btnIniciarSesion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				boolean registrado = Controlador.getUnicaInstancia().loginUsuario(
+						textEmail.getText(), 
+						new String (passwordField.getPassword()));
+				if (registrado) {
+					//VENTANA PRINCIPAL
+				} else
+					JOptionPane.showMessageDialog(frmEntrada, "Nombre de usuario o contraseña no válido",
+							"Error", JOptionPane.ERROR_MESSAGE);
+			
+			}
+		});
+	}
+	
+	private void addManejadorBotonCrearCuenta(JButton btnCrearCuenta) {
+		//btnCrearCuenta.addMouseListener(new MouseAdapter() {
+		btnCrearCuenta.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			//public void mouseClicked(MouseEvent e) {
+				VentanaRegistro window = new VentanaRegistro();
+				window.frmRegistro.setVisible(true);
+				frmEntrada.dispose();
+			}
+		});
+	}
+	
+	
 	
 }

@@ -1,7 +1,5 @@
 package gui;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -11,8 +9,6 @@ import java.awt.Color;
 
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
-import javax.swing.BoxLayout;
-import java.awt.Component;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;

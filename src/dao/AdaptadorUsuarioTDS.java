@@ -41,6 +41,8 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		
 		Propiedad nombre = new Propiedad("nombre", usuario.getNombre());
 		Propiedad email = new Propiedad("email", usuario.getEmail());
+		Propiedad password = new Propiedad("password", usuario.getPassword());
+		Propiedad login = new Propiedad("login", usuario.getLogin());	
 		Propiedad nombreCompleto = new Propiedad("nombreCompleto", usuario.getNombreCompleto());
 		Propiedad fechaNaci = new Propiedad("fechaNacimiento", usuario.getFechaNacimiento().toString());
 
@@ -68,6 +70,10 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 				p.setValor(usuario.getNombre());
 			} else if(p.getNombre().equals("email")) {
 				p.setValor(usuario.getEmail());
+			} else if(p.getNombre().equals("password")) {
+				p.setValor(usuario.getPassword());
+			} else if(p.getNombre().equals("login")) {
+				p.setValor(usuario.getLogin());
 			} else if(p.getNombre().equals("nombreCompleto")) {
 				p.setValor(usuario.getNombreCompleto());
 			}
@@ -85,6 +91,8 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		Entidad eUsuario;
 		String nombre;
 		String email;
+		String password;
+		String login;
 		String nombreCompleto;
 		LocalDate fechaNaci;
 		
@@ -93,9 +101,11 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		//Recuperar propiedades
 		nombre = servPersistencia.recuperarPropiedadEntidad(eUsuario, "nombre");
 		email = servPersistencia.recuperarPropiedadEntidad(eUsuario, "email");
+		password = servPersistencia.recuperarPropiedadEntidad(eUsuario, "password");
+		login = servPersistencia.recuperarPropiedadEntidad(eUsuario, "login");
 		nombreCompleto = servPersistencia.recuperarPropiedadEntidad(eUsuario, "nombreCompleto");
 		fechaNaci = LocalDate.parse(servPersistencia.recuperarPropiedadEntidad(eUsuario, "fechaNaci"));
-		Usuario usuario = new Usuario(nombre, email, nombreCompleto, fechaNaci);
+		Usuario usuario = new Usuario(nombre, email, password, login, nombreCompleto, fechaNaci);
 		
 		usuario.setId(id);
 		

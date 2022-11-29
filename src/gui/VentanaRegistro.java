@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.EventQueue;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -10,8 +9,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+//import java.util.Date;
 
 
 import javax.swing.*;
@@ -241,7 +239,7 @@ public class VentanaRegistro {
 		panelDate.add(dateChooser);
 		
 		//-----
-		Date date = dateChooser.getDate(); 
+		//Date date = dateChooser.getDate(); 
 		//SimpleDateFormat df = SimpleDateFormat.getDateInstance(); 
 		//.setText(df.format(date, lblDate, 0)); 
 		

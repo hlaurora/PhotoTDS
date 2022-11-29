@@ -26,11 +26,37 @@ public class Controlador {
 		return unicaInstancia;
 	}
 	
-	public void registrarUsuario(String nombre, String email, String nombreCompleto, LocalDate fechaNaci) {
-		Usuario usuario = new Usuario(nombre, email, nombreCompleto, fechaNaci);
+	public boolean esUsuarioRegistrado(String login) {
+		return RepoUsuarios.getUnicaInstancia().getUsuario(login) != null;
+	}
+	
+	public boolean loginUsuario(String nombre, String password) {
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombre);
+		if (u != null && u.getPassword().equals(password)) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean registrarUsuario(String nombre, String email, String password, String login, String nombreCompleto, LocalDate fechaNaci) {
+		
+		if (esUsuarioRegistrado(nombre))
+			return false;
+		
+		Usuario usuario = new Usuario(nombre, email, password, login, nombreCompleto, fechaNaci);
 		adaptadorUsuario.registrarUsuario(usuario);
 		repoUsuarios.addUsuario(usuario);
+		return true;
 	}
+	
+	/*
+	public boolean borrarUsuario(Usuario u) {
+		if (!esUsuarioRegistrado(u.getNombre()))
+			return false;
+		UsuarioDAO usuarioDAO = 
+		
+		return true;
+	}*/
 	
 	
 	
