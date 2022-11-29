@@ -27,12 +27,10 @@ import controlador.Controlador;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class VentanaEntrada {
 
-	private JFrame frmEntrada;
+	public JFrame frmEntrada;
 	private JPasswordField passwordField;
 	private JTextField textEmail;
 	private JButton btnIniciarSesion;
@@ -44,6 +42,7 @@ public class VentanaEntrada {
 	/**
 	 * Launch the application.
 	 */
+	/*
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -56,7 +55,7 @@ public class VentanaEntrada {
 			}
 		});
 	}
-
+*/
 	/**
 	 * Create the application.
 	 */
@@ -198,11 +197,11 @@ public class VentanaEntrada {
 						textEmail.getText(), 
 						new String (passwordField.getPassword()));
 				if (registrado) {
+					System.out.println("Registrado");
 					//VENTANA PRINCIPAL
-				} else
+				} else 
 					JOptionPane.showMessageDialog(frmEntrada, "Nombre de usuario o contraseña no válido",
-							"Error", JOptionPane.ERROR_MESSAGE);
-			
+							"Error", JOptionPane.ERROR_MESSAGE);			
 			}
 		});
 	}
