@@ -1,6 +1,6 @@
 package dominio;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Usuario {
 
@@ -8,10 +8,10 @@ public class Usuario {
 	private String nombre;
 	private String email;
 	private String nombreCompleto;
-	private Date fechaNacimiento;
+	private LocalDate fechaNacimiento;
 	private Boolean isPremium;
 	
-	public Usuario(String nombre, String email, String nombreCompleto, Date fechaNacimiento)
+	public Usuario(String nombre, String email, String nombreCompleto, LocalDate fechaNacimiento)
 	{
 		this.nombre = nombre;
 		this.email = email;
@@ -52,11 +52,11 @@ public class Usuario {
 		this.nombreCompleto = nombreCompleto;
 	}
 
-	public Date getFechaNacimiento() {
+	public LocalDate getFechaNacimiento() {
 		return fechaNacimiento;
 	}
 
-	public void setFechaNacimiento(Date fechaNacimiento) {
+	public void setFechaNacimiento(LocalDate fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
 

@@ -1,8 +1,9 @@
 package dao;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import beans.Entidad;
@@ -85,7 +86,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		String nombre;
 		String email;
 		String nombreCompleto;
-		Date fechaNaci;
+		LocalDate fechaNaci;
 		
 		eUsuario = servPersistencia.recuperarEntidad(id);
 		
@@ -93,15 +94,24 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		nombre = servPersistencia.recuperarPropiedadEntidad(eUsuario, "nombre");
 		email = servPersistencia.recuperarPropiedadEntidad(eUsuario, "email");
 		nombreCompleto = servPersistencia.recuperarPropiedadEntidad(eUsuario, "nombreCompleto");
-		fechaNaci = servPersistencia.recuperarPropiedadEntidad(eUsuario, "fechaNaci");
-		
+		fechaNaci = LocalDate.parse(servPersistencia.recuperarPropiedadEntidad(eUsuario, "fechaNaci"));
 		Usuario usuario = new Usuario(nombre, email, nombreCompleto, fechaNaci);
 		
+		usuario.setId(id);
+		
+		//añadirlo al pool
+		PoolDAO.getUnicaInstancia().addObjeto(id, usuario);
 		
 		return usuario;
 	}
 	
 	public List<Usuario> recuperarTodosUsuarios(){
+		List<Entidad> eUsuarios = servPersistencia.recuperarEntidades("usuario");
+		List<Usuario> usuarios = new LinkedList<Usuario>();
+		
+		for (Entidad eUsuario : eUsuarios) {
+			usuarios.add(recuperarUsuario(eUsuario.getId()));
+		}
 		
 		return usuarios;
 	}

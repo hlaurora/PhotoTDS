@@ -10,6 +10,9 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 import javax.swing.*;
 import com.toedter.calendar.JDateChooser;
@@ -233,8 +236,14 @@ public class VentanaRegistro {
 		panelDate.add(lblDate);
 		
 		JDateChooser dateChooser = new JDateChooser();
+		dateChooser.setDateFormatString("dd/MM/yyyy"); 
 		dateChooser.setPreferredSize(new Dimension(115, 23));
 		panelDate.add(dateChooser);
+		
+		//-----
+		Date date = dateChooser.getDate(); 
+		//SimpleDateFormat df = SimpleDateFormat.getDateInstance(); 
+		//.setText(df.format(date, lblDate, 0)); 
 		
 		JPanel panelFoto = new JPanel();
 		panelFoto.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));

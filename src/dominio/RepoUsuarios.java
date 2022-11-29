@@ -21,7 +21,7 @@ public class RepoUsuarios {
 			dao = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS);
 			adaptadorUsuario = dao.getUsuarioDAO();
 			usuarios = new HashMap<String, Usuario>();
-			
+			this.cargarRepositorio();
 		} catch (DAOException eDAO) {
 			eDAO.printStackTrace();
 		}
@@ -39,6 +39,18 @@ public class RepoUsuarios {
 		return lista;	
 	}
 	
+	// Devuelve un usuario
+	public Usuario getUsuario(int id) {
+		for (Usuario u : usuarios.values()) {
+			if (u.getId()==id) return u;
+		}
+		return null;
+	}
+	
+	public Usuario getUsuario(String nombre) {
+		return usuarios.get(nombre);
+	}
+	
 	// Añade usuario al repositorio (por nombre de usuario)
 	public void addUsuario(Usuario usuario){
 		usuarios.put(usuario.getNombre(), usuario);
@@ -49,6 +61,8 @@ public class RepoUsuarios {
 	}
 	
 	private void cargarRepositorio() throws DAOException{
-		List<Usuario> usuariosBD = adaptadorUsuario.recuperarTodos
+		List<Usuario> usuariosBD = adaptadorUsuario.recuperarTodosUsuarios();
+		for (Usuario u: usuariosBD)
+			usuarios.put(u.getNombre(), u);
 	}
 }
