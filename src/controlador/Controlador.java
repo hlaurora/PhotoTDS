@@ -1,5 +1,6 @@
 package controlador;
 
+import java.io.File;
 import java.time.LocalDate;
 
 import dao.DAOException;
@@ -50,6 +51,12 @@ public class Controlador {
 		return true;
 	}
 	
+	public void registrarFotoPerfil(String nombreUsuario, File fotoPerfil) {
+		Usuario u = repoUsuarios.getUsuario(nombreUsuario);
+		u.setFotoPerfil(fotoPerfil);
+		adaptadorUsuario.modificarUsuario(u);
+	}
+	
 	/*
 	public boolean borrarUsuario(Usuario u) {
 		if (!esUsuarioRegistrado(u.getNombre()))
@@ -69,6 +76,7 @@ public class Controlador {
 			e.printStackTrace();
 		}
 		adaptadorUsuario = factoria.getUsuarioDAO();
+		//adaptadorUsuario.borrarTodosUsuario();
 	}
 	
 	private void inicializarRepositorios() {

@@ -1,5 +1,6 @@
 package dao;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,9 +46,10 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		Propiedad nombreUsuario = new Propiedad("nombreUsuario", usuario.getNombreUsuario());
 		Propiedad password = new Propiedad("password", usuario.getPassword());
 		Propiedad fechaNaci = new Propiedad("fechaNacimiento", usuario.getFechaNacimiento().toString());
+		Propiedad fotoPerfil = new Propiedad("fotoPerfil", usuario.getFotoPerfil().toString());
 
 		eUsuario.setPropiedades(new ArrayList<Propiedad>(
-				Arrays.asList(email, nombre, apellidos, nombreUsuario, password, fechaNaci)));
+				Arrays.asList(email, nombre, apellidos, nombreUsuario, password, fechaNaci, fotoPerfil)));
 		
 		//registrar la entidad usuario
 		eUsuario = servPersistencia.registrarEntidad(eUsuario);
@@ -84,6 +86,8 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 				p.setValor(usuario.getPassword());
 			} else if(p.getNombre().equals("fechaNacimiento")) {
 				p.setValor(usuario.getFechaNacimiento().toString());
+			} else if(p.getNombre().equals("fotoPerfil")) {
+				p.setValor(usuario.getFotoPerfil().toString());
 			}
 			servPersistencia.modificarPropiedad(p);
 		}
@@ -103,6 +107,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		String nombreUsuario;
 		String password;
 		LocalDate fechaNaci;
+		File fotoPerfil;
 		
 		eUsuario = servPersistencia.recuperarEntidad(id);
 		
@@ -113,13 +118,16 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		nombreUsuario = servPersistencia.recuperarPropiedadEntidad(eUsuario, "nombreUsuario");
 		password = servPersistencia.recuperarPropiedadEntidad(eUsuario, "password");
 		fechaNaci = LocalDate.parse(servPersistencia.recuperarPropiedadEntidad(eUsuario, "fechaNacimiento"));
+		fotoPerfil = new File(servPersistencia.recuperarPropiedadEntidad(eUsuario, "fotoPerfil"));
 		Usuario usuario = new Usuario(email, nombre, apellidos, nombreUsuario, password, fechaNaci);
-		
+		usuario.setFotoPerfil(fotoPerfil);
 		usuario.setId(id);
 		
 		//añadirlo al pool
 		PoolDAO.getUnicaInstancia().addObjeto(id, usuario);
 
+		System.out.println(fotoPerfil.toPath());
+		
 		return usuario;
 	}
 	
@@ -134,4 +142,13 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		//System.out.println(usuarios);
 		return usuarios;
 	}
+	/*
+	public void cambiarFotoPerfil(Usuario u, File fotoPerfil) {
+		Entidad eUsuario = servPersistencia.recuperarEntidad(u.getId());
+
+		for (Propiedad p: eUsuario.getPropiedades()) {
+			if (p.getNombre().equals("id")) {
+		Propiedad p.setValor(String.valueOf(usuario.getId()));
+		servPersistencia.modificarPropiedad(p);
+	}*/
 }

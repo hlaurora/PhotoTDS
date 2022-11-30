@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.time.ZoneId;
 import java.util.Date;
 
@@ -62,9 +63,13 @@ public class VentanaRegistro {
 	private JButton btnRegistrar;
 	private JButton btnCancelar;
 	
+	private JFileChooser fileChooser;
+	private File fotoPerfil;
+	
 	public Color Lila = new Color(134, 46, 150);
 	public Font lblFont = new Font("Arial", Font.PLAIN, 15);
 	public Font btnFont = new Font("Arial", Font.BOLD, 15);
+	int seleccion = 5;
 	
 	/*public Registro(JFrame owner){
 		super(owner, "Registro Usuario", true);
@@ -311,8 +316,9 @@ public class VentanaRegistro {
 		btnElegirFoto.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				JFileChooser fileChooser = new JFileChooser();
-				fileChooser.showOpenDialog(null);
+				fileChooser = new JFileChooser();
+				seleccion = fileChooser.showOpenDialog(frmRegistro);
+				System.out.println(seleccion);
 			}
 		});
 		
@@ -398,15 +404,20 @@ public class VentanaRegistro {
 			public void actionPerformed(ActionEvent e) {
 				boolean ok = comprobarCampos();
 				if (ok) {
+					String nombreUsuario = textNombreUsuario.getText();				
 					String password = new String(passwordField.getPassword());
-					fechaNacimiento = dateChooser.getDate(); 					
+					fechaNacimiento = dateChooser.getDate(); 	
 					boolean registrado = Controlador.getUnicaInstancia().registrarUsuario(
 							textEmail.getText(), 
 							textNombre.getText(),
 							textApellidos.getText(),
-							textNombreUsuario.getText(),
+							nombreUsuario,
 							password, 
 							fechaNacimiento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+					if (seleccion == 0) {
+						fotoPerfil = fileChooser.getSelectedFile();
+						Controlador.getUnicaInstancia().registrarFotoPerfil(nombreUsuario, fotoPerfil);
+					}
 					if (registrado) {
 						JOptionPane.showMessageDialog(frmRegistro, "Usuario registrado correctamente.", "Registro",
 								JOptionPane.INFORMATION_MESSAGE);

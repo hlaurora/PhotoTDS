@@ -1,5 +1,6 @@
 package dominio;
 
+import java.io.File;
 import java.time.LocalDate;
 
 public class Usuario {
@@ -11,7 +12,7 @@ public class Usuario {
 	private String nombreUsuario;
 	private String password;
 	private LocalDate fechaNacimiento;
-	//private File foto;
+	private File fotoPerfil;
 	//private String textoPresentacion;
 	private Boolean isPremium;
 	
@@ -25,6 +26,7 @@ public class Usuario {
 		this.nombreUsuario = nombreUsuario;
 		this.password = password;
 		this.fechaNacimiento = fechaNacimiento;
+		this.fotoPerfil = new File("/imagenes/usuario.png");
 		this.isPremium = false;
 	};
 	
@@ -84,10 +86,18 @@ public class Usuario {
 		this.fechaNacimiento = fechaNacimiento;
 	}
 
+	public File getFotoPerfil() {
+		return fotoPerfil;
+	}
+	
+	public void setFotoPerfil(File fotoPerfil) {
+		this.fotoPerfil = fotoPerfil;
+	}
+	
 	public Boolean getIsPremium() {
 		return isPremium;
 	}
-
+	
 	public void setIsPremium(Boolean isPremium) {
 		this.isPremium = isPremium;
 	}
