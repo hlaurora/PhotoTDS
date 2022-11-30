@@ -17,6 +17,8 @@ import java.awt.Font;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class VentanaTextoPresentacion {
 
@@ -83,6 +85,17 @@ public class VentanaTextoPresentacion {
 		panel.add(lblDescripcion, gbc_lblDescripcion);
 		
 		JTextArea textArea = new JTextArea();
+		textArea.setLineWrap(true);
+		textArea.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if(textArea.getText().length() >= 200)
+			    {
+			        e.consume();
+			        System.out.println("Máximo 200");
+			    }
+			}
+		});
 		textArea.setFont(new Font("Arial", Font.PLAIN, 15));
 		GridBagConstraints gbc_textArea = new GridBagConstraints();
 		gbc_textArea.insets = new Insets(0, 0, 5, 5);
