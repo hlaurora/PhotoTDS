@@ -26,24 +26,25 @@ public class Controlador {
 		return unicaInstancia;
 	}
 	
-	public boolean esUsuarioRegistrado(String login) {
-		return RepoUsuarios.getUnicaInstancia().getUsuario(login) != null;
+	public boolean esUsuarioRegistrado(String nombreUsuario) {
+		return RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario) != null;
 	}
 	
-	public boolean loginUsuario(String nombre, String password) {
-		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombre);
+	public boolean loginUsuario(String nombreUsuario, String password) {
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
 		if (u != null && u.getPassword().equals(password)) {
 			return true;
 		}
 		return false;
 	}
 	
-	public boolean registrarUsuario(String nombre, String email, String password, String login, String nombreCompleto, LocalDate fechaNaci) {
+	public boolean registrarUsuario(String email, String nombre, String apellidos,
+			String nombreUsuario, String password, LocalDate fechaNaci) {
 		
-		if (esUsuarioRegistrado(nombre))
+		if (esUsuarioRegistrado(nombreUsuario))
 			return false;
 		
-		Usuario usuario = new Usuario(nombre, email, password, login, nombreCompleto, fechaNaci);
+		Usuario usuario = new Usuario(email, nombre, apellidos, nombreUsuario, password, fechaNaci);
 		adaptadorUsuario.registrarUsuario(usuario);
 		repoUsuarios.addUsuario(usuario);
 		return true;
@@ -72,13 +73,7 @@ public class Controlador {
 	
 	private void inicializarRepositorios() {
 		repoUsuarios = RepoUsuarios.getUnicaInstancia();
+		//repoUsuarios.removeTodosUsuarios();
 	}
 	
-	public boolean existeUsuario(String nombre) {
-		return RepoUsuarios.getUnicaInstancia().getUsuario(nombre) != null;
-	}
-	
-	
-	
-
 }

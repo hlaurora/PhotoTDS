@@ -39,15 +39,15 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		eUsuario = new Entidad();
 		eUsuario.setNombre("usuario");
 		
-		Propiedad nombre = new Propiedad("nombre", usuario.getNombre());
 		Propiedad email = new Propiedad("email", usuario.getEmail());
+		Propiedad nombre = new Propiedad("nombre", usuario.getNombre());
+		Propiedad apellidos = new Propiedad("apellidos", usuario.getApellidos());		
+		Propiedad nombreUsuario = new Propiedad("nombreUsuario", usuario.getNombreUsuario());
 		Propiedad password = new Propiedad("password", usuario.getPassword());
-		Propiedad login = new Propiedad("login", usuario.getLogin());	
-		Propiedad nombreCompleto = new Propiedad("nombreCompleto", usuario.getNombreCompleto());
 		Propiedad fechaNaci = new Propiedad("fechaNacimiento", usuario.getFechaNacimiento().toString());
 
 		eUsuario.setPropiedades(new ArrayList<Propiedad>(
-				Arrays.asList(nombre, email, nombreCompleto, fechaNaci)));
+				Arrays.asList(email, nombre, apellidos, nombreUsuario, password, fechaNaci)));
 		
 		//registrar la entidad usuario
 		eUsuario = servPersistencia.registrarEntidad(eUsuario);
@@ -60,22 +60,30 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		servPersistencia.borrarEntidad(eUsuario);
 	}
 	
+	public void borrarTodosUsuario() {
+		ArrayList<Entidad> eUsuarios = servPersistencia.recuperarEntidades("usuario");
+		for (Entidad eu : eUsuarios) 
+			servPersistencia.borrarEntidad(eu);
+	}
+	
 	public void modificarUsuario(Usuario usuario) {
 		Entidad eUsuario = servPersistencia.recuperarEntidad(usuario.getId());
 		
 		for (Propiedad p: eUsuario.getPropiedades()) {
 			if (p.getNombre().equals("id")) {
 				p.setValor(String.valueOf(usuario.getId()));
-			} else if(p.getNombre().equals("nombre")) {
-				p.setValor(usuario.getNombre());
 			} else if(p.getNombre().equals("email")) {
 				p.setValor(usuario.getEmail());
+			} else if(p.getNombre().equals("nombre")) {
+				p.setValor(usuario.getNombre());
+			} else if(p.getNombre().equals("apellidos")) {
+				p.setValor(usuario.getApellidos());
+			} else if(p.getNombre().equals("nombreUsuario")) {
+				p.setValor(usuario.getNombreUsuario());
 			} else if(p.getNombre().equals("password")) {
 				p.setValor(usuario.getPassword());
-			} else if(p.getNombre().equals("login")) {
-				p.setValor(usuario.getLogin());
-			} else if(p.getNombre().equals("nombreCompleto")) {
-				p.setValor(usuario.getNombreCompleto());
+			} else if(p.getNombre().equals("fechaNacimiento")) {
+				p.setValor(usuario.getFechaNacimiento().toString());
 			}
 			servPersistencia.modificarPropiedad(p);
 		}
@@ -89,29 +97,29 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		
 		//Si no, la recupera de la bd
 		Entidad eUsuario;
-		String nombre;
 		String email;
+		String nombre;
+		String apellidos;
+		String nombreUsuario;
 		String password;
-		String login;
-		String nombreCompleto;
 		LocalDate fechaNaci;
 		
 		eUsuario = servPersistencia.recuperarEntidad(id);
 		
 		//Recuperar propiedades
-		nombre = servPersistencia.recuperarPropiedadEntidad(eUsuario, "nombre");
 		email = servPersistencia.recuperarPropiedadEntidad(eUsuario, "email");
+		nombre = servPersistencia.recuperarPropiedadEntidad(eUsuario, "nombre");
+		apellidos = servPersistencia.recuperarPropiedadEntidad(eUsuario, "apellidos");
+		nombreUsuario = servPersistencia.recuperarPropiedadEntidad(eUsuario, "nombreUsuario");
 		password = servPersistencia.recuperarPropiedadEntidad(eUsuario, "password");
-		login = servPersistencia.recuperarPropiedadEntidad(eUsuario, "login");
-		nombreCompleto = servPersistencia.recuperarPropiedadEntidad(eUsuario, "nombreCompleto");
-		fechaNaci = LocalDate.parse(servPersistencia.recuperarPropiedadEntidad(eUsuario, "fechaNaci"));
-		Usuario usuario = new Usuario(nombre, email, password, login, nombreCompleto, fechaNaci);
+		fechaNaci = LocalDate.parse(servPersistencia.recuperarPropiedadEntidad(eUsuario, "fechaNacimiento"));
+		Usuario usuario = new Usuario(email, nombre, apellidos, nombreUsuario, password, fechaNaci);
 		
 		usuario.setId(id);
 		
 		//añadirlo al pool
 		PoolDAO.getUnicaInstancia().addObjeto(id, usuario);
-		
+
 		return usuario;
 	}
 	
@@ -123,6 +131,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 			usuarios.add(recuperarUsuario(eUsuario.getId()));
 		}
 		
+		//System.out.println(usuarios);
 		return usuarios;
 	}
 }

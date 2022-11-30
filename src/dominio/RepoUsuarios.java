@@ -11,8 +11,8 @@ import dao.IAdaptadorUsuarioDAO;
 
 public class RepoUsuarios {
 
-	private Map<Integer, Usuario> usuarios;
-	private Map<String, Usuario> usuariosPorLogin;
+	//private Map<Integer, Usuario> usuariosPorId;
+	private Map<String, Usuario> usuariosPorNombreUs;
 	private static RepoUsuarios unicainstancia = new RepoUsuarios();
 	private FactoriaDAO dao;
 	private IAdaptadorUsuarioDAO adaptadorUsuario;
@@ -21,8 +21,8 @@ public class RepoUsuarios {
 		try {
 			dao = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS);
 			adaptadorUsuario = dao.getUsuarioDAO();
-			usuarios = new HashMap<Integer, Usuario>();
-			usuariosPorLogin = new HashMap<String, Usuario>();
+			//usuarios = new HashMap<Integer, Usuario>();
+			usuariosPorNombreUs = new HashMap<String, Usuario>();
 			this.cargarRepositorio();
 		} catch (DAOException eDAO) {
 			eDAO.printStackTrace();
@@ -35,40 +35,44 @@ public class RepoUsuarios {
 	
 	// Devuelve todos los usuarios
 	public List<Usuario> getUsuarios(){
-		return new LinkedList<Usuario>(usuariosPorLogin.values());
-		/*
-		ArrayList<Usuario> lista = new ArrayList<Usuario>();
-		for (Usuario u:usuarios.values())
-			lista.add(u);
-		return lista;	*/
+		return new LinkedList<Usuario>(usuariosPorNombreUs.values());
 	}
 	
 	// Devuelve un usuario
+	/*
 	public Usuario getUsuario(int id) {
 		return usuarios.get(id);
-	}
+	}*/
 	
-	public Usuario getUsuario(String nombre) {
-		//return usuariosPorLogin.get(login);	
-		return usuariosPorLogin.get(nombre);	
+	public Usuario getUsuario(String nombreUsuario) {
+		return usuariosPorNombreUs.get(nombreUsuario);	
 	}
 	
 	// Añade usuario al repositorio (por nombre de usuario)
 	public void addUsuario(Usuario usuario){
-		usuarios.put(usuario.getId(), usuario);
-		usuariosPorLogin.put(usuario.getNombre(), usuario);
+		//usuarios.put(usuario.getId(), usuario);
+		usuariosPorNombreUs.put(usuario.getNombreUsuario(), usuario);
 	}
 	
 	public void removeUsuario(Usuario usuario) {
-		usuarios.remove(usuario.getId());
-		usuariosPorLogin.remove(usuario.getNombre());
+		//usuarios.remove(usuario.getId());
+		usuariosPorNombreUs.remove(usuario.getNombreUsuario());
 	}
 	
+	/*
+	public void removeTodosUsuarios() {
+		//usuarios.remove(usuario.getId());
+		for (Usuario u : usuariosPorNombreUs.values()) {
+			usuariosPorNombreUs.remove(u);
+		}
+	}*/
+	
 	private void cargarRepositorio() throws DAOException{
+		//adaptadorUsuario.borrarTodosUsuario();
 		List<Usuario> usuariosBD = adaptadorUsuario.recuperarTodosUsuarios();
 		for (Usuario u: usuariosBD) {
-			usuarios.put(u.getId(), u);
-			usuariosPorLogin.put(u.getNombre(), u);
+			//usuarios.put(u.getId(), u);
+			usuariosPorNombreUs.put(u.getNombreUsuario(), u);
 		}
 			
 	}

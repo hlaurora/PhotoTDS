@@ -5,23 +5,25 @@ import java.time.LocalDate;
 public class Usuario {
 
 	private int id;
-	private String nombre;
 	private String email;
-	private String login;
+	private String nombre;
+	private String apellidos;
+	private String nombreUsuario;
 	private String password;
-	private String nombreCompleto;
 	private LocalDate fechaNacimiento;
+	//private File foto;
+	//private String textoPresentacion;
 	private Boolean isPremium;
 	
-	public Usuario(String nombre, String email, String password,
-			String login, String nombreCompleto, LocalDate fechaNacimiento)
+	public Usuario(String email, String nombre, String apellidos, String nombreUsuario,
+			String password, LocalDate fechaNacimiento)
 	{
 		this.id = 0;
-		this.nombre = nombre;
 		this.email = email;
-		this.login = login;
+		this.nombre = nombre;
+		this.apellidos = apellidos;
+		this.nombreUsuario = nombreUsuario;
 		this.password = password;
-		this.nombreCompleto = nombreCompleto;
 		this.fechaNacimiento = fechaNacimiento;
 		this.isPremium = false;
 	};
@@ -34,14 +36,6 @@ public class Usuario {
 		this.id = id;
 	}
 	
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
 	public String getEmail() {
 		return email;
 	}
@@ -50,28 +44,36 @@ public class Usuario {
 		this.email = email;
 	}
 	
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getApellidos() {
+		return apellidos;
+	}
+
+	public void setApellidos(String apellidos) {
+		this.apellidos = apellidos;
+	}
+	
+	public String getNombreUsuario() {
+		return nombreUsuario;
+	}
+
+	public void setNombreUsuario(String nombreUsuario) {
+		this.nombreUsuario = nombreUsuario;
+	}
+	
 	public String getPassword() {
 		return password;
 	}
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-	
-	public String getLogin() {
-		return login;
-	}
-
-	public void setLogin(String login) {
-		this.login = login;
-	}
-
-	public String getNombreCompleto() {
-		return nombreCompleto;
-	}
-
-	public void setNombreCompleto(String nombreCompleto) {
-		this.nombreCompleto = nombreCompleto;
 	}
 
 	public LocalDate getFechaNacimiento() {

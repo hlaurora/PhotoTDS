@@ -1,7 +1,6 @@
 package gui;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 
 import javax.swing.ImageIcon;
@@ -214,7 +213,7 @@ public class VentanaEntrada {
 			//public void mouseClicked(MouseEvent e) {
 				VentanaRegistro window = new VentanaRegistro();
 				window.frmRegistro.setVisible(true);
-				frmEntrada.dispose();
+				//frmEntrada.dispose();
 			}
 		});
 	}

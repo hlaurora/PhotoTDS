@@ -7,13 +7,18 @@ import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-//import java.util.Date;
-
+import java.text.DateFormat;
+import java.time.ZoneId;
+import java.util.Date;
 
 import javax.swing.*;
 import com.toedter.calendar.JDateChooser;
+
+import controlador.Controlador;
 import javax.swing.border.TitledBorder;
 
 /*
@@ -26,10 +31,13 @@ public class VentanaRegistro {
 	private JTextField textNombre;
 	private JTextField textNombreUsuario;
 	private JPasswordField passwordField;
+	private Date fechaNacimiento;
+	private JDateChooser dateChooser;
 	
 	public Color Lila = new Color(134, 46, 150);
 	public Font lblFont = new Font("Arial", Font.PLAIN, 15);
 	public Font btnFont = new Font("Arial", Font.BOLD, 15);
+	private JTextField textApellidos;
 	
 	/*public Registro(JFrame owner){
 		super(owner, "Registro Usuario", true);
@@ -67,25 +75,18 @@ public class VentanaRegistro {
 				}
 			}
 		});
-	}
-
+	} */
 	
-	public Registro() {
-		initialize();
-	}
-
 	
-	private void initialize() { */
 	private void crearPanelRegistro() {
 		try {
 			UIManager.setLookAndFeel("com.jtattoo.plaf.mint.MintLookAndFeel");
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		frmRegistro = new JFrame();
-		frmRegistro.setBounds(100, 100, 422, 539);
+		frmRegistro.setBounds(100, 100, 422, 546);
 		frmRegistro.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmRegistro.getContentPane().setLayout(new BoxLayout(frmRegistro.getContentPane(), BoxLayout.Y_AXIS));
 
@@ -137,9 +138,9 @@ public class VentanaRegistro {
 		frmRegistro.getContentPane().add(panelDatos);
 		GridBagLayout gbl_panelDatos = new GridBagLayout();
 		gbl_panelDatos.columnWidths = new int[]{10, 0, 0, 0, 0, 0, 10, 0};
-		gbl_panelDatos.rowHeights = new int[]{20, 0, 0, 0, 0, 20, 0, 0, 0, 0};
-		gbl_panelDatos.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
-		gbl_panelDatos.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
+		gbl_panelDatos.rowHeights = new int[]{20, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0};
+		gbl_panelDatos.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, Double.MIN_VALUE};
+		gbl_panelDatos.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
 		panelDatos.setLayout(gbl_panelDatos);
 		
 		JLabel lblEmail = new JLabel("Email");
@@ -162,7 +163,7 @@ public class VentanaRegistro {
 		panelDatos.add(textEmail, gbc_textEmail);
 		textEmail.setColumns(10);
 		
-		JLabel lblNombre = new JLabel("Nombre completo");
+		JLabel lblNombre = new JLabel("Nombre");
 		GridBagConstraints gbc_lblNombre = new GridBagConstraints();
 		lblNombre.setFont(lblFont);
 		gbc_lblNombre.anchor = GridBagConstraints.WEST;
@@ -181,13 +182,32 @@ public class VentanaRegistro {
 		panelDatos.add(textNombre, gbc_textNombre);
 		textNombre.setColumns(10);
 		
+		JLabel lblApellidos = new JLabel("Apellidos");
+		GridBagConstraints gbc_lblApellidos = new GridBagConstraints();
+		lblApellidos.setFont(lblFont);
+		gbc_lblApellidos.anchor = GridBagConstraints.WEST;
+		gbc_lblApellidos.insets = new Insets(0, 0, 5, 5);
+		gbc_lblApellidos.gridx = 1;
+		gbc_lblApellidos.gridy = 3;
+		panelDatos.add(lblApellidos, gbc_lblApellidos);
+		
+		textApellidos = new JTextField();
+		GridBagConstraints gbc_textApellidos = new GridBagConstraints();
+		gbc_textApellidos.gridwidth = 4;
+		gbc_textApellidos.insets = new Insets(0, 0, 5, 5);
+		gbc_textApellidos.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textApellidos.gridx = 2;
+		gbc_textApellidos.gridy = 3;
+		panelDatos.add(textApellidos, gbc_textApellidos);
+		textApellidos.setColumns(10);
+		
 		JLabel lblNombreUsuario = new JLabel("Nombre de usuario");
 		GridBagConstraints gbc_lblNombreUsuario = new GridBagConstraints();
 		lblNombreUsuario.setFont(lblFont);
 		gbc_lblNombreUsuario.anchor = GridBagConstraints.WEST;
 		gbc_lblNombreUsuario.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNombreUsuario.gridx = 1;
-		gbc_lblNombreUsuario.gridy = 3;
+		gbc_lblNombreUsuario.gridy = 4;
 		panelDatos.add(lblNombreUsuario, gbc_lblNombreUsuario);
 		
 		textNombreUsuario = new JTextField();
@@ -196,7 +216,7 @@ public class VentanaRegistro {
 		gbc_textNombreUsuario.gridwidth = 4;
 		gbc_textNombreUsuario.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textNombreUsuario.gridx = 2;
-		gbc_textNombreUsuario.gridy = 3;
+		gbc_textNombreUsuario.gridy = 4;
 		panelDatos.add(textNombreUsuario, gbc_textNombreUsuario);
 		textNombreUsuario.setColumns(10);
 		
@@ -206,7 +226,7 @@ public class VentanaRegistro {
 		gbc_lblContraseña.anchor = GridBagConstraints.WEST;
 		gbc_lblContraseña.insets = new Insets(0, 0, 5, 5);
 		gbc_lblContraseña.gridx = 1;
-		gbc_lblContraseña.gridy = 4;
+		gbc_lblContraseña.gridy = 5;
 		panelDatos.add(lblContraseña, gbc_lblContraseña);
 		
 		passwordField = new JPasswordField();
@@ -215,7 +235,7 @@ public class VentanaRegistro {
 		gbc_passwordField.gridwidth = 4;
 		gbc_passwordField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_passwordField.gridx = 2;
-		gbc_passwordField.gridy = 4;
+		gbc_passwordField.gridy = 5;
 		panelDatos.add(passwordField, gbc_passwordField);
 		
 		JPanel panelDate = new JPanel();
@@ -226,22 +246,18 @@ public class VentanaRegistro {
 		gbc_panelDate.insets = new Insets(0, 0, 5, 5);
 		gbc_panelDate.fill = GridBagConstraints.BOTH;
 		gbc_panelDate.gridx = 1;
-		gbc_panelDate.gridy = 6;
+		gbc_panelDate.gridy = 7;
 		panelDatos.add(panelDate, gbc_panelDate);
 		
 		JLabel lblDate = new JLabel("Fecha de nacimiento");
 		lblDate.setFont(lblFont);
 		panelDate.add(lblDate);
 		
-		JDateChooser dateChooser = new JDateChooser();
+		dateChooser = new JDateChooser();
 		dateChooser.setDateFormatString("dd/MM/yyyy"); 
 		dateChooser.setPreferredSize(new Dimension(115, 23));
 		panelDate.add(dateChooser);
-		
-		//-----
-		//Date date = dateChooser.getDate(); 
-		//SimpleDateFormat df = SimpleDateFormat.getDateInstance(); 
-		//.setText(df.format(date, lblDate, 0)); 
+	//---------------
 		
 		JPanel panelFoto = new JPanel();
 		panelFoto.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -250,7 +266,7 @@ public class VentanaRegistro {
 		gbc_panelFoto.insets = new Insets(0, 0, 5, 5);
 		gbc_panelFoto.fill = GridBagConstraints.BOTH;
 		gbc_panelFoto.gridx = 1;
-		gbc_panelFoto.gridy = 7;
+		gbc_panelFoto.gridy = 8;
 		panelDatos.add(panelFoto, gbc_panelFoto);
 		
 		JButton btnElegirFoto = new JButton("+");
@@ -277,7 +293,7 @@ public class VentanaRegistro {
 		gbc_panelPresentacion.insets = new Insets(0, 0, 0, 5);
 		gbc_panelPresentacion.fill = GridBagConstraints.BOTH;
 		gbc_panelPresentacion.gridx = 1;
-		gbc_panelPresentacion.gridy = 8;
+		gbc_panelPresentacion.gridy = 9;
 		panelDatos.add(panelPresentacion, gbc_panelPresentacion);
 		
 		JLabel lblPresentacion = new JLabel("Añadir presentación (opcional)");
@@ -309,22 +325,16 @@ public class VentanaRegistro {
 		gbl_panelBotones.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		panelBotones.setLayout(gbl_panelBotones);
 		
-		JButton btnAceptar = new JButton("Aceptar");
-		GridBagConstraints gbc_btnAceptar = new GridBagConstraints();
-		btnAceptar.setFont(btnFont);
-		btnAceptar.setForeground(Lila);
-		gbc_btnAceptar.insets = new Insets(0, 0, 5, 5);
-		gbc_btnAceptar.gridx = 7;
-		gbc_btnAceptar.gridy = 1;
-		panelBotones.add(btnAceptar, gbc_btnAceptar);
+		JButton btnRegistrar = new JButton("Registrar");
+		GridBagConstraints gbc_btnRegistrar = new GridBagConstraints();
+		btnRegistrar.setFont(btnFont);
+		btnRegistrar.setForeground(Lila);
+		gbc_btnRegistrar.insets = new Insets(0, 0, 5, 5);
+		gbc_btnRegistrar.gridx = 7;
+		gbc_btnRegistrar.gridy = 1;
+		panelBotones.add(btnRegistrar, gbc_btnRegistrar);
 		
 		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				System.exit(0);
-			}
-		});
 		btnCancelar.setFont(btnFont);
 		btnCancelar.setForeground(Lila);
 		GridBagConstraints gbc_btnCancelar = new GridBagConstraints();
@@ -332,7 +342,93 @@ public class VentanaRegistro {
 		gbc_btnCancelar.gridx = 8;
 		gbc_btnCancelar.gridy = 1;
 		panelBotones.add(btnCancelar, gbc_btnCancelar);
+		
+		addManejadorBotonRegistrar(btnRegistrar);
+		addManejadorBotonCandelar(btnCancelar);
+		
 	}
 	
+	private void addManejadorBotonRegistrar(JButton btnRegistrar) {
+		btnRegistrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				boolean ok = comprobarCampos();
+				if (ok) {
+					String password = new String(passwordField.getPassword());
+					fechaNacimiento = dateChooser.getDate(); 					
+					boolean registrado = Controlador.getUnicaInstancia().registrarUsuario(
+							textEmail.getText(), 
+							textNombre.getText(),
+							textApellidos.getText(),
+							textNombreUsuario.getText(),
+							password, 
+							fechaNacimiento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+					if (registrado) {
+						JOptionPane.showMessageDialog(frmRegistro, "Usuario registrado correctamente.", "Registro",
+								JOptionPane.INFORMATION_MESSAGE);
+						frmRegistro.dispose();
+					} 
+					else {
+							JOptionPane.showMessageDialog(frmRegistro, "Este usuario ya está registrado.\n",
+									"Registro", JOptionPane.ERROR_MESSAGE);
+							//RegistroView.this.setTitle("Login Gestor Eventos");
+					}
+				}
+			}
+		});
+	}
+	
+	private void addManejadorBotonCandelar(JButton btnCancelar) {
+		btnCancelar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				//System.exit(0);
+				frmRegistro.dispose();
+			}
+		});
+	}
+	
+	//Comprobar que los campos de registro están bin
+	private boolean comprobarCampos() {
+		boolean camposOK = true;
+		
+		if (textEmail.getText().trim().isEmpty()) {
+			System.out.println("Email mal");
+			camposOK = false;
+		}
+		if (textNombre.getText().trim().isEmpty()) {
+			System.out.println("Nombre mal");
+			camposOK = false;
+		}
+		if (textApellidos.getText().trim().isEmpty()) {
+			System.out.println("Apellidos mal");
+			camposOK = false;
+		}
+		String nombreUsuario = textNombreUsuario.getText().trim();
+		if (nombreUsuario.isEmpty()) {
+			System.out.println("Nombre usuario mal");
+			camposOK = false;
+		}
+		
+		String password = new String(passwordField.getPassword());
+		if (password.isEmpty()) {
+			System.out.println("Contraseña mal");
+			camposOK = false;
+		}
+			
+		if(dateChooser.getDate() == null) {
+			System.out.println("fechanacimiento mal");
+			camposOK = false;
+		}
+			
+		return camposOK;
+	}
 
 }
+
+
+
+
+
+
+
+
