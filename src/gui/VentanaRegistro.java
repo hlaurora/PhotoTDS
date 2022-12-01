@@ -21,10 +21,8 @@ import com.toedter.calendar.JDateChooser;
 import controlador.Controlador;
 import javax.swing.border.TitledBorder;
 
-/*
 @SuppressWarnings("serial")
-public class Registro extends JDialog {*/
-public class VentanaRegistro {
+public class VentanaRegistro extends JDialog {
 
 	public JFrame frmRegistro;
 	
@@ -75,43 +73,12 @@ public class VentanaRegistro {
 	private boolean abreTextArea = false;
 	private String textoPresentacion = "";
 	
-	/*public Registro(JFrame owner){
+	public VentanaRegistro(JFrame owner){
 		super(owner, "Registro Usuario", true);
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.setResizable(false);
-		this.crearPanelRegistro();
-		//this.initialize();
-		//Registro window = new Registro();
-		//window.frmRegistro.setVisible(true);
-	}*/
-	public VentanaRegistro(){
-		//super("Registro Usuario");
-		//this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		//this.setResizable(false);
-		//this.initialize();
-		//Registro window = new Registro();
-		//window.frmRegistro.setVisible(true);
 		crearPanelRegistro();
 	}
-	
-	
-	/*
-
-	/**
-	 * Launch the application.
-	 *
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Registro window = new Registro();
-					window.frmRegistro.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	} */
 	
 	
 	private void crearPanelRegistro() {
@@ -353,7 +320,7 @@ public class VentanaRegistro {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				abreTextArea = true;
-				ventanaTexto = new VentanaTextoPresentacion();
+				ventanaTexto = new VentanaTextoPresentacion(frmRegistro);
 				ventanaTexto.frmPresentacion.setVisible(true);
 			}
 		});
@@ -435,6 +402,8 @@ public class VentanaRegistro {
 					if (registrado) {
 						JOptionPane.showMessageDialog(frmRegistro, "Usuario registrado correctamente.", "Registro",
 								JOptionPane.INFORMATION_MESSAGE);
+						VentanaEntrada entrada = new VentanaEntrada();
+						entrada.frmEntrada.setVisible(true);
 						frmRegistro.dispose();
 					} 
 					else {

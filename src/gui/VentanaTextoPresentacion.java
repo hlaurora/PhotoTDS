@@ -13,6 +13,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+
 import java.awt.Font;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
@@ -22,7 +24,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class VentanaTextoPresentacion {
+public class VentanaTextoPresentacion extends JDialog {
 
 	public JFrame frmPresentacion;
 	
@@ -57,7 +59,10 @@ public class VentanaTextoPresentacion {
 	/**
 	 * Create the application.
 	 */
-	public VentanaTextoPresentacion() {
+	public VentanaTextoPresentacion(JFrame owner) {
+		super(owner, "Texto Presentación", true);
+		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		this.setResizable(false);
 		initialize();
 	}
 
@@ -137,7 +142,6 @@ public class VentanaTextoPresentacion {
 		btnCancelar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				//System.exit(0);
 				frmPresentacion.dispose();
 			}
 		});

@@ -196,8 +196,11 @@ public class VentanaEntrada {
 						textUsuario.getText(), 
 						new String (passwordField.getPassword()));
 				if (registrado) {
-					System.out.println("Registrado");
+					//VentanaPrincipal principal = new VentanaPrincipal();
+					//principal.
+					//System.out.println("Registrado");
 					//VENTANA PRINCIPAL
+					frmEntrada.dispose();
 				} else 
 					JOptionPane.showMessageDialog(frmEntrada, "Nombre de usuario o contraseña no válido",
 							"Error", JOptionPane.ERROR_MESSAGE);			
@@ -206,14 +209,12 @@ public class VentanaEntrada {
 	}
 	
 	private void addManejadorBotonCrearCuenta(JButton btnCrearCuenta) {
-		//btnCrearCuenta.addMouseListener(new MouseAdapter() {
 		btnCrearCuenta.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-			//public void mouseClicked(MouseEvent e) {
-				VentanaRegistro window = new VentanaRegistro();
+				VentanaRegistro window = new VentanaRegistro(frmEntrada);
 				window.frmRegistro.setVisible(true);
-				//frmEntrada.dispose();
+				frmEntrada.dispose();
 			}
 		});
 	}
