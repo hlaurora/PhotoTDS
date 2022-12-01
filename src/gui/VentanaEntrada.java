@@ -31,7 +31,7 @@ public class VentanaEntrada {
 
 	public JFrame frmEntrada;
 	private JPasswordField passwordField;
-	private JTextField textEmail;
+	private JTextField textUsuario;
 	private JButton btnIniciarSesion;
 	
 	public Color Lila = new Color(134, 46, 150);
@@ -107,24 +107,24 @@ public class VentanaEntrada {
 		gbl_panelInicioSesion.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panelInicioSesion.setLayout(gbl_panelInicioSesion);
 		
-		JLabel lblEmail = new JLabel("Nombre de usuario o email");
-		lblEmail.setFont(lblFont);
-		GridBagConstraints gbc_lblEmail = new GridBagConstraints();
-		gbc_lblEmail.anchor = GridBagConstraints.WEST;
-		gbc_lblEmail.insets = new Insets(0, 0, 5, 5);
-		gbc_lblEmail.gridx = 1;
-		gbc_lblEmail.gridy = 1;
-		panelInicioSesion.add(lblEmail, gbc_lblEmail);
+		JLabel lblUsuario = new JLabel("Nombre de usuario o email");
+		lblUsuario.setFont(lblFont);
+		GridBagConstraints gbc_lblUsuario = new GridBagConstraints();
+		gbc_lblUsuario.anchor = GridBagConstraints.WEST;
+		gbc_lblUsuario.insets = new Insets(0, 0, 5, 5);
+		gbc_lblUsuario.gridx = 1;
+		gbc_lblUsuario.gridy = 1;
+		panelInicioSesion.add(lblUsuario, gbc_lblUsuario);
 		
-		textEmail = new JTextField();
-		GridBagConstraints gbc_textEmail = new GridBagConstraints();
-		gbc_textEmail.gridwidth = 4;
-		gbc_textEmail.insets = new Insets(0, 0, 5, 5);
-		gbc_textEmail.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textEmail.gridx = 2;
-		gbc_textEmail.gridy = 1;
-		panelInicioSesion.add(textEmail, gbc_textEmail);
-		textEmail.setColumns(10);
+		textUsuario = new JTextField();
+		GridBagConstraints gbc_textUsuario = new GridBagConstraints();
+		gbc_textUsuario.gridwidth = 4;
+		gbc_textUsuario.insets = new Insets(0, 0, 5, 5);
+		gbc_textUsuario.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textUsuario.gridx = 2;
+		gbc_textUsuario.gridy = 1;
+		panelInicioSesion.add(textUsuario, gbc_textUsuario);
+		textUsuario.setColumns(10);
 		
 		JLabel lblContraseña = new JLabel("Contraseña");
 		lblContraseña.setFont(lblFont);
@@ -193,7 +193,7 @@ public class VentanaEntrada {
 		btnIniciarSesion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				boolean registrado = Controlador.getUnicaInstancia().loginUsuario(
-						textEmail.getText(), 
+						textUsuario.getText(), 
 						new String (passwordField.getPassword()));
 				if (registrado) {
 					System.out.println("Registrado");

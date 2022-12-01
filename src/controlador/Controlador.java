@@ -36,6 +36,11 @@ public class Controlador {
 		if (u != null && u.getPassword().equals(password)) {
 			return true;
 		}
+		else {
+			u = RepoUsuarios.getUnicaInstancia().getUsuarioEmail(nombreUsuario);
+			if (u != null && u.getPassword().equals(password))
+				return true;
+		}
 		return false;
 	}
 	

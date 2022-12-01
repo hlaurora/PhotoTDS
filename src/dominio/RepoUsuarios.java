@@ -13,6 +13,7 @@ public class RepoUsuarios {
 
 	//private Map<Integer, Usuario> usuariosPorId;
 	private Map<String, Usuario> usuariosPorNombreUs;
+	private Map<String, Usuario> usuariosPorEmail;
 	private static RepoUsuarios unicainstancia = new RepoUsuarios();
 	private FactoriaDAO dao;
 	private IAdaptadorUsuarioDAO adaptadorUsuario;
@@ -23,6 +24,7 @@ public class RepoUsuarios {
 			adaptadorUsuario = dao.getUsuarioDAO();
 			//usuarios = new HashMap<Integer, Usuario>();
 			usuariosPorNombreUs = new HashMap<String, Usuario>();
+			usuariosPorEmail = new HashMap<String, Usuario>();
 			this.cargarRepositorio();
 		} catch (DAOException eDAO) {
 			eDAO.printStackTrace();
@@ -48,15 +50,21 @@ public class RepoUsuarios {
 		return usuariosPorNombreUs.get(nombreUsuario);	
 	}
 	
+	public Usuario getUsuarioEmail(String email) {
+		return usuariosPorEmail.get(email);
+	}
+	
 	// Añade usuario al repositorio (por nombre de usuario)
 	public void addUsuario(Usuario usuario){
 		//usuarios.put(usuario.getId(), usuario);
 		usuariosPorNombreUs.put(usuario.getNombreUsuario(), usuario);
+		usuariosPorEmail.put(usuario.getEmail(), usuario);
 	}
 	
 	public void removeUsuario(Usuario usuario) {
 		//usuarios.remove(usuario.getId());
 		usuariosPorNombreUs.remove(usuario.getNombreUsuario());
+		usuariosPorEmail.remove(usuario.getEmail());
 	}
 	
 	/*
@@ -73,6 +81,7 @@ public class RepoUsuarios {
 		for (Usuario u: usuariosBD) {
 			//usuarios.put(u.getId(), u);
 			usuariosPorNombreUs.put(u.getNombreUsuario(), u);
+			usuariosPorEmail.put(u.getEmail(), u);
 		}
 			
 	}
