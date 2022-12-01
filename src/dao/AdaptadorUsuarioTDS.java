@@ -47,9 +47,11 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		Propiedad password = new Propiedad("password", usuario.getPassword());
 		Propiedad fechaNaci = new Propiedad("fechaNacimiento", usuario.getFechaNacimiento().toString());
 		Propiedad fotoPerfil = new Propiedad("fotoPerfil", usuario.getFotoPerfil().toString());
+		Propiedad textoPresentacion = new Propiedad("textoPresentacion", usuario.getTextoPresentacion());
 
 		eUsuario.setPropiedades(new ArrayList<Propiedad>(
-				Arrays.asList(email, nombre, apellidos, nombreUsuario, password, fechaNaci, fotoPerfil)));
+				Arrays.asList(email, nombre, apellidos, nombreUsuario, password, 
+						fechaNaci, fotoPerfil, textoPresentacion)));
 		
 		//registrar la entidad usuario
 		eUsuario = servPersistencia.registrarEntidad(eUsuario);
@@ -88,6 +90,8 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 				p.setValor(usuario.getFechaNacimiento().toString());
 			} else if(p.getNombre().equals("fotoPerfil")) {
 				p.setValor(usuario.getFotoPerfil().toString());
+			} else if(p.getNombre().equals("textoPresentacion")) {
+				p.setValor(usuario.getTextoPresentacion());
 			}
 			servPersistencia.modificarPropiedad(p);
 		}
@@ -108,6 +112,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		String password;
 		LocalDate fechaNaci;
 		File fotoPerfil;
+		String textoPresentacion;
 		
 		eUsuario = servPersistencia.recuperarEntidad(id);
 		
@@ -119,14 +124,17 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		password = servPersistencia.recuperarPropiedadEntidad(eUsuario, "password");
 		fechaNaci = LocalDate.parse(servPersistencia.recuperarPropiedadEntidad(eUsuario, "fechaNacimiento"));
 		fotoPerfil = new File(servPersistencia.recuperarPropiedadEntidad(eUsuario, "fotoPerfil"));
+		textoPresentacion = servPersistencia.recuperarPropiedadEntidad(eUsuario, "textoPresentacion");
 		Usuario usuario = new Usuario(email, nombre, apellidos, nombreUsuario, password, fechaNaci);
 		usuario.setFotoPerfil(fotoPerfil);
+		usuario.setTextoPresentacion(textoPresentacion);
 		usuario.setId(id);
 		
 		//añadirlo al pool
 		PoolDAO.getUnicaInstancia().addObjeto(id, usuario);
 
-		System.out.println(fotoPerfil.toPath());
+		//System.out.println(fotoPerfil.toPath());
+		System.out.println(textoPresentacion);
 		
 		return usuario;
 	}

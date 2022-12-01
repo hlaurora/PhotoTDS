@@ -19,10 +19,21 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class VentanaTextoPresentacion {
 
 	public JFrame frmPresentacion;
+	
+	private JPanel panel;
+	private JLabel lblDescripcion;
+	private JTextArea textArea;
+	private JButton btnAceptar;
+	private JButton btnCancelar;
+	
+	private String textoPresentacion = "";
+	
 	public Color Lila = new Color(134, 46, 150);
 	public Font btnFont = new Font("Arial", Font.BOLD, 15);
 
@@ -58,14 +69,13 @@ public class VentanaTextoPresentacion {
 			UIManager.setLookAndFeel("com.jtattoo.plaf.mint.MintLookAndFeel");
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		frmPresentacion = new JFrame();
 		frmPresentacion.setBounds(100, 100, 530, 315);
 		//frmPresentacion.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		JPanel panel = new JPanel();
+		panel = new JPanel();
 		frmPresentacion.getContentPane().add(panel, BorderLayout.CENTER);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[]{10, 10, 0, 0, 0, 0, 0, 0, 0, 10, 0, 10, 0};
@@ -74,7 +84,7 @@ public class VentanaTextoPresentacion {
 		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panel.setLayout(gbl_panel);
 		
-		JLabel lblDescripcion = new JLabel("Escribe tu presentación (Máximo 200 caracteres)");
+		lblDescripcion = new JLabel("Escribe tu presentación (Máximo 200 caracteres)");
 		lblDescripcion.setFont(new Font("Arial", Font.BOLD, 15));
 		GridBagConstraints gbc_lblDescripcion = new GridBagConstraints();
 		lblDescripcion.setForeground(Lila);
@@ -84,7 +94,7 @@ public class VentanaTextoPresentacion {
 		gbc_lblDescripcion.gridy = 1;
 		panel.add(lblDescripcion, gbc_lblDescripcion);
 		
-		JTextArea textArea = new JTextArea();
+		textArea = new JTextArea();
 		textArea.setLineWrap(true);
 		textArea.addKeyListener(new KeyAdapter() {
 			@Override
@@ -92,7 +102,6 @@ public class VentanaTextoPresentacion {
 				if(textArea.getText().length() >= 200)
 			    {
 			        e.consume();
-			        System.out.println("Máximo 200");
 			    }
 			}
 		});
@@ -106,7 +115,13 @@ public class VentanaTextoPresentacion {
 		gbc_textArea.gridy = 3;
 		panel.add(textArea, gbc_textArea);
 		
-		JButton btnAceptar = new JButton("Aceptar");
+		btnAceptar = new JButton("Aceptar");
+		btnAceptar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textoPresentacion = textArea.getText();
+				frmPresentacion.dispose();
+			}
+		});
 		btnAceptar.setMaximumSize(new Dimension(100, 23));
 		btnAceptar.setPreferredSize(new Dimension(90, 23));
 		GridBagConstraints gbc_btnAceptar = new GridBagConstraints();
@@ -118,7 +133,7 @@ public class VentanaTextoPresentacion {
 		gbc_btnAceptar.gridy = 7;
 		panel.add(btnAceptar, gbc_btnAceptar);
 		
-		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar = new JButton("Cancelar");
 		btnCancelar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -134,6 +149,11 @@ public class VentanaTextoPresentacion {
 		gbc_btnCancelar.gridx = 8;
 		gbc_btnCancelar.gridy = 7;
 		panel.add(btnCancelar, gbc_btnCancelar);
+	}
+	
+	public String getTexto() {
+		//System.out.println(textoPresentacion);
+		return textoPresentacion;
 	}
 
 }

@@ -13,7 +13,7 @@ public class Usuario {
 	private String password;
 	private LocalDate fechaNacimiento;
 	private File fotoPerfil;
-	//private String textoPresentacion;
+	private String textoPresentacion;
 	private Boolean isPremium;
 	
 	public Usuario(String email, String nombre, String apellidos, String nombreUsuario,
@@ -27,6 +27,7 @@ public class Usuario {
 		this.password = password;
 		this.fechaNacimiento = fechaNacimiento;
 		this.fotoPerfil = new File("/imagenes/usuario.png");
+		this.textoPresentacion = "";
 		this.isPremium = false;
 	};
 	
@@ -81,9 +82,9 @@ public class Usuario {
 	public LocalDate getFechaNacimiento() {
 		return fechaNacimiento;
 	}
-
-	public void setFechaNacimiento(LocalDate fechaNacimiento) {
-		this.fechaNacimiento = fechaNacimiento;
+	
+	public void setTextoPresentacion(String textoPresentacion) {
+		this.textoPresentacion = textoPresentacion;
 	}
 
 	public File getFotoPerfil() {
@@ -92,6 +93,14 @@ public class Usuario {
 	
 	public void setFotoPerfil(File fotoPerfil) {
 		this.fotoPerfil = fotoPerfil;
+	}
+	
+	public String getTextoPresentacion() {
+		return textoPresentacion;
+	}
+	
+	public void setFechaNacimiento(LocalDate fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
 	}
 	
 	public Boolean getIsPremium() {

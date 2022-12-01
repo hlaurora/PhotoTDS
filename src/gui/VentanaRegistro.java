@@ -28,7 +28,7 @@ public class VentanaRegistro {
 
 	public JFrame frmRegistro;
 	
-	private JTextArea txtDescripcion;
+	private JTextArea textDescripcion;
 	private JTextField textEmail;
 	private JTextField textNombre;
 	private JTextField textApellidos;
@@ -69,7 +69,11 @@ public class VentanaRegistro {
 	public Color Lila = new Color(134, 46, 150);
 	public Font lblFont = new Font("Arial", Font.PLAIN, 15);
 	public Font btnFont = new Font("Arial", Font.BOLD, 15);
-	int seleccion = 5;
+	private int seleccion = 5;
+	
+	private VentanaTextoPresentacion ventanaTexto;
+	private boolean abreTextArea = false;
+	private String textoPresentacion = "";
 	
 	/*public Registro(JFrame owner){
 		super(owner, "Registro Usuario", true);
@@ -144,14 +148,14 @@ public class VentanaRegistro {
 		Component rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
 		frmRegistro.getContentPane().add(rigidArea_1);
 		
-		txtDescripcion = new JTextArea();
-		txtDescripcion.setFont(btnFont);
-		txtDescripcion.setForeground(Lila);
-		txtDescripcion.setMaximumSize(new Dimension(2147483647, 50));
-		txtDescripcion.setLineWrap(true);
-		txtDescripcion.setText(" Si te registras podrás compartir fotos y ver las fotos de tus amigos");
-		txtDescripcion.setEditable(false);
-		frmRegistro.getContentPane().add(txtDescripcion);
+		textDescripcion = new JTextArea();
+		textDescripcion.setFont(btnFont);
+		textDescripcion.setForeground(Lila);
+		textDescripcion.setMaximumSize(new Dimension(2147483647, 50));
+		textDescripcion.setLineWrap(true);
+		textDescripcion.setText(" Si te registras podrás compartir fotos y ver las fotos de tus amigos");
+		textDescripcion.setEditable(false);
+		frmRegistro.getContentPane().add(textDescripcion);
 	}
 	
 	private void crearPanelDatos() {
@@ -318,7 +322,7 @@ public class VentanaRegistro {
 			public void mouseClicked(MouseEvent e) {
 				fileChooser = new JFileChooser();
 				seleccion = fileChooser.showOpenDialog(frmRegistro);
-				System.out.println(seleccion);
+				//System.out.println(seleccion);
 			}
 		});
 		
@@ -348,8 +352,9 @@ public class VentanaRegistro {
 		btnPresentacion.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				VentanaTextoPresentacion window = new VentanaTextoPresentacion();
-				window.frmPresentacion.setVisible(true);
+				abreTextArea = true;
+				ventanaTexto = new VentanaTextoPresentacion();
+				ventanaTexto.frmPresentacion.setVisible(true);
 			}
 		});
 		panelPresentacion.add(btnPresentacion);		
@@ -418,6 +423,15 @@ public class VentanaRegistro {
 						fotoPerfil = fileChooser.getSelectedFile();
 						Controlador.getUnicaInstancia().registrarFotoPerfil(nombreUsuario, fotoPerfil);
 					}
+					
+					if (abreTextArea) {
+						textoPresentacion = ventanaTexto.getTexto();
+						//if(!ventanaTexto.getTexto().isEmpty()) {
+						if (!textoPresentacion.isEmpty()) {
+							Controlador.getUnicaInstancia().registrarTextoPresentacion(nombreUsuario, textoPresentacion);
+						}
+					}
+				
 					if (registrado) {
 						JOptionPane.showMessageDialog(frmRegistro, "Usuario registrado correctamente.", "Registro",
 								JOptionPane.INFORMATION_MESSAGE);

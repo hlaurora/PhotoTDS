@@ -57,6 +57,12 @@ public class Controlador {
 		adaptadorUsuario.modificarUsuario(u);
 	}
 	
+	public void registrarTextoPresentacion(String nombreUsuario, String textoPresentacion) {
+		Usuario u = repoUsuarios.getUsuario(nombreUsuario);
+		u.setTextoPresentacion(textoPresentacion);
+		adaptadorUsuario.modificarUsuario(u);
+	}
+	
 	/*
 	public boolean borrarUsuario(Usuario u) {
 		if (!esUsuarioRegistrado(u.getNombre()))
