@@ -12,7 +12,7 @@ import dao.IAdaptadorPublicacionDAO;
 public class RepoPublicaciones {
 	
 	private Map<Integer, Publicacion> fotosPorId;
-	private Map<Integer, Publicacion> albumesPorId;
+	//private Map<Integer, Publicacion> albumesPorId;
 	private static RepoPublicaciones unicainstancia = new RepoPublicaciones();
 	private FactoriaDAO dao;
 	private IAdaptadorPublicacionDAO adaptadorPublicacion;
@@ -22,7 +22,7 @@ public class RepoPublicaciones {
 			dao = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS);
 			adaptadorPublicacion = dao.getPublicacionDAO();
 			fotosPorId = new HashMap<Integer, Publicacion>();
-			albumesPorId = new HashMap<Integer, Publicacion>();
+			//albumesPorId = new HashMap<Integer, Publicacion>();
 			this.cargarRepositorio();
 		} catch (DAOException e) {
 			e.printStackTrace();
@@ -33,33 +33,34 @@ public class RepoPublicaciones {
 		return unicainstancia;
 	}
 	
-	/*
-	// Devuelve todas las publicaciones
+	
+	// Devuelve todas las fotos
 	public List<Publicacion> getPublicaciones(){
-		return new LinkedList<Publicacion>(publicacionesPorId.values());
+		return new LinkedList<Publicacion>(fotosPorId.values());
 	}
 	
-	// Devuelve una publicacion	
+	// Devuelve una foto	
 	public Publicacion getPublicacion(int id) {
-		return publicacionesPorId.get(id);	
-	}*/
+		return fotosPorId.get(id);	
+	}
 
 	// Añade publicacion al repositorio (por id)
 	public void addPublicacion(Publicacion publicacion){
 		if (publicacion.getClass().equals(Foto.class)) {
 			fotosPorId.put(publicacion.getId(), publicacion);
 		}
+		/*
 		else 
-			albumesPorId.put(publicacion.getId(), publicacion);
+			albumesPorId.put(publicacion.getId(), publicacion);*/
 	}
 	
 	public void removePublicacion(Publicacion publicacion) {
 		if (publicacion.getClass().equals(Foto.class)) {
 			fotosPorId.remove(publicacion.getId());
 		}
-		else 
+		/*else 
 			albumesPorId.remove(publicacion.getId(), publicacion);
-		publicacionesPorId.remove(publicacion.getId());
+		publicacionesPorId.remove(publicacion.getId());*/
 	}
 	
 	/*

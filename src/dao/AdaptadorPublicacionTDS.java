@@ -78,15 +78,15 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 		Propiedad usuario = new Propiedad("usuario", String.valueOf(publicacion.getUsuario().getId()));
 		Propiedad fecha = new Propiedad("fecha", publicacion.getFecha().toString());
 		Propiedad descripcion = new Propiedad("descripcion", publicacion.getDescripcion());
-		Propiedad meGustas = new Propiedad("meGustas", String.valueOf(publicacion.getMeGustas()));
 		Propiedad hashtags = new Propiedad("hashtags", publicacion.getHashtags().toString());
+		Propiedad meGustas = new Propiedad("meGustas", String.valueOf(publicacion.getMeGustas()));
 
 		if (publicacion.getClass().equals(Foto.class)) {
 			Propiedad ruta = new Propiedad("ruta", ((Foto)publicacion).getRuta());
 			ePublicacion.setNombre("foto");
 			
 			ePublicacion.setPropiedades(new ArrayList<Propiedad>(
-					Arrays.asList(titulo, usuario, fecha, descripcion, meGustas, hashtags, ruta)));
+					Arrays.asList(titulo, usuario, fecha, descripcion, hashtags, meGustas, ruta)));
 		}
 		
 		//Si es un álbum
@@ -94,7 +94,7 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 		else {
 			ePublicacion.setNombre("album");
 			ePublicacion.setPropiedades(new ArrayList<Propiedad>(
-					Arrays.asList(titulo, usuario, fecha, descripcion, meGustas, hashtags)));
+					Arrays.asList(titulo, usuario, fecha, descripcion, hashtags, meGustas)));
 		}
 
 		
@@ -125,10 +125,10 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 				p.setValor(publicacion.getFecha().toString());
 			} else if(p.getNombre().equals("descripcion")) {
 				p.setValor(publicacion.getDescripcion());
-			} else if(p.getNombre().equals("meGustas")) {
-				p.setValor(String.valueOf(publicacion.getMeGustas()));
 			} else if(p.getNombre().equals("hashtags")) {
 				p.setValor(publicacion.getHashtags().toString());
+			} else if(p.getNombre().equals("meGustas")) {
+				p.setValor(String.valueOf(publicacion.getMeGustas()));
 			} else if (p.getNombre().equals("ruta")) {
 				p.setValor( ((Foto)publicacion).getRuta());
 			}
@@ -149,31 +149,32 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 		String titulo;
 		LocalDate fecha;
 		String descripcion;
-		int meGustas;
 		String cadenaHashtags;
+		int meGustas;
 		List<String> hashtags;
 		
 		//Recuperar propiedades
 		titulo = servPersistencia.recuperarPropiedadEntidad(ePublicacion, "titulo");
 		fecha = LocalDate.parse(servPersistencia.recuperarPropiedadEntidad(ePublicacion, "fecha"));		
 		descripcion = servPersistencia.recuperarPropiedadEntidad(ePublicacion, "descripcion");
-		meGustas = (Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(ePublicacion, "meGustas")));
 		cadenaHashtags = servPersistencia.recuperarPropiedadEntidad(ePublicacion, "hashtags");
 		hashtags = new ArrayList<String>(Arrays.asList(cadenaHashtags.split("#")));
-		
+		meGustas = (Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(ePublicacion, "meGustas")));
+
 		Publicacion publicacion;
 		
 		if(ePublicacion.getNombre().equals("foto")) {
 			String ruta = servPersistencia.recuperarPropiedadEntidad(ePublicacion, "ruta");
-			publicacion = new Foto(titulo, fecha, descripcion, meGustas, hashtags, ruta);
-
+			publicacion = new Foto(titulo, fecha, descripcion, hashtags, ruta);
 		}
 		
 		else {
-			publicacion = new Album(titulo, fecha, descripcion, meGustas, hashtags);
+			publicacion = new Album(titulo, fecha, descripcion, hashtags);
 		}
 		
 		publicacion.setId(id);
+		publicacion.setMeGustas(meGustas);
+
 		
 		//añadirlo al pool
 		PoolDAO.getUnicaInstancia().addObjeto(id, publicacion);

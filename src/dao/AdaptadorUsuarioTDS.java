@@ -63,6 +63,10 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 				Arrays.asList(email, nombre, apellidos, nombreUsuario, password, 
 						fechaNaci, fotoPerfil, textoPresentacion, fotos)));
 		
+		/*eUsuario.setPropiedades(new ArrayList<Propiedad>(
+				Arrays.asList(email, nombre, apellidos, nombreUsuario, password, 
+						fechaNaci, fotoPerfil, textoPresentacion)));*/
+		
 		//registrar la entidad usuario
 		eUsuario = servPersistencia.registrarEntidad(eUsuario);
 		//asignar identificador único(el que genera el servicio de persistencia)
@@ -146,8 +150,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		//añadirlo al pool
 		PoolDAO.getUnicaInstancia().addObjeto(id, usuario);
 
-		fotos = obtenerFotosDesdeId(servPersistencia.recuperarPropiedadEntidad(eUsuario, "fotos"));
-		
+		//fotos = obtenerFotosDesdeId(servPersistencia.recuperarPropiedadEntidad(eUsuario, "fotos"));
 		for (Foto f : fotos) {
 			usuario.addFoto(f);
 		}

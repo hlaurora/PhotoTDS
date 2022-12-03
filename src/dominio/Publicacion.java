@@ -14,13 +14,13 @@ public abstract class Publicacion {
 	private List<String> hashtags;
 	
 	public Publicacion(String titulo, LocalDate fecha,
-				String descripcion, int meGustas, List<String> hashtags) {
+				String descripcion, List<String> hashtags) {
 		this.id = 0;
 		this.titulo = titulo;
 		this.usuario = null;
 		this.fecha = fecha;
 		this.descripcion = descripcion;
-		this.meGustas = meGustas;
+		this.meGustas = 0;
 		this.hashtags = hashtags;
 	}
 	

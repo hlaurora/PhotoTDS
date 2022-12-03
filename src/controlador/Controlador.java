@@ -2,11 +2,13 @@ package controlador;
 
 import java.io.File;
 import java.time.LocalDate;
+import java.util.List;
 
 import dao.DAOException;
 import dao.FactoriaDAO;
 import dao.IAdaptadorPublicacionDAO;
 import dao.IAdaptadorUsuarioDAO;
+import dominio.Foto;
 import dominio.RepoPublicaciones;
 import dominio.RepoUsuarios;
 import dominio.Usuario;
@@ -71,6 +73,49 @@ public class Controlador {
 		u.setTextoPresentacion(textoPresentacion);
 		adaptadorUsuario.modificarUsuario(u);
 	}
+	
+	public String getNombreUsuario(String s) {
+		//Si ha entrado con el nombre de usuario pues lo devolvemos
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(s);
+		if (u != null ) {
+			return s;
+		}
+		//Si no lo buscamos
+		else {
+			u = RepoUsuarios.getUnicaInstancia().getUsuarioEmail(s);
+			return u.getNombreUsuario();
+		}
+	}
+	
+	public String getEmail(String s) {
+		//Si ha entrado con el email pues lo devolvemos
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuarioEmail(s);
+		if (u != null ) {
+			return s;
+		}
+		//Si no lo buscamos
+		else {
+			u = RepoUsuarios.getUnicaInstancia().getUsuario(s);
+			return u.getEmail();
+		}
+	}
+	
+	public String getFotoPerfil(String usuario) {
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(usuario);
+		String ruta = u.getFotoPerfil().getPath();
+		System.out.println(ruta);
+		return ruta;
+	}
+	
+	
+	public List<Foto> getFotos(String nombreUsuario){
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
+		return u.getFotos();
+	}
+	
+	
+	
+	
 	
 	/*
 	public boolean borrarUsuario(Usuario u) {

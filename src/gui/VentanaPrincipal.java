@@ -9,6 +9,9 @@ import javax.swing.JLabel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EtchedBorder;
+
+import controlador.Controlador;
+
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -29,10 +32,12 @@ import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class VentanaPrincipal {
+public class VentanaPrincipal extends JFrame{
 
-	private JFrame frmPrincipal;
+	public JFrame frmPrincipal;
 	
 	private JLabel lblPhotoTDS;
 	private JPanel panelNorte;
@@ -50,10 +55,17 @@ public class VentanaPrincipal {
 	private JPopupMenu popupMenu;
 	private JLabel lblNewLabel;
 	private JLabel lblPureba;
+	
+	private String usuario;
+	private String fotoPerfil;
+	private Color LILA = new Color(134, 46, 150);
+	
+	private PanelPerfilUsuario panelPerfilUsuario;
 
 	/**
 	 * Launch the application.
 	 */
+/*
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -65,30 +77,38 @@ public class VentanaPrincipal {
 				}
 			}
 		});
-	}
+	}*/
 
 	/**
 	 * Create the application.
 	 */
-	public VentanaPrincipal() {
+	public VentanaPrincipal(String u) {	
+		this.usuario = Controlador.getUnicaInstancia().getNombreUsuario(u);
 		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize() {		
 		try {
 			UIManager.setLookAndFeel("com.jtattoo.plaf.mint.MintLookAndFeel");
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException e1) {
 			e1.printStackTrace();
 		}
+				
+		panelPerfilUsuario = new PanelPerfilUsuario(this, usuario);
+		this.fotoPerfil = Controlador.getUnicaInstancia().getFotoPerfil(usuario);
+		
+		
 		frmPrincipal = new JFrame();
 		frmPrincipal.setBounds(100, 100, 548, 570);
 		frmPrincipal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		crearPanelNorte();
+		//this.fixedSize(panelNorte, Constantes.X_SIZE,Constantes.Y_SIZE+20);
+
 	}
 	
 	
@@ -98,11 +118,9 @@ public class VentanaPrincipal {
 		panelNorte.setLayout(new BoxLayout(panelNorte, BoxLayout.X_AXIS));
 		
 		lblPhotoTDS = new JLabel("PhotoTDS");
-		lblPhotoTDS.setForeground(new Color(134, 46, 150));
-		lblPhotoTDS.setFont(new Font("HP Simplified Hans", Font.PLAIN, 35));
-		lblPhotoTDS.setPreferredSize(new Dimension(170, 0));
-		lblPhotoTDS.setForeground(new Color(134, 46, 150));
+		lblPhotoTDS.setForeground(LILA);
 		lblPhotoTDS.setFont(new Font("HP Simplified Hans", Font.PLAIN, 30));
+		lblPhotoTDS.setPreferredSize(new Dimension(170, 0));
 		panelNorte.add(lblPhotoTDS);
 		
 		rigidArea = Box.createRigidArea(new Dimension(20, 20));
@@ -110,9 +128,10 @@ public class VentanaPrincipal {
 		rigidArea.setPreferredSize(new Dimension(50, 20));
 		panelNorte.add(rigidArea);
 		
-		btnNewButton = new JButton("");
+		btnNewButton = new JButton("+");
+		btnNewButton.setForeground(LILA);
+		btnNewButton.setFont(new Font("HP Simplified Hans", Font.BOLD, 20));
 		this.fixedSize(btnNewButton, 40, 40);
-		btnNewButton.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/icons8-más-30.png")));
 		panelNorte.add(btnNewButton);
 		
 		horizontalStrut = Box.createHorizontalStrut(20);
@@ -123,27 +142,32 @@ public class VentanaPrincipal {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 		
 		textField = new JTextField();
-		/*
-		textField.setMaximumSize(new Dimension(300, 30));
-		textField.setPreferredSize(new Dimension(300, 30));
-		textField.setAlignmentX(Component.LEFT_ALIGNMENT);*/
-		this.fixedSize(textField, 100, 30);
+		this.fixedSize(textField, 90, 27);
 		panel.add(textField);
 		textField.setColumns(10);
 		
-		btnBuscar = new JButton("");
+		btnBuscar = new JButton("Buscar");
+		btnBuscar.setForeground(LILA);
+		btnBuscar.setFont(new Font("HP Simplified Hans", Font.BOLD, 15));
 		btnBuscar.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnBuscar.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/icons8-búsqueda-30.png")));
-		this.fixedSize(btnBuscar, 40, 40);
+		//btnBuscar.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/icons8-búsqueda-30.png")));
+		this.fixedSize(btnBuscar, 70, 40);
 		panel.add(btnBuscar);
 		
 		rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
 		panelNorte.add(rigidArea_1);
 		
 		btnNewButton_1 = new JButton("");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frmPrincipal.setContentPane(panelPerfilUsuario);
+			}
+		});
 		btnNewButton_1.setAlignmentX(Component.CENTER_ALIGNMENT);
 		this.fixedSize(btnNewButton_1, 50, 50);
-		btnNewButton_1.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/usuario48.png")));
+		//btnNewButton_1.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/usuario48.png")));
+		this.añadirPerfil(btnNewButton_1, fotoPerfil);
+		
 		panelNorte.add(btnNewButton_1);
 
 		menu = new JMenu("New menu");
@@ -191,6 +215,17 @@ public class VentanaPrincipal {
 				Image.SCALE_DEFAULT));
 		lbl.setIcon(icono);
 	}
+	
+	
+	private void añadirPerfil(JButton btn, String ruta) {
+		ImageIcon image = new ImageIcon(ruta);
+		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
+				btn.getWidth()-7, 
+				btn.getHeight()-7, 
+				Image.SCALE_DEFAULT));
+		btn.setIcon(icono);
+	}
+	
 	/**
 	 * Fija el tamaño de un componente
 	 */
@@ -214,6 +249,10 @@ public class VentanaPrincipal {
 		lblNewLabel = new JLabel("");
 		//lblNewLabel.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/icons8-búsqueda-60.png")));
 		panelPublicacion.add(lblNewLabel);
+	}
+	
+	public int getWidth() {
+		return frmPrincipal.getWidth();
 	}
 
 
