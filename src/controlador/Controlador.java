@@ -5,7 +5,9 @@ import java.time.LocalDate;
 
 import dao.DAOException;
 import dao.FactoriaDAO;
+import dao.IAdaptadorPublicacionDAO;
 import dao.IAdaptadorUsuarioDAO;
+import dominio.RepoPublicaciones;
 import dominio.RepoUsuarios;
 import dominio.Usuario;
 
@@ -14,7 +16,9 @@ public class Controlador {
 	private static Controlador unicaInstancia;
 	
 	private IAdaptadorUsuarioDAO adaptadorUsuario;
+	private IAdaptadorPublicacionDAO adaptadorPublicacion;
 	private RepoUsuarios repoUsuarios;
+	private RepoPublicaciones repoPublicaciones;
 	
 	private Controlador() {
 		inicializarAdaptadores();
@@ -87,12 +91,13 @@ public class Controlador {
 			e.printStackTrace();
 		}
 		adaptadorUsuario = factoria.getUsuarioDAO();
+		adaptadorPublicacion = factoria.getPublicacionDAO();
 		//adaptadorUsuario.borrarTodosUsuario();
 	}
 	
 	private void inicializarRepositorios() {
 		repoUsuarios = RepoUsuarios.getUnicaInstancia();
-		//repoUsuarios.removeTodosUsuarios();
+		repoPublicaciones = RepoPublicaciones.getUnicaInstancia();
 	}
 	
 }
