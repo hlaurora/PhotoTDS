@@ -11,7 +11,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
 
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.JTextField;
@@ -25,12 +27,17 @@ import java.awt.Image;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.Rectangle;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import java.awt.Component;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
+import java.awt.geom.Area;
+import java.awt.geom.Ellipse2D;
+import java.awt.image.BufferedImage;
 import java.awt.event.ActionEvent;
 
 public class PanelPerfilUsuario extends JPanel {
@@ -47,7 +54,7 @@ public class PanelPerfilUsuario extends JPanel {
 	private JButton btnBuscar;
 	private JLabel lblFotoPerfil;
 	private JButton btnNewButton;
-	private JLabel lblNewLabel_1;
+	private JLabel lblFotoPerfilGrande;
 	private JLabel lblNumPublicaciones;
 	private JLabel lblNumSeguidores;
 	private JLabel lblNumSeguidos;
@@ -62,7 +69,7 @@ public class PanelPerfilUsuario extends JPanel {
 	private JPanel panelFotos;
 	private JPanel panelAlbumes;
 	private JLabel lblNewLabel;
-	private JTable table;
+	private JTable tableFotos;
 	
 	private JFileChooser fileChooser;
 	private File selectedFile;
@@ -70,7 +77,6 @@ public class PanelPerfilUsuario extends JPanel {
 	private String usuario;
 	private String email;
 	private String fotoPerfil;
-	private JLabel lblNewLabel_2;
 
 
 	/**
@@ -205,18 +211,18 @@ public class PanelPerfilUsuario extends JPanel {
 		gbl_panelPerfil.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panelPerfil.setLayout(gbl_panelPerfil);
 		{
-			lblNewLabel_1 = new JLabel();
+			lblFotoPerfilGrande = new JLabel();
 			//lblNewLabel_1.setIcon(new ImageIcon(PanelPerfilUsuario.class.getResource("/imagenes/usuario48.png")));
-			this.fixedSize(lblNewLabel_1, 80, 80);
-			this.añadirPerfil(lblNewLabel_1, fotoPerfil);
-			GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
-			gbc_lblNewLabel_1.fill = GridBagConstraints.VERTICAL;
-			gbc_lblNewLabel_1.gridheight = 5;
-			gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
-			gbc_lblNewLabel_1.gridx = 1;
-			gbc_lblNewLabel_1.gridy = 1;
-			this.fixedSize(lblNewLabel_1, 70, 70);
-			panelPerfil.add(lblNewLabel_1, gbc_lblNewLabel_1);
+			this.fixedSize(lblFotoPerfilGrande, 80, 80);
+			this.añadirPerfil(lblFotoPerfilGrande, fotoPerfil);
+			GridBagConstraints gbc_lblFotoPerfilGrande = new GridBagConstraints();
+			gbc_lblFotoPerfilGrande.fill = GridBagConstraints.VERTICAL;
+			gbc_lblFotoPerfilGrande.gridheight = 5;
+			gbc_lblFotoPerfilGrande.insets = new Insets(0, 0, 5, 5);
+			gbc_lblFotoPerfilGrande.gridx = 1;
+			gbc_lblFotoPerfilGrande.gridy = 1;
+			this.fixedSize(lblFotoPerfilGrande, 70, 70);
+			panelPerfil.add(lblFotoPerfilGrande, gbc_lblFotoPerfilGrande);
 		}
 		{
 			//lblEmail = new JLabel("email@email.e");
@@ -234,6 +240,13 @@ public class PanelPerfilUsuario extends JPanel {
 		}
 		{
 			btnEditarPerfil = new JButton("Editar Perfil");
+			btnEditarPerfil.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					VentanaRegistro vr = new VentanaRegistro(ventanaPrincipal.frmPrincipal);
+					vr.editarPerfil();
+					vr.frmRegistro.setVisible(true);
+				}
+			});
 			btnEditarPerfil.setForeground(Lila);
 			btnEditarPerfil.setFont(fuenteLabel);
 			GridBagConstraints gbc_btnEditarPerfil = new GridBagConstraints();
@@ -327,6 +340,7 @@ public class PanelPerfilUsuario extends JPanel {
 	
 	private void crearPanelPublicaciones() {
 		panelPublicaciones = new JPanel();
+		this.fixedSize(panelPublicaciones, 600, 500);
 		panelPublicaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		add(panelPublicaciones);
 		panelPublicaciones.setLayout(new CardLayout(0, 0));
@@ -334,12 +348,10 @@ public class PanelPerfilUsuario extends JPanel {
 			panelFotos = new JPanel();
 			panelPublicaciones.add(panelFotos, "panelFotos");
 			{
-				lblNewLabel_2 = new JLabel("FOTOS");
-				panelFotos.add(lblNewLabel_2);
-			}
-			{
-				table = new JTable();
-				panelFotos.add(table);
+				tableFotos = new JTable();
+				this.fixedSize(tableFotos, 
+						panelPublicaciones.getWidth(), panelPublicaciones.getHeight());
+				panelFotos.add(tableFotos);
 			}
 		}
 		{
@@ -361,6 +373,7 @@ public class PanelPerfilUsuario extends JPanel {
 		lbl.setIcon(icono);
 	}
 	
+	
 	private void añadirPerfil(JLabel lbl, String ruta) {
 		ImageIcon image = new ImageIcon(ruta);
 		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
@@ -381,5 +394,32 @@ public class PanelPerfilUsuario extends JPanel {
 		o.setPreferredSize(d);
 		o.setSize(d);
 	}
+	
+	/*
+	private void añadirPerfil(JLabel lbl, String ruta) throws IOException {
+		ImageIcon image = new ImageIcon(ruta);
+		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
+				lbl.getWidth()-7, 
+				lbl.getHeight()-7, 
+				Image.SCALE_DEFAULT));
+		
+		BufferedImage imagen = new BufferedImage(
+			    icono.getIconWidth(),
+			    icono.getIconHeight(),
+			    BufferedImage.TYPE_INT_RGB);		
+		
+		Area clip = new Area(new Rectangle(0, 0, imagen.getWidth(), imagen.getHeight()));
+		Area oval = new Area(new Ellipse2D.Double(0,0, imagen.getWidth()-1, imagen.getHeight()-1));
+		clip.subtract( oval );
+		Graphics g2d = imagen.createGraphics();
+		g2d.setClip( clip );
+		//g2d.setColor( Color.BLACK );
+		//g2d.fillRect(0, 0, imagen.getWidth(), imagen.getHeight());
+		
+		lbl.setIcon(new ImageIcon (imagen));
+	}*/
+	
+	
+
 
 }

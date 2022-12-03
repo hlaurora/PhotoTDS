@@ -448,6 +448,21 @@ public class VentanaRegistro extends JDialog {
 		
 		return camposOK;
 	}
+	
+	@SuppressWarnings("deprecation")
+	public void editarPerfil() {
+		textDescripcion.setVisible(false);
+		lblObligatorio.setVisible(false);
+		textEmail.disable();
+		
+		btnRegistrar.setText("Modificar");
+		/*
+		private JTextField textNombre;
+		private JTextField textApellidos;
+		private JTextField textNombreUsuario;
+		private JPasswordField passwordField;
+		private JPasswordField passwordField2;*/
+	}
 
 }
 
