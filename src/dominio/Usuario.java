@@ -2,6 +2,8 @@ package dominio;
 
 import java.io.File;
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Usuario {
 
@@ -15,6 +17,7 @@ public class Usuario {
 	private File fotoPerfil;
 	private String textoPresentacion;
 	private Boolean isPremium;
+	private List<Foto> fotos;
 	
 	public Usuario(String email, String nombre, String apellidos, String nombreUsuario,
 			String password, LocalDate fechaNacimiento)
@@ -28,6 +31,7 @@ public class Usuario {
 		this.fechaNacimiento = fechaNacimiento;
 		this.fotoPerfil = new File("/imagenes/usuario.png");
 		this.textoPresentacion = "";
+		this.fotos = new LinkedList<Foto>();
 		this.isPremium = false;
 	};
 	
@@ -101,6 +105,14 @@ public class Usuario {
 	
 	public void setFechaNacimiento(LocalDate fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
+	}
+	
+	public List<Foto> getFotos() {
+		return fotos;
+	}
+	
+	public void addFoto(Foto foto) {
+		fotos.add(foto);
 	}
 	
 	public Boolean getIsPremium() {
