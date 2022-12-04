@@ -449,13 +449,34 @@ public class VentanaRegistro extends JDialog {
 		return camposOK;
 	}
 	
+	
 	@SuppressWarnings("deprecation")
-	public void editarPerfil() {
+	public void editarPerfil(String nombreUsuario) {
 		textDescripcion.setVisible(false);
 		lblObligatorio.setVisible(false);
+		
+		textEmail.setText(Controlador.getUnicaInstancia().getDato("email", nombreUsuario));
 		textEmail.disable();
+		lblEmail.setForeground(Color.GRAY);
+		
+		textNombre.setText(Controlador.getUnicaInstancia().getDato("nombre", nombreUsuario));
+		textNombre.disable();
+		lblNombre.setForeground(Color.GRAY);
+		
+		textApellidos.setText(Controlador.getUnicaInstancia().getDato("apellidos", nombreUsuario));
+		textApellidos.disable();
+		lblApellidos.setForeground(Color.GRAY);
+		
+		textNombreUsuario.setText(nombreUsuario);
+		textNombreUsuario.disable();
+		lblNombreUsuario.setForeground(Color.GRAY);
+		
+		dateChooser.disable();
+		lblDate.setForeground(Color.GRAY);
 		
 		btnRegistrar.setText("Modificar");
+		
+		
 		/*
 		private JTextField textNombre;
 		private JTextField textApellidos;

@@ -19,8 +19,10 @@ import javax.swing.Icon;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.border.EtchedBorder;
+import javax.swing.table.DefaultTableModel;
 
 import controlador.Controlador;
+import dominio.Foto;
 
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -30,6 +32,9 @@ import java.awt.Insets;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import java.awt.Component;
@@ -39,6 +44,7 @@ import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.awt.event.ActionEvent;
+import javax.swing.JScrollPane;
 
 public class PanelPerfilUsuario extends JPanel {
 	
@@ -70,6 +76,7 @@ public class PanelPerfilUsuario extends JPanel {
 	private JPanel panelAlbumes;
 	private JLabel lblNewLabel;
 	private JTable tableFotos;
+	private DefaultTableModel tm;
 	
 	private JFileChooser fileChooser;
 	private File selectedFile;
@@ -77,6 +84,8 @@ public class PanelPerfilUsuario extends JPanel {
 	private String usuario;
 	private String email;
 	private String fotoPerfil;
+	private List<Foto> fotosUsuario;
+	private JScrollPane scrollPane;
 
 
 	/**
@@ -128,8 +137,9 @@ public class PanelPerfilUsuario extends JPanel {
 					if (seleccion != JFileChooser.CANCEL_OPTION) {
 						//Foto foto = new
 						selectedFile = fileChooser.getSelectedFile();
-						System.out.println(selectedFile.getAbsolutePath());
-						//Controlador.getUnicaInstancia().re
+						Controlador.getUnicaInstancia().registrarFoto(usuario, 
+								selectedFile.getPath());
+						mostrarFotos();
 					}
 				
 				}
@@ -215,6 +225,7 @@ public class PanelPerfilUsuario extends JPanel {
 			//lblNewLabel_1.setIcon(new ImageIcon(PanelPerfilUsuario.class.getResource("/imagenes/usuario48.png")));
 			this.fixedSize(lblFotoPerfilGrande, 80, 80);
 			this.añadirPerfil(lblFotoPerfilGrande, fotoPerfil);
+			//this.cambiarImagen(lblFotoPerfilGrande, fotoPerfil);
 			GridBagConstraints gbc_lblFotoPerfilGrande = new GridBagConstraints();
 			gbc_lblFotoPerfilGrande.fill = GridBagConstraints.VERTICAL;
 			gbc_lblFotoPerfilGrande.gridheight = 5;
@@ -226,7 +237,7 @@ public class PanelPerfilUsuario extends JPanel {
 		}
 		{
 			//lblEmail = new JLabel("email@email.e");
-			email = Controlador.getUnicaInstancia().getEmail(usuario);
+			email = Controlador.getUnicaInstancia().getDato("email", usuario);
 			lblEmail = new JLabel(email);
 
 			lblEmail.setFont(fuenteLabel);
@@ -243,7 +254,7 @@ public class PanelPerfilUsuario extends JPanel {
 			btnEditarPerfil.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					VentanaRegistro vr = new VentanaRegistro(ventanaPrincipal.frmPrincipal);
-					vr.editarPerfil();
+					vr.editarPerfil(usuario);
 					vr.frmRegistro.setVisible(true);
 				}
 			});
@@ -348,9 +359,16 @@ public class PanelPerfilUsuario extends JPanel {
 			panelFotos = new JPanel();
 			panelPublicaciones.add(panelFotos, "panelFotos");
 			{
+				String titulos[] = {"col1", "col2", "col3"};
+				tm = new DefaultTableModel(null, titulos);
 				tableFotos = new JTable();
 				this.fixedSize(tableFotos, 
-						panelPublicaciones.getWidth(), panelPublicaciones.getHeight());
+				panelPublicaciones.getWidth(), panelPublicaciones.getHeight());
+				
+				tableFotos.setDefaultRenderer(Object.class, new ImgTabla());
+				this.mostrarFotos();
+				tableFotos.setRowHeight(70);
+				tableFotos.setModel(tm);
 				panelFotos.add(tableFotos);
 			}
 		}
@@ -364,15 +382,6 @@ public class PanelPerfilUsuario extends JPanel {
 		}
 	}
 	
-	private void añadirImagen(JLabel lbl, String ruta) {
-		ImageIcon image = new ImageIcon(PanelPerfilUsuario.class.getResource(ruta));
-		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
-				lbl.getWidth()-7, 
-				lbl.getHeight()-7, 
-				Image.SCALE_DEFAULT));
-		lbl.setIcon(icono);
-	}
-	
 	
 	private void añadirPerfil(JLabel lbl, String ruta) {
 		ImageIcon image = new ImageIcon(ruta);
@@ -381,6 +390,68 @@ public class PanelPerfilUsuario extends JPanel {
 				lbl.getHeight()-7, 
 				Image.SCALE_DEFAULT));
 		lbl.setIcon(icono);
+	}
+	
+	private Icon imagenCelda(String ruta) {
+		ImageIcon image = new ImageIcon(ruta);
+		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
+				100-7, 
+				70-7, 
+				Image.SCALE_DEFAULT));
+		return icono;
+	}
+	
+	private void mostrarFotos() {
+		
+		//Limpiamos la tabla
+		for (int i = 0; i < tableFotos.getRowCount(); i++) {
+			tm.removeRow(i);
+			i-=1;
+		}
+		
+		//Recuperamos la lista de fotos
+		fotosUsuario = Controlador.getUnicaInstancia().getFotos(usuario);
+		Collections.reverse(fotosUsuario);
+		String ruta;
+		int numFotos = fotosUsuario.size();
+		
+		//Calculamos el número de filas
+		int numFilas = 0;
+		if ((0 < numFotos) && (numFotos <= 3)) {
+			numFilas = 1;
+		}
+		else if (numFotos > 3) numFilas = (numFotos/3) + 1;
+		
+		//Rellenamos la tabla
+		int j;
+		int f = 0;
+		if (numFilas == 1) {
+			tm.addRow(new Object[] {null,null, null});
+			for (j = 0; j < fotosUsuario.size(); j++) {
+				ruta = fotosUsuario.get(j).getRuta();
+				tm.setValueAt(new JLabel(imagenCelda(ruta)), 0, j);
+			}
+		}
+		
+		else {
+			int i = 0;
+			while (i < numFilas-1) {
+				tm.addRow(new Object[] {null,null, null});
+				for (j = 0; j<3; j++) {
+					ruta = fotosUsuario.get(f).getRuta();
+					tm.setValueAt(new JLabel(imagenCelda(ruta)), i, j);
+					f++;
+				}
+				i++;
+			}
+			//Última fila
+			tm.addRow(new Object[] {null, null, null});
+			while (f < numFotos) {
+				ruta = fotosUsuario.get(f).getRuta();
+				tm.setValueAt(new JLabel(imagenCelda(ruta)), i, f%3);
+				f++;
+			}
+		}		
 	}
 	
 	
@@ -419,7 +490,19 @@ public class PanelPerfilUsuario extends JPanel {
 		lbl.setIcon(new ImageIcon (imagen));
 	}*/
 	
-	
+	/*
+	public void cambiarImagen(JLabel lbl, String nombre) {
+		URL url = this.getClass().getResource(nombre);
+		BufferedImage myPicture = new BufferedImage();
+		try {
+			myPicture = ImageIO.read(url);
+			Image aux = myPicture.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_DEFAULT);
+			lbl.setIcon(new ImageIcon(aux));
+			lbl.repaint();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}*/
 
 
 }

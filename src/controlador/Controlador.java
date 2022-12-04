@@ -2,6 +2,7 @@ package controlador;
 
 import java.io.File;
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 
 import dao.DAOException;
@@ -9,6 +10,7 @@ import dao.FactoriaDAO;
 import dao.IAdaptadorPublicacionDAO;
 import dao.IAdaptadorUsuarioDAO;
 import dominio.Foto;
+import dominio.Publicacion;
 import dominio.RepoPublicaciones;
 import dominio.RepoUsuarios;
 import dominio.Usuario;
@@ -87,6 +89,7 @@ public class Controlador {
 		}
 	}
 	
+	/*
 	public String getEmail(String s) {
 		//Si ha entrado con el email pues lo devolvemos
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuarioEmail(s);
@@ -98,12 +101,32 @@ public class Controlador {
 			u = RepoUsuarios.getUnicaInstancia().getUsuario(s);
 			return u.getEmail();
 		}
+	}*/
+	
+	public String getDato(String d, String usuario) {
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(usuario);
+		String dato = "";
+		if (d.equals("nombre")) {
+			dato = u.getNombre();
+		}
+		else if (d.equals("apellidos")) {
+			dato = u.getApellidos();
+		}
+		else if (d.equals("email")) {
+			dato = u.getEmail();
+		}
+		return dato;
+	}
+	
+	public LocalDate getFechaNacimiento(String usuario) {
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(usuario);
+		LocalDate fecha = u.getFechaNacimiento();
+		return fecha;
 	}
 	
 	public String getFotoPerfil(String usuario) {
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(usuario);
 		String ruta = u.getFotoPerfil().getPath();
-		System.out.println(ruta);
 		return ruta;
 	}
 	
@@ -113,6 +136,16 @@ public class Controlador {
 		return u.getFotos();
 	}
 	
+	
+	public boolean registrarFoto(String nombreUsuario, String ruta) {
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);		
+		List<String> hashtags = new LinkedList<String>();
+		Publicacion p = new Foto("titulo", LocalDate.now(), "descri", hashtags, ruta);
+		u.addFoto((Foto)p);
+		//adaptadorPublicacion.registrarPublicacion(p);
+		//repoPublicaciones.addPublicacion(p);
+		return true;
+	}
 	
 	
 	
