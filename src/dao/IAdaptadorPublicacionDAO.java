@@ -8,7 +8,7 @@ public interface IAdaptadorPublicacionDAO {
 	
 	public void registrarPublicacion(Publicacion publicacion);
 	public void borrarPublicacion(Publicacion publicacion);
-	//public void borrarTodosUsuario();
+	public void borrarTodasPublicaciones();
 	public void modificarPublicacion(Publicacion publicacion);
 	public Publicacion recuperarPublicacion(int id);
 	public List<Publicacion> recuperarTodasPublicaciones();

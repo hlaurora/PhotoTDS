@@ -45,6 +45,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 public class PanelPerfilUsuario extends JPanel {
 	
@@ -88,7 +89,6 @@ public class PanelPerfilUsuario extends JPanel {
 	private JScrollPane scrollPane;
 	private int numFotos;
 
-
 	/**
 	 * Create the panel.
 	 */
@@ -97,6 +97,9 @@ public class PanelPerfilUsuario extends JPanel {
 		ventanaPrincipal = vp;
 		this.usuario = nombreUsuario;
 		this.fotoPerfil = Controlador.getUnicaInstancia().getFotoPerfil(usuario);
+		//Recuperamos la lista de fotos
+		fotosUsuario = Controlador.getUnicaInstancia().getFotos(usuario);
+		//numFotos = fotosUsuario.size();
 		
 		setSize(575, 624);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -140,6 +143,7 @@ public class PanelPerfilUsuario extends JPanel {
 						selectedFile = fileChooser.getSelectedFile();
 						Controlador.getUnicaInstancia().registrarFoto(usuario, 
 								selectedFile.getPath());
+						lblNumPublicaciones.setText(fotosUsuario.size() + " Publicaciones");;
 						mostrarFotos();
 					}
 				
@@ -269,7 +273,8 @@ public class PanelPerfilUsuario extends JPanel {
 		}
 		{
 			lblNumPublicaciones = new JLabel("");
-			lblNumPublicaciones.setText(numFotos + " Publicaciones");
+			//numFotos = fotosUsuario.size();
+			lblNumPublicaciones.setText(fotosUsuario.size() + " Publicaciones");
 			lblNumPublicaciones.setFont(fuenteLabel);
 			GridBagConstraints gbc_lblNumPublicaciones = new GridBagConstraints();
 			gbc_lblNumPublicaciones.anchor = GridBagConstraints.WEST;
@@ -363,13 +368,18 @@ public class PanelPerfilUsuario extends JPanel {
 			{
 				String titulos[] = {"col1", "col2", "col3"};
 				tm = new DefaultTableModel(null, titulos);
-				tableFotos = new JTable();
-				//this.fixedSize(tableFotos, 
-				//panelPublicaciones.getWidth(), panelPublicaciones.getHeight());
-
-				tableFotos.setRowHeight(70);
-				tableFotos.setModel(tm);
-				tableFotos.setDefaultRenderer(Object.class, new ImgTabla());
+				{
+					//scrollPane = new JScrollPane();
+					//scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+					//scrollPane.setPreferredSize(getPreferredSize());
+					//panelFotos.add(scrollPane);
+					tableFotos = new JTable();
+					//scrollPane.setViewportView(tableFotos);
+					tableFotos.setRowHeight(70);
+					tableFotos.setModel(tm);
+					tableFotos.setTableHeader(null);
+					tableFotos.setDefaultRenderer(Object.class, new ImgTabla());
+				}
 				for (int i = 0; i < 3; i++) {
 					tableFotos.getColumnModel().getColumn(i).setPreferredWidth(170);
 				}
@@ -414,12 +424,15 @@ public class PanelPerfilUsuario extends JPanel {
 			i-=1;
 		}
 		
+		/*
 		//Recuperamos la lista de fotos
 		fotosUsuario = Controlador.getUnicaInstancia().getFotos(usuario);
-		Collections.reverse(fotosUsuario);
-		String ruta;
+
+		numFotos = fotosUsuario.size();*/
 		numFotos = fotosUsuario.size();
 		
+		Collections.reverse(fotosUsuario);
+		String ruta;
 		//Calculamos el número de filas
 		int numFilas = 0;
 		if ((0 < numFotos) && (numFotos <= 3)) {

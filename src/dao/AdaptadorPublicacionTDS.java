@@ -109,6 +109,13 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 		Entidad ePublicacion = servPersistencia.recuperarEntidad(publicacion.getId());
 		servPersistencia.borrarEntidad(ePublicacion);
 	}
+	
+	
+	public void borrarTodasPublicaciones() {
+		ArrayList<Entidad> ePublicaciones = servPersistencia.recuperarEntidades("foto");
+		for (Entidad eu : ePublicaciones) 
+			servPersistencia.borrarEntidad(eu);
+	}
 
 	
 	public void modificarPublicacion(Publicacion publicacion) {

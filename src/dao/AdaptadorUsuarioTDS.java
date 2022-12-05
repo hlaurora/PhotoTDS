@@ -150,7 +150,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		//añadirlo al pool
 		PoolDAO.getUnicaInstancia().addObjeto(id, usuario);
 
-		//fotos = obtenerFotosDesdeId(servPersistencia.recuperarPropiedadEntidad(eUsuario, "fotos"));
+		fotos = obtenerFotosDesdeId(servPersistencia.recuperarPropiedadEntidad(eUsuario, "fotos"));
 		for (Foto f : fotos) {
 			usuario.addFoto(f);
 		}

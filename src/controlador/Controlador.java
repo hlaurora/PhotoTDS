@@ -1,5 +1,6 @@
 package controlador;
 
+import java.awt.Image;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.LinkedList;
@@ -59,6 +60,7 @@ public class Controlador {
 			return false;
 		
 		Usuario usuario = new Usuario(email, nombre, apellidos, nombreUsuario, password, fechaNaci);
+		//usuario.setFotoPerfil(new File("imagenes/usuario48.png"));
 		adaptadorUsuario.registrarUsuario(usuario);
 		repoUsuarios.addUsuario(usuario);
 		return true;
@@ -145,6 +147,7 @@ public class Controlador {
 		u.addFoto((Foto)p);
 		repoPublicaciones.addPublicacion(p);
 		adaptadorPublicacion.registrarPublicacion(p);
+		adaptadorUsuario.modificarUsuario(u);
 		return true;
 	}
 	
@@ -171,6 +174,7 @@ public class Controlador {
 		}
 		adaptadorUsuario = factoria.getUsuarioDAO();
 		adaptadorPublicacion = factoria.getPublicacionDAO();
+		//adaptadorPublicacion.borrarTodasPublicaciones();
 		//adaptadorUsuario.borrarTodosUsuario();
 	}
 	
