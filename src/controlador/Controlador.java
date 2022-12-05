@@ -141,9 +141,10 @@ public class Controlador {
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);		
 		List<String> hashtags = new LinkedList<String>();
 		Publicacion p = new Foto("titulo", LocalDate.now(), "descri", hashtags, ruta);
+		p.setUsuario(u);
 		u.addFoto((Foto)p);
-		//adaptadorPublicacion.registrarPublicacion(p);
-		//repoPublicaciones.addPublicacion(p);
+		repoPublicaciones.addPublicacion(p);
+		adaptadorPublicacion.registrarPublicacion(p);
 		return true;
 	}
 	

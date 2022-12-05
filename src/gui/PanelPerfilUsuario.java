@@ -86,6 +86,7 @@ public class PanelPerfilUsuario extends JPanel {
 	private String fotoPerfil;
 	private List<Foto> fotosUsuario;
 	private JScrollPane scrollPane;
+	private int numFotos;
 
 
 	/**
@@ -267,7 +268,8 @@ public class PanelPerfilUsuario extends JPanel {
 			panelPerfil.add(btnEditarPerfil, gbc_btnEditarPerfil);
 		}
 		{
-			lblNumPublicaciones = new JLabel("13 Publicaciones");
+			lblNumPublicaciones = new JLabel("");
+			lblNumPublicaciones.setText(numFotos + " Publicaciones");
 			lblNumPublicaciones.setFont(fuenteLabel);
 			GridBagConstraints gbc_lblNumPublicaciones = new GridBagConstraints();
 			gbc_lblNumPublicaciones.anchor = GridBagConstraints.WEST;
@@ -362,13 +364,16 @@ public class PanelPerfilUsuario extends JPanel {
 				String titulos[] = {"col1", "col2", "col3"};
 				tm = new DefaultTableModel(null, titulos);
 				tableFotos = new JTable();
-				this.fixedSize(tableFotos, 
-				panelPublicaciones.getWidth(), panelPublicaciones.getHeight());
-				
-				tableFotos.setDefaultRenderer(Object.class, new ImgTabla());
-				this.mostrarFotos();
+				//this.fixedSize(tableFotos, 
+				//panelPublicaciones.getWidth(), panelPublicaciones.getHeight());
+
 				tableFotos.setRowHeight(70);
 				tableFotos.setModel(tm);
+				tableFotos.setDefaultRenderer(Object.class, new ImgTabla());
+				for (int i = 0; i < 3; i++) {
+					tableFotos.getColumnModel().getColumn(i).setPreferredWidth(170);
+				}
+				this.mostrarFotos();
 				panelFotos.add(tableFotos);
 			}
 		}
@@ -395,8 +400,8 @@ public class PanelPerfilUsuario extends JPanel {
 	private Icon imagenCelda(String ruta) {
 		ImageIcon image = new ImageIcon(ruta);
 		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
-				100-7, 
-				70-7, 
+				170, 
+				70-4, 
 				Image.SCALE_DEFAULT));
 		return icono;
 	}
@@ -413,7 +418,7 @@ public class PanelPerfilUsuario extends JPanel {
 		fotosUsuario = Controlador.getUnicaInstancia().getFotos(usuario);
 		Collections.reverse(fotosUsuario);
 		String ruta;
-		int numFotos = fotosUsuario.size();
+		numFotos = fotosUsuario.size();
 		
 		//Calculamos el número de filas
 		int numFilas = 0;
@@ -425,6 +430,7 @@ public class PanelPerfilUsuario extends JPanel {
 		//Rellenamos la tabla
 		int j;
 		int f = 0;
+		
 		if (numFilas == 1) {
 			tm.addRow(new Object[] {null,null, null});
 			for (j = 0; j < fotosUsuario.size(); j++) {
@@ -442,6 +448,7 @@ public class PanelPerfilUsuario extends JPanel {
 					tm.setValueAt(new JLabel(imagenCelda(ruta)), i, j);
 					f++;
 				}
+				//tm.addRow(new Object[] {null,null, null});
 				i++;
 			}
 			//Última fila

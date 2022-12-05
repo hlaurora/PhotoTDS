@@ -86,7 +86,7 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 			ePublicacion.setNombre("foto");
 			
 			ePublicacion.setPropiedades(new ArrayList<Propiedad>(
-					Arrays.asList(titulo, usuario, fecha, descripcion, hashtags, meGustas, ruta)));
+					Arrays.asList(titulo, fecha, descripcion, hashtags, usuario, meGustas, ruta)));
 		}
 		
 		//Si es un álbum
@@ -94,7 +94,7 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 		else {
 			ePublicacion.setNombre("album");
 			ePublicacion.setPropiedades(new ArrayList<Propiedad>(
-					Arrays.asList(titulo, usuario, fecha, descripcion, hashtags, meGustas)));
+					Arrays.asList(titulo, fecha, descripcion, hashtags, usuario, meGustas)));
 		}
 
 		
@@ -158,7 +158,7 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 		fecha = LocalDate.parse(servPersistencia.recuperarPropiedadEntidad(ePublicacion, "fecha"));		
 		descripcion = servPersistencia.recuperarPropiedadEntidad(ePublicacion, "descripcion");
 		cadenaHashtags = servPersistencia.recuperarPropiedadEntidad(ePublicacion, "hashtags");
-		hashtags = new ArrayList<String>(Arrays.asList(cadenaHashtags.split("#")));
+		hashtags = new ArrayList<String>(Arrays.asList(cadenaHashtags.split(" ")));
 		meGustas = (Integer.valueOf(servPersistencia.recuperarPropiedadEntidad(ePublicacion, "meGustas")));
 
 		Publicacion publicacion;
@@ -191,7 +191,7 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 	
 	
 	public List<Publicacion> recuperarTodasPublicaciones(){
-		List<Entidad> ePublicaciones = servPersistencia.recuperarEntidades("publicacion");
+		List<Entidad> ePublicaciones = servPersistencia.recuperarEntidades("foto");
 		List<Publicacion> publicaciones = new LinkedList<Publicacion>();
 		
 		for (Entidad ePublicacion : ePublicaciones) {
