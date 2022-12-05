@@ -1,16 +1,18 @@
 package gui;
 
-import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.Insets;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EtchedBorder;
-
 import controlador.Controlador;
+import dominio.Foto;
 
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
@@ -26,8 +28,6 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import java.awt.event.MouseAdapter;
@@ -42,42 +42,23 @@ public class VentanaPrincipal extends JFrame{
 	private JLabel lblPhotoTDS;
 	private JPanel panelNorte;
 	private Component rigidArea;
-	private JButton btnNewButton;
+	private JButton btnAddFoto;
 	private JPanel panel;
-	private JButton btnNewButton_1;
+	private JButton btnPerfil;
 	private Component horizontalStrut;
 	private JTextField textField;
 	private JButton btnBuscar;
 	private JScrollPane scrollPane;
-	private JList list;
 	private Component rigidArea_1;
 	private JMenu menu;
 	private JPopupMenu popupMenu;
-	private JLabel lblNewLabel;
-	private JLabel lblPureba;
 	
 	private String usuario;
 	private String fotoPerfil;
 	private Color LILA = new Color(134, 46, 150);
-	
+		
 	private PanelPerfilUsuario panelPerfilUsuario;
-
-	/**
-	 * Launch the application.
-	 */
-/*
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaPrincipal window = new VentanaPrincipal();
-					window.frmPrincipal.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
+	private JPanel panelPublicaciones;
 
 	/**
 	 * Create the application.
@@ -107,8 +88,7 @@ public class VentanaPrincipal extends JFrame{
 		frmPrincipal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		crearPanelNorte();
-		//this.fixedSize(panelNorte, Constantes.X_SIZE,Constantes.Y_SIZE+20);
-
+		crearPanelPublicaciones();
 	}
 	
 	
@@ -128,11 +108,11 @@ public class VentanaPrincipal extends JFrame{
 		rigidArea.setPreferredSize(new Dimension(50, 20));
 		panelNorte.add(rigidArea);
 		
-		btnNewButton = new JButton("+");
-		btnNewButton.setForeground(LILA);
-		btnNewButton.setFont(new Font("HP Simplified Hans", Font.BOLD, 20));
-		this.fixedSize(btnNewButton, 40, 40);
-		panelNorte.add(btnNewButton);
+		btnAddFoto = new JButton("+");
+		btnAddFoto.setForeground(LILA);
+		btnAddFoto.setFont(new Font("HP Simplified Hans", Font.BOLD, 20));
+		this.fixedSize(btnAddFoto, 40, 40);
+		panelNorte.add(btnAddFoto);
 		
 		horizontalStrut = Box.createHorizontalStrut(20);
 		panelNorte.add(horizontalStrut);
@@ -150,44 +130,46 @@ public class VentanaPrincipal extends JFrame{
 		btnBuscar.setForeground(LILA);
 		btnBuscar.setFont(new Font("HP Simplified Hans", Font.BOLD, 15));
 		btnBuscar.setAlignmentX(Component.CENTER_ALIGNMENT);
-		//btnBuscar.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/icons8-búsqueda-30.png")));
 		this.fixedSize(btnBuscar, 70, 40);
 		panel.add(btnBuscar);
 		
 		rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
 		panelNorte.add(rigidArea_1);
 		
-		btnNewButton_1 = new JButton("");
-		btnNewButton_1.addActionListener(new ActionListener() {
+		btnPerfil = new JButton("");
+		btnPerfil.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frmPrincipal.setContentPane(panelPerfilUsuario);
 			}
 		});
-		btnNewButton_1.setAlignmentX(Component.CENTER_ALIGNMENT);
-		this.fixedSize(btnNewButton_1, 50, 50);
-		//btnNewButton_1.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/usuario48.png")));
-		this.añadirPerfil(btnNewButton_1, fotoPerfil);
+		btnPerfil.setAlignmentX(Component.CENTER_ALIGNMENT);
+		this.fixedSize(btnPerfil, 50, 50);
+		this.añadirPerfil(btnPerfil, fotoPerfil);
 		
-		panelNorte.add(btnNewButton_1);
+		panelNorte.add(btnPerfil);
 
 		menu = new JMenu("New menu");
 		panelNorte.add(menu);
 		
 		popupMenu = new JPopupMenu();
 		addPopup(menu, popupMenu);
-		
+	}
+	
+	private void crearPanelPublicaciones() {
 		scrollPane = new JScrollPane();
-		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		frmPrincipal.getContentPane().add(scrollPane, BorderLayout.CENTER);
 		
-		list = new JList();
-		scrollPane.setViewportView(list);
+		panelPublicaciones = new JPanel();
+		scrollPane.setViewportView(panelPublicaciones);
+		panelPublicaciones.setLayout(new BoxLayout(panelPublicaciones, BoxLayout.Y_AXIS));
 		
-		this.crearPanelPublicacion();
-
-		
+		JPanel publi;
+		for (Foto f : Controlador.getUnicaInstancia().getFotos(usuario)) {
+			publi = this.panelPublicacion(f.getRuta(), fotoPerfil, usuario);
+			panelPublicaciones.add(publi);
+		}
 	}
+	
 
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
@@ -205,15 +187,6 @@ public class VentanaPrincipal extends JFrame{
 				popup.show(e.getComponent(), e.getX(), e.getY());
 			}
 		});
-	}
-	
-	private void añadirImagen(JLabel lbl, String ruta) {
-		ImageIcon image = new ImageIcon(VentanaPrincipal.class.getResource(ruta));
-		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
-				lbl.getWidth()-7, 
-				lbl.getHeight()-7, 
-				Image.SCALE_DEFAULT));
-		lbl.setIcon(icono);
 	}
 	
 	
@@ -237,23 +210,81 @@ public class VentanaPrincipal extends JFrame{
 		o.setSize(d);
 	}
 
-
-
-	private void crearPanelPublicacion() {
-		JPanel panelPublicacion = new JPanel();
-		panelPublicacion.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		int ancho = frmPrincipal.getWidth();
-		this.fixedSize(panelPublicacion, ancho, 10);
-		frmPrincipal.getContentPane().add(panelPublicacion, BorderLayout.CENTER);
-		
-		lblNewLabel = new JLabel("");
-		//lblNewLabel.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/icons8-búsqueda-60.png")));
-		panelPublicacion.add(lblNewLabel);
-	}
 	
 	public int getWidth() {
 		return frmPrincipal.getWidth();
 	}
 
+	public JPanel panelPublicacion(String r, String fp, String nu) {
+		JPanel panelPublicacion = new JPanel();
+		this.fixedSize(panelPublicacion, 500, 80);
+		panelPublicacion.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{200, 49, 0, 0, 0};
+		gridBagLayout.rowHeights = new int[]{5, 14, 0, 0, 0, 0, 5, 0};
+		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		panelPublicacion.setLayout(gridBagLayout);
+		
+		JButton btnMeGusta = new JButton("");
+		btnMeGusta.setIcon(new ImageIcon(PanelPublicacion.class.getResource("/imagenes/icons8-me-gusta-16.png")));
+		GridBagConstraints gbc_btnMeGusta = new GridBagConstraints();
+		gbc_btnMeGusta.insets = new Insets(0, 0, 5, 5);
+		gbc_btnMeGusta.gridx = 1;
+		gbc_btnMeGusta.gridy = 2;
+		panelPublicacion.add(btnMeGusta, gbc_btnMeGusta);
+		
+		JButton btnComentario = new JButton("");
+		btnComentario.setIcon(new ImageIcon(PanelPublicacion.class.getResource("/imagenes/comentario.png")));
+		GridBagConstraints gbc_btnComentario = new GridBagConstraints();
+		gbc_btnComentario.insets = new Insets(0, 0, 5, 5);
+		gbc_btnComentario.gridx = 2;
+		gbc_btnComentario.gridy = 2;
+		panelPublicacion.add(btnComentario, gbc_btnComentario);
+		
+		JLabel lblNumMg = new JLabel("9 Me Gustas");
+		GridBagConstraints gbc_lblNumMg = new GridBagConstraints();
+		gbc_lblNumMg.insets = new Insets(0, 0, 5, 0);
+		gbc_lblNumMg.gridx = 3;
+		gbc_lblNumMg.gridy = 2;
+		panelPublicacion.add(lblNumMg, gbc_lblNumMg);
+		
+		JLabel lblImagen = new JLabel("");
+		this.fixedSize(lblImagen, 150, 90);
+		lblImagen.setIcon(escalarImagen(lblImagen, r));
+		GridBagConstraints gbc_lblImagen = new GridBagConstraints();
+		gbc_lblImagen.gridheight = 5;
+		gbc_lblImagen.insets = new Insets(0, 0, 5, 5);
+		gbc_lblImagen.gridx = 0;
+		gbc_lblImagen.gridy = 1;
+		panelPublicacion.add(lblImagen, gbc_lblImagen);
+		
+		JLabel lblFotoPerfil = new JLabel("");
+		this.fixedSize(lblFotoPerfil, 60, 60);
+		lblFotoPerfil.setIcon(escalarImagen(lblFotoPerfil, fp));
+		GridBagConstraints gbc_lblFotoPerfil = new GridBagConstraints();
+		gbc_lblFotoPerfil.insets = new Insets(0, 0, 5, 5);
+		gbc_lblFotoPerfil.gridx = 1;
+		gbc_lblFotoPerfil.gridy = 4;
+		panelPublicacion.add(lblFotoPerfil, gbc_lblFotoPerfil);
+		
+		JLabel lblNombreUsuario = new JLabel(nu);
+		GridBagConstraints gbc_lblNombreUsuario = new GridBagConstraints();
+		gbc_lblNombreUsuario.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNombreUsuario.gridx = 2;
+		gbc_lblNombreUsuario.gridy = 4;
+		panelPublicacion.add(lblNombreUsuario, gbc_lblNombreUsuario);
 
+		return panelPublicacion;
+	}
+	
+	
+	private Icon escalarImagen(JLabel lbl, String ruta) {
+		ImageIcon image = new ImageIcon(ruta);
+		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
+				lbl.getWidth()-4, 
+				lbl.getHeight()-4, 
+				Image.SCALE_DEFAULT));
+		return icono;
+	}
 }

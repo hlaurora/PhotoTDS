@@ -138,6 +138,11 @@ public class Controlador {
 		return u.getFotos();
 	}
 	
+	public int getNumSeguidores(String nombreUsuario) {
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
+		return u.getSeguidores().size();
+	}
+	
 	
 	public boolean registrarFoto(String nombreUsuario, String ruta) {
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);		

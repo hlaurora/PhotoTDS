@@ -141,6 +141,11 @@ public class PanelPerfilUsuario extends JPanel {
 					if (seleccion != JFileChooser.CANCEL_OPTION) {
 						//Foto foto = new
 						selectedFile = fileChooser.getSelectedFile();
+						
+						//PanelAñadirPublicacion pp = new PanelAñadirPublicacion(ventanaPrincipal);
+						
+						//pp.setVisible(true);
+						
 						Controlador.getUnicaInstancia().registrarFoto(usuario, 
 								selectedFile.getPath());
 						lblNumPublicaciones.setText(fotosUsuario.size() + " Publicaciones");;
@@ -285,7 +290,7 @@ public class PanelPerfilUsuario extends JPanel {
 			panelPerfil.add(lblNumPublicaciones, gbc_lblNumPublicaciones);
 		}
 		{
-			lblNumSeguidores = new JLabel("7 seguidores");
+			lblNumSeguidores = new JLabel(Controlador.getUnicaInstancia().getNumSeguidores(usuario) + " Seguidores");
 			lblNumSeguidores.setFont(fuenteLabel);
 			GridBagConstraints gbc_lblNumSeguidores = new GridBagConstraints();
 			gbc_lblNumSeguidores.anchor = GridBagConstraints.WEST;
@@ -424,11 +429,6 @@ public class PanelPerfilUsuario extends JPanel {
 			i-=1;
 		}
 		
-		/*
-		//Recuperamos la lista de fotos
-		fotosUsuario = Controlador.getUnicaInstancia().getFotos(usuario);
-
-		numFotos = fotosUsuario.size();*/
 		numFotos = fotosUsuario.size();
 		
 		Collections.reverse(fotosUsuario);

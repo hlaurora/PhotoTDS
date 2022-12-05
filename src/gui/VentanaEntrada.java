@@ -197,7 +197,12 @@ public class VentanaEntrada {
 						new String (passwordField.getPassword()));
 				if (registrado) {
 					VentanaPrincipal window = new VentanaPrincipal(textUsuario.getText());
+					//Prueba p = new Prueba(textUsuario.getText());
+					//p.frmPrincipal.setVisible(true);
 					window.frmPrincipal.setVisible(true);
+					
+					
+					
 					//VentanaPrincipal principal = new VentanaPrincipal();
 					//principal.
 					//System.out.println("Registrado");

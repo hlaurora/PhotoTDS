@@ -18,6 +18,7 @@ public class Usuario {
 	private String textoPresentacion;
 	private Boolean isPremium;
 	private List<Foto> fotos;
+	private List<Usuario> seguidores;
 	
 	public Usuario(String email, String nombre, String apellidos, String nombreUsuario,
 			String password, LocalDate fechaNacimiento)
@@ -32,6 +33,7 @@ public class Usuario {
 		this.fotoPerfil = new File("/imagenes/usuario.png");
 		this.textoPresentacion = "";
 		this.fotos = new LinkedList<Foto>();
+		this.seguidores = new LinkedList<Usuario>();
 		this.isPremium = false;
 	};
 	
@@ -113,6 +115,14 @@ public class Usuario {
 	
 	public void addFoto(Foto foto) {
 		fotos.add(foto);
+	}
+	
+	public List<Usuario> getSeguidores(){
+		return seguidores;
+	}
+	
+	public void addSeguidor(Usuario seguidor) {
+		seguidores.add(seguidor);
 	}
 	
 	public Boolean getIsPremium() {
