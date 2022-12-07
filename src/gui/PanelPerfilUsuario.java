@@ -134,26 +134,7 @@ public class PanelPerfilUsuario extends JPanel {
 		}
 		{
 			btnAddFoto = new JButton(" + ");
-			btnAddFoto.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					fileChooser = new JFileChooser();
-					int seleccion = fileChooser.showOpenDialog(btnAddAlbum);
-					if (seleccion != JFileChooser.CANCEL_OPTION) {
-						//Foto foto = new
-						selectedFile = fileChooser.getSelectedFile();
-						
-						//PanelAñadirPublicacion pp = new PanelAñadirPublicacion(ventanaPrincipal);
-						
-						//pp.setVisible(true);
-						
-						Controlador.getUnicaInstancia().registrarFoto(usuario, 
-								selectedFile.getPath());
-						lblNumPublicaciones.setText(fotosUsuario.size() + " Publicaciones");;
-						mostrarFotos();
-					}
-				
-				}
-			});
+			this.addManejadorBotonAddFoto(btnAddFoto);
 			btnAddFoto.setForeground(Lila);
 			btnAddFoto.setFont(new Font("HP Simplified Hans", Font.BOLD, 20));
 			GridBagConstraints gbc_btnAddFoto = new GridBagConstraints();
@@ -402,6 +383,21 @@ public class PanelPerfilUsuario extends JPanel {
 		}
 	}
 	
+	private void addManejadorBotonAddFoto(JButton btn) {
+		btnAddFoto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				fileChooser = new JFileChooser();
+				int seleccion = fileChooser.showOpenDialog(btnAddAlbum);
+				if (seleccion != JFileChooser.CANCEL_OPTION) {
+					selectedFile = fileChooser.getSelectedFile();					
+					Controlador.getUnicaInstancia().registrarFoto(usuario, 
+							selectedFile.getPath());
+					lblNumPublicaciones.setText(fotosUsuario.size() + " Publicaciones");;
+					mostrarFotos();
+				}
+			}
+		});
+	}
 	
 	private void añadirPerfil(JLabel lbl, String ruta) {
 		ImageIcon image = new ImageIcon(ruta);

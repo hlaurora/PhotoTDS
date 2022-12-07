@@ -157,6 +157,21 @@ public class Controlador {
 	}
 	
 	
+	public List<Usuario> buscarUsuarios (String cadena) {
+		List<Usuario> usuarios = new LinkedList<Usuario>();
+		
+		//usuarios = RepoUsuarios.getUnicaInstancia().getUsuarios();
+		
+		for (Usuario u : RepoUsuarios.getUnicaInstancia().getUsuarios()) {
+			if ((u.getNombreUsuario().contains(cadena)) ||
+					(u.getNombre().contains(cadena) && !usuarios.contains(u)) ||
+					 (u.getEmail().contains(cadena) && !usuarios.contains(u))) {
+				usuarios.add(u);
+			}
+		}
+		
+		return usuarios;
+	}
 	
 	
 	/*

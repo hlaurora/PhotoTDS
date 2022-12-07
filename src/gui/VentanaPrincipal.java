@@ -8,17 +8,20 @@ import java.awt.Insets;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EtchedBorder;
 import controlador.Controlador;
 import dominio.Foto;
+import dominio.Usuario;
 
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import java.awt.Component;
@@ -26,12 +29,19 @@ import javax.swing.Box;
 import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
 import javax.swing.JScrollPane;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -52,19 +62,30 @@ public class VentanaPrincipal extends JFrame{
 	private Component rigidArea_1;
 	private JMenu menu;
 	private JPopupMenu popupMenu;
+	private JFileChooser fileChooser;
+	private File selectedFile;
 	
-	private String usuario;
+	private String usuarioActual;
 	private String fotoPerfil;
 	private Color LILA = new Color(134, 46, 150);
 		
 	private PanelPerfilUsuario panelPerfilUsuario;
 	private JPanel panelPublicaciones;
+	private List<JPanel> panelesFotos = new ArrayList<JPanel>();
+	private List<Foto> fotosUsuario;
+	
+	private VentanaPrincipal ventanaPrincipal;
+
+	public void mostrarVentana() {
+		setLocationRelativeTo(null);
+		setVisible(true);
+	}
 
 	/**
 	 * Create the application.
 	 */
 	public VentanaPrincipal(String u) {	
-		this.usuario = Controlador.getUnicaInstancia().getNombreUsuario(u);
+		this.usuarioActual = Controlador.getUnicaInstancia().getNombreUsuario(u);
 		initialize();
 	}
 
@@ -79,8 +100,8 @@ public class VentanaPrincipal extends JFrame{
 			e1.printStackTrace();
 		}
 				
-		panelPerfilUsuario = new PanelPerfilUsuario(this, usuario);
-		this.fotoPerfil = Controlador.getUnicaInstancia().getFotoPerfil(usuario);
+		panelPerfilUsuario = new PanelPerfilUsuario(this, usuarioActual);
+		this.fotoPerfil = Controlador.getUnicaInstancia().getFotoPerfil(usuarioActual);
 		
 		
 		frmPrincipal = new JFrame();
@@ -89,6 +110,8 @@ public class VentanaPrincipal extends JFrame{
 
 		crearPanelNorte();
 		crearPanelPublicaciones();
+		ventanaPrincipal = this;
+
 	}
 	
 	
@@ -108,7 +131,9 @@ public class VentanaPrincipal extends JFrame{
 		rigidArea.setPreferredSize(new Dimension(50, 20));
 		panelNorte.add(rigidArea);
 		
+		//Botón para añadir fotos
 		btnAddFoto = new JButton("+");
+		this.addManejadorBotonAddFoto(btnAddFoto);
 		btnAddFoto.setForeground(LILA);
 		btnAddFoto.setFont(new Font("HP Simplified Hans", Font.BOLD, 20));
 		this.fixedSize(btnAddFoto, 40, 40);
@@ -117,16 +142,20 @@ public class VentanaPrincipal extends JFrame{
 		horizontalStrut = Box.createHorizontalStrut(20);
 		panelNorte.add(horizontalStrut);
 		
+		//Crea panel norte
 		panel = new JPanel();
 		panelNorte.add(panel);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 		
+		//TextField para buscar usuarios y publicaciones
 		textField = new JTextField();
 		this.fixedSize(textField, 90, 27);
 		panel.add(textField);
 		textField.setColumns(10);
 		
+		//Botón para buscar
 		btnBuscar = new JButton("Buscar");
+		this.addManejadorBotonBuscar();
 		btnBuscar.setForeground(LILA);
 		btnBuscar.setFont(new Font("HP Simplified Hans", Font.BOLD, 15));
 		btnBuscar.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -136,25 +165,22 @@ public class VentanaPrincipal extends JFrame{
 		rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
 		panelNorte.add(rigidArea_1);
 		
+		//Botón para abrir el panel del perfil del usuario
 		btnPerfil = new JButton("");
-		btnPerfil.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frmPrincipal.setContentPane(panelPerfilUsuario);
-			}
-		});
+		addManejadorBotonPerfil(btnPerfil);
 		btnPerfil.setAlignmentX(Component.CENTER_ALIGNMENT);
 		this.fixedSize(btnPerfil, 50, 50);
 		this.añadirPerfil(btnPerfil, fotoPerfil);
-		
 		panelNorte.add(btnPerfil);
 
+		//-------------MENU
 		menu = new JMenu("New menu");
 		panelNorte.add(menu);
-		
 		popupMenu = new JPopupMenu();
 		addPopup(menu, popupMenu);
 	}
 	
+	//Añade las publicaciones al panel
 	private void crearPanelPublicaciones() {
 		scrollPane = new JScrollPane();
 		frmPrincipal.getContentPane().add(scrollPane, BorderLayout.CENTER);
@@ -163,13 +189,30 @@ public class VentanaPrincipal extends JFrame{
 		scrollPane.setViewportView(panelPublicaciones);
 		panelPublicaciones.setLayout(new BoxLayout(panelPublicaciones, BoxLayout.Y_AXIS));
 		
-		JPanel publi;
-		for (Foto f : Controlador.getUnicaInstancia().getFotos(usuario)) {
-			publi = this.panelPublicacion(f.getRuta(), fotoPerfil, usuario);
-			panelPublicaciones.add(publi);
-		}
+		this.mostrarPublicaciones();
 	}
 	
+	private void mostrarPublicaciones() {
+		panelPublicaciones.removeAll();
+		JPanel publi;
+		for (Foto f : Controlador.getUnicaInstancia().getFotos(usuarioActual)) {
+			publi = this.panelPublicacion(f.getRuta(), fotoPerfil, usuarioActual);
+			panelPublicaciones.add(publi);
+		}
+		//for (JPanel p : panelesFotos) {
+		//	panelPublicaciones.remove(p);
+		//}
+		//panelesFotos = new ArrayList<JPanel>();	
+		/*
+		JPanel publi;
+		fotosUsuario = Controlador.getUnicaInstancia().getFotos(usuario);
+		//Collections.reverse(fotosUsuario);
+		for (Foto f : fotosUsuario) {
+			publi = this.panelPublicacion(f.getRuta(), fotoPerfil, usuario);
+			panelPublicaciones.add(publi);
+			//panelesFotos.add(publi);
+		}*/
+	}
 
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
@@ -278,6 +321,44 @@ public class VentanaPrincipal extends JFrame{
 		return panelPublicacion;
 	}
 	
+	private void addManejadorBotonPerfil(JButton btn) {
+		btnPerfil.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frmPrincipal.setContentPane(panelPerfilUsuario);
+			}
+		});
+	}
+	
+	private void addManejadorBotonAddFoto(JButton btn) {
+		btnAddFoto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				fileChooser = new JFileChooser();
+				int seleccion = fileChooser.showOpenDialog(btnAddFoto);
+				if (seleccion != JFileChooser.CANCEL_OPTION) {
+					selectedFile = fileChooser.getSelectedFile();					
+					Controlador.getUnicaInstancia().registrarFoto(usuarioActual, 
+							selectedFile.getPath());
+					mostrarPublicaciones();
+				}
+			}
+		});
+	}
+	
+	private void addManejadorBotonBuscar() {
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String cadena = textField.getText();
+				if (!cadena.isEmpty()) {
+					VentanaBusqueda vb = new VentanaBusqueda(ventanaPrincipal, cadena);
+					vb.setVisible(true);
+				}
+			}
+		});
+	}
+	
+	public void abirPerfil(String nombreUsuario) {
+		frmPrincipal.setContentPane(new PanelPerfilUsuario(this, nombreUsuario));
+	}
 	
 	private Icon escalarImagen(JLabel lbl, String ruta) {
 		ImageIcon image = new ImageIcon(ruta);
@@ -287,4 +368,7 @@ public class VentanaPrincipal extends JFrame{
 				Image.SCALE_DEFAULT));
 		return icono;
 	}
+	
+	
+	
 }
