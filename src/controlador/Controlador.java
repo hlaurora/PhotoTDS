@@ -173,6 +173,28 @@ public class Controlador {
 		return usuarios;
 	}
 	
+	public boolean sigue (String seguidor, String seguido) {
+		//recuperamos seguidor
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(seguidor);
+		//recuperamos seguido
+		Usuario s = RepoUsuarios.getUnicaInstancia().getUsuario(seguido);
+		
+		if (s.getSeguidores().contains(u)) {
+			return true;
+		}
+		return false;
+	}
+	
+	public void seguirUsuario (String seguidor, String seguido) {
+		//recuperamos seguidor
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(seguidor);
+		//recuperamos seguido
+		Usuario s = RepoUsuarios.getUnicaInstancia().getUsuario(seguido);
+		
+		s.addSeguidor(u);
+		adaptadorUsuario.modificarUsuario(s);
+	}
+	
 	
 	/*
 	public boolean borrarUsuario(Usuario u) {

@@ -79,10 +79,8 @@ public class PanelPerfilUsuario extends JPanel {
 	private JTable tableFotos;
 	private DefaultTableModel tm;
 	
-	private JFileChooser fileChooser;
-	private File selectedFile;
-	
 	private String usuario;
+	private String usuarioActual;
 	private String email;
 	private String fotoPerfil;
 	private List<Foto> fotosUsuario;
@@ -97,6 +95,7 @@ public class PanelPerfilUsuario extends JPanel {
 		ventanaPrincipal = vp;
 		this.usuario = nombreUsuario;
 		this.fotoPerfil = Controlador.getUnicaInstancia().getFotoPerfil(usuario);
+		this.usuarioActual = ventanaPrincipal.getUsuario();
 		//Recuperamos la lista de fotos
 		fotosUsuario = Controlador.getUnicaInstancia().getFotos(usuario);
 		//numFotos = fotosUsuario.size();
@@ -240,15 +239,24 @@ public class PanelPerfilUsuario extends JPanel {
 			gbc_lblEmail.gridy = 1;
 			panelPerfil.add(lblEmail, gbc_lblEmail);
 		}
+		
 		{
-			btnEditarPerfil = new JButton("Editar Perfil");
-			btnEditarPerfil.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					VentanaRegistro vr = new VentanaRegistro(ventanaPrincipal.frmPrincipal);
-					vr.editarPerfil(usuario);
-					vr.frmRegistro.setVisible(true);
-				}
-			});
+			btnEditarPerfil = new JButton("");
+			
+			if (usuario.equals(usuarioActual)){
+				btnEditarPerfil.setText("Editar Perfil");
+				this.addManejadorBotonEditarPerfil();
+			}
+			
+			else if(Controlador.getUnicaInstancia().sigue(usuarioActual, usuario)) {
+				btnEditarPerfil.setText("Siguiendo");
+			}
+			
+			else {
+				btnEditarPerfil.setText("Seguir");
+				this.addManejadorBotonSeguir();
+			}
+
 			btnEditarPerfil.setForeground(Lila);
 			btnEditarPerfil.setFont(fuenteLabel);
 			GridBagConstraints gbc_btnEditarPerfil = new GridBagConstraints();
@@ -259,7 +267,6 @@ public class PanelPerfilUsuario extends JPanel {
 		}
 		{
 			lblNumPublicaciones = new JLabel("");
-			//numFotos = fotosUsuario.size();
 			lblNumPublicaciones.setText(fotosUsuario.size() + " Publicaciones");
 			lblNumPublicaciones.setFont(fuenteLabel);
 			GridBagConstraints gbc_lblNumPublicaciones = new GridBagConstraints();
@@ -293,7 +300,6 @@ public class PanelPerfilUsuario extends JPanel {
 		{
 			lblNombreUsuario = new JLabel(usuario);
 			lblNombreUsuario.setFont(fuenteLabel);
-			//lblNombreUsuario.setAlignmentX(Component.CENTER_ALIGNMENT);
 			GridBagConstraints gbc_lblNombreUsuario = new GridBagConstraints();
 			gbc_lblNombreUsuario.anchor = GridBagConstraints.WEST;
 			gbc_lblNombreUsuario.gridwidth = 4;
@@ -402,6 +408,25 @@ public class PanelPerfilUsuario extends JPanel {
 					VentanaBusqueda vb = new VentanaBusqueda(ventanaPrincipal, cadena);
 					vb.setVisible(true);
 				}
+			}
+		});
+	}
+	
+	private void addManejadorBotonEditarPerfil() {
+		btnEditarPerfil.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				VentanaRegistro vr = new VentanaRegistro(ventanaPrincipal.frmPrincipal);
+				vr.editarPerfil(usuario);
+				vr.frmRegistro.setVisible(true);
+			}
+		});
+	}
+	
+	private void addManejadorBotonSeguir() {
+		btnEditarPerfil.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Controlador.getUnicaInstancia().seguirUsuario(usuarioActual, usuario);
+				lblNumSeguidores.setText(Controlador.getUnicaInstancia().getNumSeguidores(usuario) + " Seguidores");
 			}
 		});
 	}

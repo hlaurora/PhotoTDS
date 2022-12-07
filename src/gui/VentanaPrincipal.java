@@ -297,6 +297,10 @@ public class VentanaPrincipal extends JFrame{
 		return frmPrincipal.getWidth();
 	}
 	
+	public String getUsuario() {
+		return this.usuarioActual;
+	}
+	
 	/**
 	 * Fija el tamaño de un componente
 	 */
