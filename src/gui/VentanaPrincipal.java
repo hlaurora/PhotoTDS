@@ -103,7 +103,6 @@ public class VentanaPrincipal extends JFrame{
 		panelPerfilUsuario = new PanelPerfilUsuario(this, usuarioActual);
 		this.fotoPerfil = Controlador.getUnicaInstancia().getFotoPerfil(usuarioActual);
 		
-		
 		frmPrincipal = new JFrame();
 		frmPrincipal.setBounds(100, 100, 548, 570);
 		frmPrincipal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -111,7 +110,6 @@ public class VentanaPrincipal extends JFrame{
 		crearPanelNorte();
 		crearPanelPublicaciones();
 		ventanaPrincipal = this;
-
 	}
 	
 	
@@ -180,7 +178,7 @@ public class VentanaPrincipal extends JFrame{
 		addPopup(menu, popupMenu);
 	}
 	
-	//Añade las publicaciones al panel
+	//Crear el panel de las publicaciones
 	private void crearPanelPublicaciones() {
 		scrollPane = new JScrollPane();
 		frmPrincipal.getContentPane().add(scrollPane, BorderLayout.CENTER);
@@ -192,11 +190,12 @@ public class VentanaPrincipal extends JFrame{
 		this.mostrarPublicaciones();
 	}
 	
+	//Añade las publicaciones al panel
 	private void mostrarPublicaciones() {
 		panelPublicaciones.removeAll();
 		JPanel publi;
 		for (Foto f : Controlador.getUnicaInstancia().getFotos(usuarioActual)) {
-			publi = this.panelPublicacion(f.getRuta(), fotoPerfil, usuarioActual);
+			publi = new PanelPublicacion(f.getRuta(), fotoPerfil, usuarioActual);
 			panelPublicaciones.add(publi);
 		}
 		//for (JPanel p : panelesFotos) {
@@ -242,85 +241,9 @@ public class VentanaPrincipal extends JFrame{
 		btn.setIcon(icono);
 	}
 	
-	/**
-	 * Fija el tamaño de un componente
-	 */
-	private void fixedSize(JComponent o, int x, int y) {
-		Dimension d = new Dimension(x, y);
-		o.setMinimumSize(d);
-		o.setMaximumSize(d);
-		o.setPreferredSize(d);
-		o.setSize(d);
-	}
-
+	//MANEJADORES DE LOS BOTONES
 	
-	public int getWidth() {
-		return frmPrincipal.getWidth();
-	}
-
-	public JPanel panelPublicacion(String r, String fp, String nu) {
-		JPanel panelPublicacion = new JPanel();
-		this.fixedSize(panelPublicacion, 500, 80);
-		panelPublicacion.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{200, 49, 0, 0, 0};
-		gridBagLayout.rowHeights = new int[]{5, 14, 0, 0, 0, 0, 5, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		panelPublicacion.setLayout(gridBagLayout);
-		
-		JButton btnMeGusta = new JButton("");
-		btnMeGusta.setIcon(new ImageIcon(PanelPublicacion.class.getResource("/imagenes/icons8-me-gusta-16.png")));
-		GridBagConstraints gbc_btnMeGusta = new GridBagConstraints();
-		gbc_btnMeGusta.insets = new Insets(0, 0, 5, 5);
-		gbc_btnMeGusta.gridx = 1;
-		gbc_btnMeGusta.gridy = 2;
-		panelPublicacion.add(btnMeGusta, gbc_btnMeGusta);
-		
-		JButton btnComentario = new JButton("");
-		btnComentario.setIcon(new ImageIcon(PanelPublicacion.class.getResource("/imagenes/comentario.png")));
-		GridBagConstraints gbc_btnComentario = new GridBagConstraints();
-		gbc_btnComentario.insets = new Insets(0, 0, 5, 5);
-		gbc_btnComentario.gridx = 2;
-		gbc_btnComentario.gridy = 2;
-		panelPublicacion.add(btnComentario, gbc_btnComentario);
-		
-		JLabel lblNumMg = new JLabel("9 Me Gustas");
-		GridBagConstraints gbc_lblNumMg = new GridBagConstraints();
-		gbc_lblNumMg.insets = new Insets(0, 0, 5, 0);
-		gbc_lblNumMg.gridx = 3;
-		gbc_lblNumMg.gridy = 2;
-		panelPublicacion.add(lblNumMg, gbc_lblNumMg);
-		
-		JLabel lblImagen = new JLabel("");
-		this.fixedSize(lblImagen, 150, 90);
-		lblImagen.setIcon(escalarImagen(lblImagen, r));
-		GridBagConstraints gbc_lblImagen = new GridBagConstraints();
-		gbc_lblImagen.gridheight = 5;
-		gbc_lblImagen.insets = new Insets(0, 0, 5, 5);
-		gbc_lblImagen.gridx = 0;
-		gbc_lblImagen.gridy = 1;
-		panelPublicacion.add(lblImagen, gbc_lblImagen);
-		
-		JLabel lblFotoPerfil = new JLabel("");
-		this.fixedSize(lblFotoPerfil, 60, 60);
-		lblFotoPerfil.setIcon(escalarImagen(lblFotoPerfil, fp));
-		GridBagConstraints gbc_lblFotoPerfil = new GridBagConstraints();
-		gbc_lblFotoPerfil.insets = new Insets(0, 0, 5, 5);
-		gbc_lblFotoPerfil.gridx = 1;
-		gbc_lblFotoPerfil.gridy = 4;
-		panelPublicacion.add(lblFotoPerfil, gbc_lblFotoPerfil);
-		
-		JLabel lblNombreUsuario = new JLabel(nu);
-		GridBagConstraints gbc_lblNombreUsuario = new GridBagConstraints();
-		gbc_lblNombreUsuario.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNombreUsuario.gridx = 2;
-		gbc_lblNombreUsuario.gridy = 4;
-		panelPublicacion.add(lblNombreUsuario, gbc_lblNombreUsuario);
-
-		return panelPublicacion;
-	}
-	
+	//Botón Perfil (abre el perfil del usuario actual)
 	private void addManejadorBotonPerfil(JButton btn) {
 		btnPerfil.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -329,21 +252,30 @@ public class VentanaPrincipal extends JFrame{
 		});
 	}
 	
+	//Botón addFoto (abre el fileChooser y añade foto)
 	private void addManejadorBotonAddFoto(JButton btn) {
 		btnAddFoto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				fileChooser = new JFileChooser();
-				int seleccion = fileChooser.showOpenDialog(btnAddFoto);
-				if (seleccion != JFileChooser.CANCEL_OPTION) {
-					selectedFile = fileChooser.getSelectedFile();					
-					Controlador.getUnicaInstancia().registrarFoto(usuarioActual, 
-							selectedFile.getPath());
+				if (addFoto()) {
 					mostrarPublicaciones();
 				}
 			}
 		});
 	}
 	
+	public boolean addFoto() {
+		fileChooser = new JFileChooser();
+		int seleccion = fileChooser.showOpenDialog(btnAddFoto);
+		if (seleccion != JFileChooser.CANCEL_OPTION) {
+			selectedFile = fileChooser.getSelectedFile();					
+			Controlador.getUnicaInstancia().registrarFoto(usuarioActual, 
+					selectedFile.getPath());
+			return true;
+		}
+		return false;
+	}
+	
+	//Botón buscar (usuarios cuyo nombre/nombreUsuario/email coincide con el buscado)
 	private void addManejadorBotonBuscar() {
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -356,19 +288,24 @@ public class VentanaPrincipal extends JFrame{
 		});
 	}
 	
+	//Abre perfil del usuario indicado al seleccionar en la lista
 	public void abirPerfil(String nombreUsuario) {
 		frmPrincipal.setContentPane(new PanelPerfilUsuario(this, nombreUsuario));
 	}
 	
-	private Icon escalarImagen(JLabel lbl, String ruta) {
-		ImageIcon image = new ImageIcon(ruta);
-		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
-				lbl.getWidth()-4, 
-				lbl.getHeight()-4, 
-				Image.SCALE_DEFAULT));
-		return icono;
+	public int getWidth() {
+		return frmPrincipal.getWidth();
 	}
 	
-	
+	/**
+	 * Fija el tamaño de un componente
+	 */
+	private void fixedSize(JComponent o, int x, int y) {
+		Dimension d = new Dimension(x, y);
+		o.setMinimumSize(d);
+		o.setMaximumSize(d);
+		o.setPreferredSize(d);
+		o.setSize(d);
+	}
 	
 }

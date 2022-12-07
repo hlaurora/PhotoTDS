@@ -167,6 +167,7 @@ public class PanelPerfilUsuario extends JPanel {
 		}
 		{
 			btnBuscar = new JButton("Buscar");
+			this.addManejadorBotonBuscar();
 			btnBuscar.setForeground(Lila);
 			btnBuscar.setFont(new Font("HP Simplified Hans", Font.BOLD, 15));
 			this.fixedSize(btnBuscar, 65, 35);
@@ -227,7 +228,6 @@ public class PanelPerfilUsuario extends JPanel {
 			panelPerfil.add(lblFotoPerfilGrande, gbc_lblFotoPerfilGrande);
 		}
 		{
-			//lblEmail = new JLabel("email@email.e");
 			email = Controlador.getUnicaInstancia().getDato("email", usuario);
 			lblEmail = new JLabel(email);
 
@@ -291,7 +291,6 @@ public class PanelPerfilUsuario extends JPanel {
 			panelPerfil.add(lblNumSeguidos, gbc_lblNumSeguidos);
 		}
 		{
-			//lblNombreUsuario = new JLabel("Nombre Usuario");
 			lblNombreUsuario = new JLabel(usuario);
 			lblNombreUsuario.setFont(fuenteLabel);
 			//lblNombreUsuario.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -386,18 +385,27 @@ public class PanelPerfilUsuario extends JPanel {
 	private void addManejadorBotonAddFoto(JButton btn) {
 		btnAddFoto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				fileChooser = new JFileChooser();
-				int seleccion = fileChooser.showOpenDialog(btnAddAlbum);
-				if (seleccion != JFileChooser.CANCEL_OPTION) {
-					selectedFile = fileChooser.getSelectedFile();					
-					Controlador.getUnicaInstancia().registrarFoto(usuario, 
-							selectedFile.getPath());
+				if (ventanaPrincipal.addFoto()) {
 					lblNumPublicaciones.setText(fotosUsuario.size() + " Publicaciones");;
 					mostrarFotos();
 				}
 			}
 		});
 	}
+	
+	//Botón buscar (usuarios cuyo nombre/nombreUsuario/email coincide con el buscado)
+	private void addManejadorBotonBuscar() {
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String cadena = textBuscar.getText();
+				if (!cadena.isEmpty()) {
+					VentanaBusqueda vb = new VentanaBusqueda(ventanaPrincipal, cadena);
+					vb.setVisible(true);
+				}
+			}
+		});
+	}
+	
 	
 	private void añadirPerfil(JLabel lbl, String ruta) {
 		ImageIcon image = new ImageIcon(ruta);
