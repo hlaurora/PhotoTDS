@@ -194,8 +194,11 @@ public class VentanaPrincipal extends JFrame{
 	private void mostrarPublicaciones() {
 		panelPublicaciones.removeAll();
 		JPanel publi;
-		for (Foto f : Controlador.getUnicaInstancia().getFotos(usuarioActual)) {
-			publi = new PanelPublicacion(f.getRuta(), fotoPerfil, usuarioActual);
+		for (Foto f : Controlador.getUnicaInstancia().getFotosSeguidos(usuarioActual)) {
+			publi = new PanelPublicacion(f.getId(), f.getRuta(), 
+					f.getUsuario().getFotoPerfil().getPath(), f.getUsuario().getNombreUsuario());
+			//publi = new PanelPublicacion(f.getId());
+			this.fixedSize(publi, frmPrincipal.getWidth(), 90);
 			panelPublicaciones.add(publi);
 		}
 		//for (JPanel p : panelesFotos) {

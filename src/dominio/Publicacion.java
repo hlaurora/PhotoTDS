@@ -64,8 +64,12 @@ public abstract class Publicacion {
 		return meGustas;
 	}
 
-	public void setMeGustas(int meGustas) {
-		this.meGustas = meGustas;
+	public void addMeGustas() {
+		this.meGustas += 1;
+	}
+	
+	public void setMeGustas(int num) {
+		this.meGustas = num;
 	}
 
 	public List<String> getHashtags() {

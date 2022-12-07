@@ -3,8 +3,13 @@ package controlador;
 import java.awt.Image;
 import java.io.File;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
 
 import dao.DAOException;
 import dao.FactoriaDAO;
@@ -138,9 +143,42 @@ public class Controlador {
 		return u.getFotos();
 	}
 	
+	public List<Foto> getFotosSeguidos(String nombreUsuario){
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
+		List<Foto> listaFotos = new ArrayList<>();
+		for (Usuario s : u.getSeguidos()) {
+			for (Foto f : s.getFotos()) {
+				listaFotos.add(f);
+			}
+		}
+		for (Foto f : u.getFotos()) {
+			listaFotos.add(f);
+		}
+		
+		Collections.sort(listaFotos);
+
+		/*
+		for (Foto f : listaFotos) {
+			System.out.println(f.getFecha());
+		}
+		if (listaFotos.size() <= 3) {
+			return listaFotos;
+		}
+		return listaFotos.subList(0, 2);*/
+		if (listaFotos.size() <= 20) {
+			return listaFotos;
+		}
+		return listaFotos.subList(0, 19);
+	}
+	
 	public int getNumSeguidores(String nombreUsuario) {
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
 		return u.getSeguidores().size();
+	}
+	
+	public int getNumSeguidos(String nombreUsuario) {
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
+		return u.getSeguidos().size();
 	}
 	
 	
@@ -156,6 +194,17 @@ public class Controlador {
 		return true;
 	}
 	
+	
+	public int getMeGustas(int id) {
+		Foto f = (Foto) repoPublicaciones.getPublicacion(id);
+		return f.getMeGustas();
+	}
+	
+	public void darMeGusta(int id) {
+		Foto f = (Foto) repoPublicaciones.getPublicacion(id);
+		f.addMeGustas();
+		adaptadorPublicacion.modificarPublicacion(f);
+	}
 	
 	public List<Usuario> buscarUsuarios (String cadena) {
 		List<Usuario> usuarios = new LinkedList<Usuario>();
@@ -192,7 +241,9 @@ public class Controlador {
 		Usuario s = RepoUsuarios.getUnicaInstancia().getUsuario(seguido);
 		
 		s.addSeguidor(u);
+		u.addSeguido(s);
 		adaptadorUsuario.modificarUsuario(s);
+		adaptadorUsuario.modificarUsuario(u);
 	}
 	
 	

@@ -19,6 +19,7 @@ public class Usuario {
 	private Boolean isPremium;
 	private List<Foto> fotos;
 	private List<Usuario> seguidores;
+	private List<Usuario> seguidos;
 	
 	public Usuario(String email, String nombre, String apellidos, String nombreUsuario,
 			String password, LocalDate fechaNacimiento)
@@ -34,6 +35,7 @@ public class Usuario {
 		this.textoPresentacion = "";
 		this.fotos = new LinkedList<Foto>();
 		this.seguidores = new LinkedList<Usuario>();
+		this.seguidos = new LinkedList<Usuario>();
 		this.isPremium = false;
 	};
 	
@@ -117,12 +119,32 @@ public class Usuario {
 		fotos.add(foto);
 	}
 	
+	public void removeFoto(Foto foto) {
+		fotos.remove(foto);
+	}
+	
 	public List<Usuario> getSeguidores(){
 		return seguidores;
 	}
 	
 	public void addSeguidor(Usuario seguidor) {
 		seguidores.add(seguidor);
+	}
+	
+	public void removeSeguidor(Usuario seguidor) {
+		seguidores.remove(seguidor);
+	}
+		
+	public List<Usuario> getSeguidos(){
+		return seguidos;
+	}
+	
+	public void addSeguido(Usuario seguido) {
+		seguidos.add(seguido);
+	}
+	
+	public void removeSeguido(Usuario seguido) {
+		seguidos.remove(seguido);
 	}
 	
 	public Boolean getIsPremium() {

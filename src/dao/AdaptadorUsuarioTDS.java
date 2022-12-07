@@ -50,6 +50,11 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 			this.registrarUsuario(s);
 		}
 		
+		//Registramos los seguidos
+		for (Usuario s : usuario.getSeguidos()) {
+			this.registrarUsuario(s);
+		}
+		
 		//Crear entidad Usuario
 		eUsuario = new Entidad();
 		eUsuario.setNombre("usuario");
@@ -64,10 +69,11 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		Propiedad textoPresentacion = new Propiedad("textoPresentacion", usuario.getTextoPresentacion());
 		Propiedad fotos = new Propiedad("fotos", obtenerIdFotos(usuario.getFotos()));
 		Propiedad seguidores = new Propiedad("seguidores", obtenerIdSeguidores(usuario.getSeguidores()));
+		Propiedad seguidos = new Propiedad("seguidos", obtenerIdSeguidores(usuario.getSeguidos()));
 		
 		eUsuario.setPropiedades(new ArrayList<Propiedad>(
 				Arrays.asList(email, nombre, apellidos, nombreUsuario, password, 
-						fechaNaci, fotoPerfil, textoPresentacion, fotos, seguidores)));
+						fechaNaci, fotoPerfil, textoPresentacion, fotos, seguidores, seguidos)));
 		
 		/*eUsuario.setPropiedades(new ArrayList<Propiedad>(
 				Arrays.asList(email, nombre, apellidos, nombreUsuario, password, 
@@ -80,7 +86,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 	}
 	
 	public void borrarUsuario(Usuario usuario) {
-		Entidad eUsuario = servPersistencia.recuperarEntidad(usuario.getId());
+		Entidad eUsuario = servPersistencia.recuperarEntidad(usuario.getId());	
 		servPersistencia.borrarEntidad(eUsuario);
 	}
 	
@@ -116,6 +122,8 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 				p.setValor(obtenerIdFotos(usuario.getFotos()));
 			} else if(p.getNombre().equals("seguidores")) {
 				p.setValor(obtenerIdSeguidores(usuario.getSeguidores()));
+			} else if(p.getNombre().equals("seguidos")) {
+				p.setValor(obtenerIdSeguidores(usuario.getSeguidos()));
 			}
 			servPersistencia.modificarPropiedad(p);
 		}
@@ -139,7 +147,8 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		String textoPresentacion;
 		List<Foto> fotos = new LinkedList<Foto>();
 		List<Usuario> seguidores = new LinkedList<Usuario>();
-		
+		List<Usuario> seguidos = new LinkedList<Usuario>();
+
 		eUsuario = servPersistencia.recuperarEntidad(id);
 		
 		//Recuperar propiedades
@@ -169,6 +178,11 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 			usuario.addSeguidor(s);
 		}
 		
+		seguidos = obtenerSeguidoresDesdeId(servPersistencia.recuperarPropiedadEntidad(eUsuario, "seguidos"));
+		for (Usuario s : seguidos) {
+			usuario.addSeguido(s);
+		}
+		
 		return usuario;
 	}
 	
@@ -179,19 +193,8 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		for (Entidad eUsuario : eUsuarios) {
 			usuarios.add(recuperarUsuario(eUsuario.getId()));
 		}
-		
-		//System.out.println(usuarios);
 		return usuarios;
 	}
-	/*
-	public void cambiarFotoPerfil(Usuario u, File fotoPerfil) {
-		Entidad eUsuario = servPersistencia.recuperarEntidad(u.getId());
-
-		for (Propiedad p: eUsuario.getPropiedades()) {
-			if (p.getNombre().equals("id")) {
-		Propiedad p.setValor(String.valueOf(usuario.getId()));
-		servPersistencia.modificarPropiedad(p);
-	}*/
 	
 	private String obtenerIdFotos(List<Foto> listaFotos) {
 		String aux = "";

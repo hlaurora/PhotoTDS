@@ -86,6 +86,8 @@ public class PanelPerfilUsuario extends JPanel {
 	private List<Foto> fotosUsuario;
 	private JScrollPane scrollPane;
 	private int numFotos;
+	
+	private Font fontBtn = new Font("HP Simplified Hans", Font.BOLD, 15);
 
 	/**
 	 * Create the panel.
@@ -135,7 +137,7 @@ public class PanelPerfilUsuario extends JPanel {
 			btnAddFoto = new JButton(" + ");
 			this.addManejadorBotonAddFoto(btnAddFoto);
 			btnAddFoto.setForeground(Lila);
-			btnAddFoto.setFont(new Font("HP Simplified Hans", Font.BOLD, 20));
+			btnAddFoto.setFont(fontBtn);
 			GridBagConstraints gbc_btnAddFoto = new GridBagConstraints();
 			gbc_btnAddFoto.insets = new Insets(0, 0, 0, 5);
 			gbc_btnAddFoto.gridx = 5;
@@ -145,7 +147,7 @@ public class PanelPerfilUsuario extends JPanel {
 		{
 			btnAddAlbum = new JButton("A+");
 			btnAddAlbum.setForeground(Lila);
-			btnAddAlbum.setFont(new Font("HP Simplified Hans", Font.BOLD, 20));
+			btnAddAlbum.setFont(fontBtn);
 			GridBagConstraints gbc_btnAddAlbum = new GridBagConstraints();
 			gbc_btnAddAlbum.insets = new Insets(0, 0, 0, 5);
 			gbc_btnAddAlbum.gridx = 6;
@@ -168,7 +170,7 @@ public class PanelPerfilUsuario extends JPanel {
 			btnBuscar = new JButton("Buscar");
 			this.addManejadorBotonBuscar();
 			btnBuscar.setForeground(Lila);
-			btnBuscar.setFont(new Font("HP Simplified Hans", Font.BOLD, 15));
+			btnBuscar.setFont(fontBtn);
 			this.fixedSize(btnBuscar, 65, 35);
 			GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
 			gbc_btnBuscar.insets = new Insets(0, 0, 0, 5);
@@ -288,7 +290,7 @@ public class PanelPerfilUsuario extends JPanel {
 			panelPerfil.add(lblNumSeguidores, gbc_lblNumSeguidores);
 		}
 		{
-			lblNumSeguidos = new JLabel("9 Seguidos");
+			lblNumSeguidos = new JLabel(Controlador.getUnicaInstancia().getNumSeguidos(usuario) + " Seguidos");
 			lblNumSeguidos.setFont(fuenteLabel);
 			GridBagConstraints gbc_lblNumSeguidos = new GridBagConstraints();
 			gbc_lblNumSeguidos.anchor = GridBagConstraints.WEST;
