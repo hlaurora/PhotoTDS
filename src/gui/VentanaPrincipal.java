@@ -259,13 +259,18 @@ public class VentanaPrincipal extends JFrame{
 	private void addManejadorBotonAddFoto(JButton btn) {
 		btnAddFoto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (addFoto()) {
-					mostrarPublicaciones();
+				fileChooser = new JFileChooser();
+				int seleccion = fileChooser.showOpenDialog(btnAddFoto);
+				if (seleccion != JFileChooser.CANCEL_OPTION) {
+					selectedFile = fileChooser.getSelectedFile();					
+					if(Controlador.getUnicaInstancia().registrarFoto(usuarioActual, 
+							selectedFile.getPath(), ""))
+						mostrarPublicaciones();
 				}
 			}
 		});
 	}
-	
+	/*
 	public boolean addFoto() {
 		fileChooser = new JFileChooser();
 		int seleccion = fileChooser.showOpenDialog(btnAddFoto);
@@ -276,7 +281,7 @@ public class VentanaPrincipal extends JFrame{
 			return true;
 		}
 		return false;
-	}
+	}*/
 	
 	//Botón buscar (usuarios cuyo nombre/nombreUsuario/email coincide con el buscado)
 	private void addManejadorBotonBuscar() {

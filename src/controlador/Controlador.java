@@ -156,12 +156,9 @@ public class Controlador {
 		}
 		
 		Collections.sort(listaFotos);
-
-		/*
-		for (Foto f : listaFotos) {
-			System.out.println(f.getFecha());
-		}
-		if (listaFotos.size() <= 3) {
+		Collections.reverse(listaFotos);
+		
+		/*if (listaFotos.size() <= 3) {
 			return listaFotos;
 		}
 		return listaFotos.subList(0, 2);*/
@@ -182,14 +179,15 @@ public class Controlador {
 	}
 	
 	
-	public boolean registrarFoto(String nombreUsuario, String ruta) {
+	public boolean registrarFoto(String nombreUsuario, String ruta, String comentario) {
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);		
 		List<String> hashtags = new LinkedList<String>();
-		Publicacion p = new Foto("titulo", LocalDate.now(), "descri", hashtags, ruta);
+		Publicacion p = new Foto("titulo", LocalDate.now(), comentario, hashtags, ruta);
 		p.setUsuario(u);
 		u.addFoto((Foto)p);
-		repoPublicaciones.addPublicacion(p);
-		adaptadorPublicacion.registrarPublicacion(p);
+		//repoPublicaciones.addPublicacion(p);
+		RepoPublicaciones.getUnicaInstancia().addPublicacion((Foto)p);
+		adaptadorPublicacion.registrarPublicacion((Foto)p);
 		adaptadorUsuario.modificarUsuario(u);
 		return true;
 	}

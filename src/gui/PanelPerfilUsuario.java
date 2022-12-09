@@ -68,6 +68,8 @@ public class PanelPerfilUsuario extends JPanel {
 	private JLabel lblEmail;
 	private JButton btnEditarPerfil;
 	private JLabel lblNombreUsuario;
+	private JFileChooser fileChooser;
+	private File selectedFile;
 	
 	private Font fuenteLabel = new Font("HP Simplified Hans", Font.PLAIN, 15);
 	private Color Lila = new Color(134, 46, 150);
@@ -86,8 +88,9 @@ public class PanelPerfilUsuario extends JPanel {
 	private List<Foto> fotosUsuario;
 	private JScrollPane scrollPane;
 	private int numFotos;
+	private PanelPerfilUsuario panelAct;
 	
-	private Font fontBtn = new Font("HP Simplified Hans", Font.BOLD, 15);
+	private Font fontBtn = new Font("HP Simplified Hans", Font.BOLD, 20);
 
 	/**
 	 * Create the panel.
@@ -109,6 +112,7 @@ public class PanelPerfilUsuario extends JPanel {
 		this.crearPanelPerfil();
 		this.crearPanelPublicaciones();
 
+		panelAct = this;
 	}
 	
 	private void crearPanelNorte() {
@@ -135,7 +139,8 @@ public class PanelPerfilUsuario extends JPanel {
 		}
 		{
 			btnAddFoto = new JButton(" + ");
-			this.addManejadorBotonAddFoto(btnAddFoto);
+			if (usuario.equals(usuarioActual))
+				this.addManejadorBotonAddFoto(btnAddFoto);
 			btnAddFoto.setForeground(Lila);
 			btnAddFoto.setFont(fontBtn);
 			GridBagConstraints gbc_btnAddFoto = new GridBagConstraints();
@@ -170,7 +175,7 @@ public class PanelPerfilUsuario extends JPanel {
 			btnBuscar = new JButton("Buscar");
 			this.addManejadorBotonBuscar();
 			btnBuscar.setForeground(Lila);
-			btnBuscar.setFont(fontBtn);
+			btnBuscar.setFont(new Font("HP Simplified Hans", Font.BOLD, 15));
 			this.fixedSize(btnBuscar, 65, 35);
 			GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
 			gbc_btnBuscar.insets = new Insets(0, 0, 0, 5);
@@ -390,15 +395,41 @@ public class PanelPerfilUsuario extends JPanel {
 		}
 	}
 	
+	/*
 	private void addManejadorBotonAddFoto(JButton btn) {
 		btnAddFoto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (ventanaPrincipal.addFoto()) {
-					lblNumPublicaciones.setText(fotosUsuario.size() + " Publicaciones");;
+				fileChooser = new JFileChooser();
+				int seleccion = fileChooser.showOpenDialog(btnAddFoto);
+				if (seleccion != JFileChooser.CANCEL_OPTION) {
+					selectedFile = fileChooser.getSelectedFile();					
+					Controlador.getUnicaInstancia().registrarFoto(usuarioActual, 
+							selectedFile.getPath());
+					lblNumPublicaciones.setText(fotosUsuario.size() + " Publicaciones");
 					mostrarFotos();
 				}
 			}
 		});
+	}*/
+	
+	private void addManejadorBotonAddFoto(JButton btn) {
+		btnAddFoto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				fileChooser = new JFileChooser();
+				int seleccion = fileChooser.showOpenDialog(btnAddFoto);
+				if (seleccion != JFileChooser.CANCEL_OPTION) {
+					selectedFile = fileChooser.getSelectedFile();
+					VentanaAñadirPublicacion vap = new VentanaAñadirPublicacion(usuarioActual,
+							selectedFile.getPath(), panelAct);
+					vap.setVisible(true);	
+				}
+			}
+		});
+	}
+	
+	public void actualizar() {
+		lblNumPublicaciones.setText(fotosUsuario.size() + " Publicaciones");
+		mostrarFotos();
 	}
 	
 	//Botón buscar (usuarios cuyo nombre/nombreUsuario/email coincide con el buscado)
@@ -509,7 +540,7 @@ public class PanelPerfilUsuario extends JPanel {
 	/**
 	 * Fija el tamaño de un componente
 	 */
-	private void fixedSize(JComponent o, int x, int y) {
+	public void fixedSize(JComponent o, int x, int y) {
 		Dimension d = new Dimension(x, y);
 		o.setMinimumSize(d);
 		o.setMaximumSize(new Dimension(100000, 100));
