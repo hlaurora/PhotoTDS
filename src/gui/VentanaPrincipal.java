@@ -45,7 +45,8 @@ import java.util.List;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class VentanaPrincipal extends JFrame{
+//public class VentanaPrincipal extends JFrame{
+public class VentanaPrincipal extends JPanel{
 
 	public JFrame frmPrincipal;
 	
@@ -71,20 +72,20 @@ public class VentanaPrincipal extends JFrame{
 		
 	private PanelPerfilUsuario panelPerfilUsuario;
 	private JPanel panelPublicaciones;
-	private List<JPanel> panelesFotos = new ArrayList<JPanel>();
-	private List<Foto> fotosUsuario;
 	
 	private VentanaPrincipal ventanaPrincipal;
+	
 
-	public void mostrarVentana() {
+	/*public void mostrarVentana() {
 		setLocationRelativeTo(null);
 		setVisible(true);
-	}
+	}*/
 
 	/**
 	 * Create the application.
 	 */
-	public VentanaPrincipal(String u) {	
+	public VentanaPrincipal(frmPrincipal frm, String u) {	
+		this.frmPrincipal = frm;
 		this.usuarioActual = Controlador.getUnicaInstancia().getNombreUsuario(u);
 		initialize();
 	}
@@ -93,19 +94,19 @@ public class VentanaPrincipal extends JFrame{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {		
-		try {
+		/*try {
 			UIManager.setLookAndFeel("com.jtattoo.plaf.mint.MintLookAndFeel");
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException e1) {
 			e1.printStackTrace();
-		}
+		}*/
 				
 		panelPerfilUsuario = new PanelPerfilUsuario(this, usuarioActual);
 		this.fotoPerfil = Controlador.getUnicaInstancia().getFotoPerfil(usuarioActual);
 		
-		frmPrincipal = new JFrame();
-		frmPrincipal.setBounds(100, 100, 548, 570);
-		frmPrincipal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frmPrincipal = new JFrame();
+		//frmPrincipal.setBounds(100, 100, 548, 570);
+		//frmPrincipal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		crearPanelNorte();
 		crearPanelPublicaciones();
@@ -118,6 +119,8 @@ public class VentanaPrincipal extends JFrame{
 		frmPrincipal.getContentPane().add(panelNorte, BorderLayout.NORTH);
 		panelNorte.setLayout(new BoxLayout(panelNorte, BoxLayout.X_AXIS));
 		
+		this.fixedSize(panelNorte, 550, 50);
+		
 		lblPhotoTDS = new JLabel("PhotoTDS");
 		lblPhotoTDS.setForeground(LILA);
 		lblPhotoTDS.setFont(new Font("HP Simplified Hans", Font.PLAIN, 30));
@@ -125,8 +128,7 @@ public class VentanaPrincipal extends JFrame{
 		panelNorte.add(lblPhotoTDS);
 		
 		rigidArea = Box.createRigidArea(new Dimension(20, 20));
-		rigidArea.setMaximumSize(new Dimension(70, 20));
-		rigidArea.setPreferredSize(new Dimension(50, 20));
+		rigidArea.setPreferredSize(new Dimension(10, 10));
 		panelNorte.add(rigidArea);
 		
 		//Botón para añadir fotos
@@ -138,6 +140,7 @@ public class VentanaPrincipal extends JFrame{
 		panelNorte.add(btnAddFoto);
 		
 		horizontalStrut = Box.createHorizontalStrut(20);
+		horizontalStrut.setMaximumSize(new Dimension(20, 20));
 		panelNorte.add(horizontalStrut);
 		
 		//Crea panel norte
@@ -191,12 +194,14 @@ public class VentanaPrincipal extends JFrame{
 	}
 	
 	//Añade las publicaciones al panel
-	private void mostrarPublicaciones() {
+	public void mostrarPublicaciones() {
 		panelPublicaciones.removeAll();
 		JPanel publi;
-		for (Foto f : Controlador.getUnicaInstancia().getFotosSeguidos(usuarioActual)) {
-			publi = new PanelPublicacion(f.getId(), f.getRuta(), 
-					f.getUsuario().getFotoPerfil().getPath(), f.getUsuario().getNombreUsuario());
+		List<Foto> fotos = Controlador.getUnicaInstancia().getFotosSeguidos(usuarioActual);
+		for (Foto f : fotos) {
+			/*publi = new PanelPublicacion(f.getId(), f.getRuta(), 
+					f.getUsuario().getFotoPerfil().getPath(), f.getUsuario().getNombreUsuario());*/
+			publi = new PanelPublicacion(f);
 			//publi = new PanelPublicacion(f.getId());
 			this.fixedSize(publi, frmPrincipal.getWidth(), 90);
 			panelPublicaciones.add(publi);
@@ -262,26 +267,14 @@ public class VentanaPrincipal extends JFrame{
 				fileChooser = new JFileChooser();
 				int seleccion = fileChooser.showOpenDialog(btnAddFoto);
 				if (seleccion != JFileChooser.CANCEL_OPTION) {
-					selectedFile = fileChooser.getSelectedFile();					
-					if(Controlador.getUnicaInstancia().registrarFoto(usuarioActual, 
-							selectedFile.getPath(), ""))
-						mostrarPublicaciones();
-				}
+					selectedFile = fileChooser.getSelectedFile();
+					VentanaAñadirPublicacion vap = new VentanaAñadirPublicacion(usuarioActual,
+							selectedFile.getPath(), ventanaPrincipal);
+					vap.setVisible(true);	
+				}				
 			}
 		});
 	}
-	/*
-	public boolean addFoto() {
-		fileChooser = new JFileChooser();
-		int seleccion = fileChooser.showOpenDialog(btnAddFoto);
-		if (seleccion != JFileChooser.CANCEL_OPTION) {
-			selectedFile = fileChooser.getSelectedFile();					
-			Controlador.getUnicaInstancia().registrarFoto(usuarioActual, 
-					selectedFile.getPath());
-			return true;
-		}
-		return false;
-	}*/
 	
 	//Botón buscar (usuarios cuyo nombre/nombreUsuario/email coincide con el buscado)
 	private void addManejadorBotonBuscar() {

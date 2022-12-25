@@ -45,6 +45,8 @@ public class VentanaAñadirPublicacion extends JFrame {
 	private Color LILA = new Color(134, 46, 150);
 	private Font fontBtn = new Font("HP Simplified Hans", Font.BOLD, 15);
 	
+	private JPanel ventanaActual;
+	
 	/*
 	/**
 	 * Launch the application.
@@ -65,12 +67,14 @@ public class VentanaAñadirPublicacion extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public VentanaAñadirPublicacion(String u, String r, PanelPerfilUsuario p) {
+	public VentanaAñadirPublicacion(String u, String r, JPanel p) {
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		this.ruta = r;
 		this.usuarioActual = u;
-		this.panelPerfil = p;
+			
+		this.ventanaActual = p;
+		//this.panelPerfil = p;
 		
 		setBounds(100, 100, 551, 283);
 		contentPane = new JPanel();
@@ -154,9 +158,14 @@ public class VentanaAñadirPublicacion extends JFrame {
 		btnCompartir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				comentario = textArea.getText();
-				Controlador.getUnicaInstancia().registrarFoto(usuarioActual, ruta, comentario);
-				dispose();
-				panelPerfil.actualizar();
+				if (Controlador.getUnicaInstancia().registrarFoto(usuarioActual, ruta, comentario)) {
+					dispose();
+					
+					if (ventanaActual.getClass() == PanelPerfilUsuario.class)
+						((PanelPerfilUsuario)ventanaActual).actualizar();
+					else if (ventanaActual.getClass() == VentanaPrincipal.class)
+						((VentanaPrincipal)ventanaActual).mostrarPublicaciones();
+				}
 			}
 		});
 	}

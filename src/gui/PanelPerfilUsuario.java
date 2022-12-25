@@ -40,12 +40,16 @@ import javax.swing.ImageIcon;
 import java.awt.Component;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.JPopupMenu;
 
 public class PanelPerfilUsuario extends JPanel {
 	
@@ -91,6 +95,8 @@ public class PanelPerfilUsuario extends JPanel {
 	private PanelPerfilUsuario panelAct;
 	
 	private Font fontBtn = new Font("HP Simplified Hans", Font.BOLD, 20);
+	private JPopupMenu popupMenu;
+	private JButton btnEliminarFoto;
 
 	/**
 	 * Create the panel.
@@ -378,6 +384,7 @@ public class PanelPerfilUsuario extends JPanel {
 					tableFotos.setTableHeader(null);
 					tableFotos.setDefaultRenderer(Object.class, new ImgTabla());
 				}
+				tableFotos.setDefaultEditor(Object.class, null);  
 				for (int i = 0; i < 3; i++) {
 					tableFotos.getColumnModel().getColumn(i).setPreferredWidth(170);
 				}
@@ -425,6 +432,7 @@ public class PanelPerfilUsuario extends JPanel {
 				}
 			}
 		});
+		//actualizar();
 	}
 	
 	public void actualizar() {
@@ -482,6 +490,7 @@ public class PanelPerfilUsuario extends JPanel {
 				Image.SCALE_DEFAULT));
 		return icono;
 	}
+	
 	
 	private void mostrarFotos() {
 		
@@ -587,4 +596,21 @@ public class PanelPerfilUsuario extends JPanel {
 	}*/
 
 
+	private static void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
+	}
 }

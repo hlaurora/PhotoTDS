@@ -143,6 +143,11 @@ public class Controlador {
 		return u.getFotos();
 	}
 	
+	public Foto getFoto(int id) {
+		Foto f = (Foto)RepoPublicaciones.getUnicaInstancia().getPublicacion(id);
+		return f;
+	}
+	
 	public List<Foto> getFotosSeguidos(String nombreUsuario){
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
 		List<Foto> listaFotos = new ArrayList<>();

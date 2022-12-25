@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 
 import controlador.Controlador;
+import dominio.Foto;
 import dominio.RepoPublicaciones;
 
 import javax.swing.JLabel;
@@ -28,16 +29,24 @@ public class PanelPublicacion extends JPanel {
 
 	private JLabel lblNumMg;
 	private JLabel lblImagen;
+	private Foto foto;
 	
 	/**
 	 * Create the panel.
 	 */
-	public PanelPublicacion(int id, String r, String fp, String nu) {
-	//public PanelPublicacion(int id) {
-		this.ruta = r;
+	//public PanelPublicacion(int id, String r, String fp, String nu) {
+	public PanelPublicacion(Foto foto) {
+		/*this.ruta = r;
 		this.fotoPerfil = fp;
 		this.nombreUsuario = nu;
-		this.idFoto = id;
+		this.idFoto = id;*/
+		//this.idFoto = id;
+		//this.foto = Controlador.getUnicaInstancia().getFoto(id);
+		this.foto = foto;
+		this.ruta = foto.getRuta();
+		this.fotoPerfil = foto.getUsuario().getFotoPerfil().getPath();
+		this.nombreUsuario = foto.getUsuario().getNombreUsuario();		
+		
 		
 		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -64,7 +73,8 @@ public class PanelPublicacion extends JPanel {
 		gbc_btnComentario.gridy = 2;
 		add(btnComentario, gbc_btnComentario);
 		
-		lblNumMg = new JLabel(Controlador.getUnicaInstancia().getMeGustas(idFoto) + " Me gustas");
+		//lblNumMg = new JLabel(Controlador.getUnicaInstancia().getMeGustas(idFoto) + " Me gustas");
+		lblNumMg = new JLabel(foto.getMeGustas() + " Me gustas");
 		GridBagConstraints gbc_lblNumMg = new GridBagConstraints();
 		gbc_lblNumMg.insets = new Insets(0, 0, 5, 0);
 		gbc_lblNumMg.gridx = 3;
