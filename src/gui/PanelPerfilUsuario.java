@@ -447,6 +447,7 @@ public class PanelPerfilUsuario extends JPanel {
 				String cadena = textBuscar.getText();
 				if (!cadena.isEmpty()) {
 					VentanaBusqueda vb = new VentanaBusqueda(ventanaPrincipal, cadena);
+					vb.setLocationRelativeTo(btnBuscar);
 					vb.setVisible(true);
 				}
 			}
@@ -458,6 +459,7 @@ public class PanelPerfilUsuario extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				VentanaRegistro vr = new VentanaRegistro(ventanaPrincipal.frmPrincipal);
 				vr.editarPerfil(usuario);
+				//vr.setLocationRelativeTo(ventanaPrincipal);
 				vr.frmRegistro.setVisible(true);
 			}
 		});

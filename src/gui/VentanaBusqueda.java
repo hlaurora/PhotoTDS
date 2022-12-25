@@ -36,7 +36,7 @@ public class VentanaBusqueda extends JFrame {
 	 */
 	public VentanaBusqueda(VentanaPrincipal vp, String cadena) {
 		this.ventanaPrincipal = vp;
-		setBounds(100, 100, 357, 376);
+		setBounds(100, 100, 230, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 

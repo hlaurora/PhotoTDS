@@ -74,8 +74,8 @@ public class VentanaEntrada {
 			e1.printStackTrace();
 		}
 		frmEntrada = new JFrame();
-		frmEntrada.setLocationRelativeTo(null);
 		frmEntrada.setBounds(100, 100, 383, 457);
+		frmEntrada.setLocationRelativeTo(null);
 		frmEntrada.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmEntrada.getContentPane().setLayout(new BoxLayout(frmEntrada.getContentPane(), BoxLayout.Y_AXIS));
 	
@@ -197,22 +197,17 @@ public class VentanaEntrada {
 						textUsuario.getText(), 
 						new String (passwordField.getPassword()));
 				if (registrado) {
-					frmPrincipal frm = new frmPrincipal();
-					VentanaPrincipal window = new VentanaPrincipal(frm, textUsuario.getText());
+					FrmPrincipal frm = new FrmPrincipal();
+					VentanaPrincipal vPrincipal = new VentanaPrincipal(frm, textUsuario.getText());
 					//VentanaPrincipal window = new VentanaPrincipal(textUsuario.getText());
 					//Prueba p = new Prueba(textUsuario.getText());
 					//p.frmPrincipal.setVisible(true);
 					//window.frmPrincipal.setVisible(true);
-					window.setVisible(true);
+					vPrincipal.setVisible(true);
 					//frm.setContentPane(window);
 					
 					frm.setVisible(true);
 					
-					
-					
-					//VentanaPrincipal principal = new VentanaPrincipal();
-					//principal.
-					//System.out.println("Registrado");
 					//VENTANA PRINCIPAL
 					frmEntrada.dispose();
 				} else 

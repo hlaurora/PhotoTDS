@@ -90,7 +90,7 @@ public class VentanaRegistro extends JDialog {
 		}
 		frmRegistro = new JFrame();
 		frmRegistro.setBounds(100, 100, 422, 568);
-		frmRegistro.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmRegistro.setLocationRelativeTo(null);
 		frmRegistro.getContentPane().setLayout(new BoxLayout(frmRegistro.getContentPane(), BoxLayout.Y_AXIS));
 
 		crearPanelTitulo();

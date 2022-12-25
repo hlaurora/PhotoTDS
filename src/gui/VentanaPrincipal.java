@@ -84,7 +84,7 @@ public class VentanaPrincipal extends JPanel{
 	/**
 	 * Create the application.
 	 */
-	public VentanaPrincipal(frmPrincipal frm, String u) {	
+	public VentanaPrincipal(FrmPrincipal frm, String u) {	
 		this.frmPrincipal = frm;
 		this.usuarioActual = Controlador.getUnicaInstancia().getNombreUsuario(u);
 		initialize();
@@ -198,7 +198,7 @@ public class VentanaPrincipal extends JPanel{
 		List<Foto> fotos = Controlador.getUnicaInstancia().getFotosSeguidos(usuarioActual);
 		for (Foto f : fotos) {
 			publi = new PanelPublicacion(f);
-			this.fixedSize(publi, frmPrincipal.getWidth(), 90);
+			this.fixedSize(publi, frmPrincipal.getWidth()-40, 90);
 			panelPublicaciones.add(publi);
 		}
 	}
@@ -265,6 +265,7 @@ public class VentanaPrincipal extends JPanel{
 				String cadena = textField.getText();
 				if (!cadena.isEmpty()) {
 					VentanaBusqueda vb = new VentanaBusqueda(ventanaPrincipal, cadena);
+					vb.setLocationRelativeTo(btnBuscar);
 					vb.setVisible(true);
 				}
 			}

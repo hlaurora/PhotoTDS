@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-public class frmPrincipal extends JFrame {
+public class FrmPrincipal extends JFrame {
 
 	private JPanel contentPane;
 
@@ -17,7 +17,7 @@ public class frmPrincipal extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					frmPrincipal frame = new frmPrincipal();
+					FrmPrincipal frame = new FrmPrincipal();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -29,12 +29,12 @@ public class frmPrincipal extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public frmPrincipal() {
-		setLocationRelativeTo(null);
+	public FrmPrincipal() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 558, 560);
+		setBounds(100, 100, 600, 560);
+		setLocationRelativeTo(null);
+
 		contentPane = new JPanel();
-		//contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		
