@@ -94,12 +94,6 @@ public class VentanaPrincipal extends JPanel{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {		
-		/*try {
-			UIManager.setLookAndFeel("com.jtattoo.plaf.mint.MintLookAndFeel");
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException e1) {
-			e1.printStackTrace();
-		}*/
 				
 		panelPerfilUsuario = new PanelPerfilUsuario(this, usuarioActual);
 		this.fotoPerfil = Controlador.getUnicaInstancia().getFotoPerfil(usuarioActual);
@@ -183,12 +177,16 @@ public class VentanaPrincipal extends JPanel{
 	
 	//Crear el panel de las publicaciones
 	private void crearPanelPublicaciones() {
-		scrollPane = new JScrollPane();
-		frmPrincipal.getContentPane().add(scrollPane, BorderLayout.CENTER);
-		
 		panelPublicaciones = new JPanel();
-		scrollPane.setViewportView(panelPublicaciones);
+		frmPrincipal.getContentPane().add(panelPublicaciones, BorderLayout.CENTER);
+		scrollPane = new JScrollPane();
+		
+		panelPublicaciones.add(scrollPane);
+		
+		//scrollPane.setViewportView(panelPublicaciones);
+		//frmPrincipal.getContentPane().add(scrollPane, BorderLayout.CENTER);
 		panelPublicaciones.setLayout(new BoxLayout(panelPublicaciones, BoxLayout.Y_AXIS));
+		//scrollPane.VERTICAL_SCROLLBAR_ALWAYS;
 		
 		this.mostrarPublicaciones();
 	}
@@ -199,26 +197,10 @@ public class VentanaPrincipal extends JPanel{
 		JPanel publi;
 		List<Foto> fotos = Controlador.getUnicaInstancia().getFotosSeguidos(usuarioActual);
 		for (Foto f : fotos) {
-			/*publi = new PanelPublicacion(f.getId(), f.getRuta(), 
-					f.getUsuario().getFotoPerfil().getPath(), f.getUsuario().getNombreUsuario());*/
 			publi = new PanelPublicacion(f);
-			//publi = new PanelPublicacion(f.getId());
 			this.fixedSize(publi, frmPrincipal.getWidth(), 90);
 			panelPublicaciones.add(publi);
 		}
-		//for (JPanel p : panelesFotos) {
-		//	panelPublicaciones.remove(p);
-		//}
-		//panelesFotos = new ArrayList<JPanel>();	
-		/*
-		JPanel publi;
-		fotosUsuario = Controlador.getUnicaInstancia().getFotos(usuario);
-		//Collections.reverse(fotosUsuario);
-		for (Foto f : fotosUsuario) {
-			publi = this.panelPublicacion(f.getRuta(), fotoPerfil, usuario);
-			panelPublicaciones.add(publi);
-			//panelesFotos.add(publi);
-		}*/
 	}
 
 	private static void addPopup(Component component, final JPopupMenu popup) {

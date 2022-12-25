@@ -367,7 +367,7 @@ public class VentanaRegistro extends JDialog {
 		panelBotones.add(btnCancelar, gbc_btnCancelar);
 		
 		addManejadorBotonRegistrar(btnRegistrar);
-		addManejadorBotonCandelar(btnCancelar);
+		addManejadorBotonCancelar(btnCancelar);
 		
 	}
 	
@@ -415,10 +415,51 @@ public class VentanaRegistro extends JDialog {
 		});
 	}
 	
-	private void addManejadorBotonCandelar(JButton btnCancelar) {
+	private void addManejadorBotonCancelar(JButton btnCancelar) {
 		btnCancelar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				frmRegistro.dispose();
+			}
+		});
+	}
+	
+	private void addManejadorBotonEditar(JButton btnEditar, String nombreUsuario){
+		btnRegistrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//ver si ha cambiado la contraseña
+				String password = new String(passwordField.getPassword());
+				String password2 = new String(passwordField2.getPassword());
+				if (!password.isEmpty()) {
+					if (!password.equals(password2)) {
+						JOptionPane.showMessageDialog(frmRegistro, "Las contraseñas no coinciden.\n",
+								"Registro", JOptionPane.ERROR_MESSAGE);
+					}
+					else {
+						Controlador.getUnicaInstancia().registrarContraseña(nombreUsuario, password);
+						JOptionPane.showMessageDialog(frmRegistro, "Contraseña modificada correctamente.", 
+								"EditarPerfil", JOptionPane.INFORMATION_MESSAGE);
+					}
+				}
+				
+				//ver si ha cambiado la foto
+				if (seleccion == 0) {
+					fotoPerfil = fileChooser.getSelectedFile();
+					Controlador.getUnicaInstancia().registrarFotoPerfil(nombreUsuario, fotoPerfil);
+					JOptionPane.showMessageDialog(frmRegistro, "Foto de perfil modificada correctamente.", 
+							"EditarPerfil", JOptionPane.INFORMATION_MESSAGE);
+				}
+				
+				//ver si ha cambiado el textoPresentacion
+				if (abreTextArea) {
+					textoPresentacion = ventanaTexto.getTexto();
+					if (!textoPresentacion.isEmpty()) {
+						Controlador.getUnicaInstancia().registrarTextoPresentacion(nombreUsuario, textoPresentacion);
+						JOptionPane.showMessageDialog(frmRegistro, "Texto de presentación modificado correctamente.",
+								"EditarPerfil", JOptionPane.INFORMATION_MESSAGE);
+					}
+				}
+				
 				frmRegistro.dispose();
 			}
 		});
@@ -448,9 +489,8 @@ public class VentanaRegistro extends JDialog {
 		
 		return camposOK;
 	}
+
 	
-	
-	@SuppressWarnings("deprecation")
 	public void editarPerfil(String nombreUsuario) {
 		textDescripcion.setVisible(false);
 		lblObligatorio.setVisible(false);
@@ -474,16 +514,15 @@ public class VentanaRegistro extends JDialog {
 		dateChooser.disable();
 		lblDate.setForeground(Color.GRAY);
 		
+		lblContraseña.setText("Nueva contraseña(opcional)");
+		lblAñadirFoto.setText("Nueva foto de perfil(opcional)");
+		lblPresentacion.setText("Nueva presentación(opcional)");
+		
 		btnRegistrar.setText("Modificar");
-		
-		
-		/*
-		private JTextField textNombre;
-		private JTextField textApellidos;
-		private JTextField textNombreUsuario;
-		private JPasswordField passwordField;
-		private JPasswordField passwordField2;*/
+		addManejadorBotonEditar(btnRegistrar, nombreUsuario);
+
 	}
+
 
 }
 

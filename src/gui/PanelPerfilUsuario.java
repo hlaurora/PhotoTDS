@@ -473,25 +473,6 @@ public class PanelPerfilUsuario extends JPanel {
 	}
 	
 	
-	private void añadirPerfil(JLabel lbl, String ruta) {
-		ImageIcon image = new ImageIcon(ruta);
-		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
-				lbl.getWidth()-7, 
-				lbl.getHeight()-7, 
-				Image.SCALE_DEFAULT));
-		lbl.setIcon(icono);
-	}
-	
-	private Icon imagenCelda(String ruta) {
-		ImageIcon image = new ImageIcon(ruta);
-		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
-				170, 
-				70-4, 
-				Image.SCALE_DEFAULT));
-		return icono;
-	}
-	
-	
 	private void mostrarFotos() {
 		
 		//Limpiamos la tabla
@@ -532,7 +513,6 @@ public class PanelPerfilUsuario extends JPanel {
 					tm.setValueAt(new JLabel(imagenCelda(ruta)), i, j);
 					f++;
 				}
-				//tm.addRow(new Object[] {null,null, null});
 				i++;
 			}
 			//Última fila
@@ -545,56 +525,6 @@ public class PanelPerfilUsuario extends JPanel {
 		}		
 	}
 	
-	
-	/**
-	 * Fija el tamaño de un componente
-	 */
-	public void fixedSize(JComponent o, int x, int y) {
-		Dimension d = new Dimension(x, y);
-		o.setMinimumSize(d);
-		o.setMaximumSize(new Dimension(100000, 100));
-		o.setPreferredSize(d);
-		o.setSize(d);
-	}
-	
-	/*
-	private void añadirPerfil(JLabel lbl, String ruta) throws IOException {
-		ImageIcon image = new ImageIcon(ruta);
-		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
-				lbl.getWidth()-7, 
-				lbl.getHeight()-7, 
-				Image.SCALE_DEFAULT));
-		
-		BufferedImage imagen = new BufferedImage(
-			    icono.getIconWidth(),
-			    icono.getIconHeight(),
-			    BufferedImage.TYPE_INT_RGB);		
-		
-		Area clip = new Area(new Rectangle(0, 0, imagen.getWidth(), imagen.getHeight()));
-		Area oval = new Area(new Ellipse2D.Double(0,0, imagen.getWidth()-1, imagen.getHeight()-1));
-		clip.subtract( oval );
-		Graphics g2d = imagen.createGraphics();
-		g2d.setClip( clip );
-		//g2d.setColor( Color.BLACK );
-		//g2d.fillRect(0, 0, imagen.getWidth(), imagen.getHeight());
-		
-		lbl.setIcon(new ImageIcon (imagen));
-	}*/
-	
-	/*
-	public void cambiarImagen(JLabel lbl, String nombre) {
-		URL url = this.getClass().getResource(nombre);
-		BufferedImage myPicture = new BufferedImage();
-		try {
-			myPicture = ImageIO.read(url);
-			Image aux = myPicture.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_DEFAULT);
-			lbl.setIcon(new ImageIcon(aux));
-			lbl.repaint();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-	}*/
-
 
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
@@ -612,5 +542,37 @@ public class PanelPerfilUsuario extends JPanel {
 				popup.show(e.getComponent(), e.getX(), e.getY());
 			}
 		});
+	}
+	
+	
+	/**
+	 * Fija el tamaño de un componente
+	 */
+	public void fixedSize(JComponent o, int x, int y) {
+		Dimension d = new Dimension(x, y);
+		o.setMinimumSize(d);
+		o.setMaximumSize(new Dimension(100000, 100));
+		o.setPreferredSize(d);
+		o.setSize(d);
+	}
+	
+
+	
+	private void añadirPerfil(JLabel lbl, String ruta) {
+		ImageIcon image = new ImageIcon(ruta);
+		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
+				lbl.getWidth()-7, 
+				lbl.getHeight()-7, 
+				Image.SCALE_DEFAULT));
+		lbl.setIcon(icono);
+	}
+	
+	private Icon imagenCelda(String ruta) {
+		ImageIcon image = new ImageIcon(ruta);
+		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
+				170, 
+				70-4, 
+				Image.SCALE_DEFAULT));
+		return icono;
 	}
 }

@@ -83,6 +83,12 @@ public class Controlador {
 		adaptadorUsuario.modificarUsuario(u);
 	}
 	
+	public void registrarContraseña(String nombreUsuario, String password) {
+		Usuario u = repoUsuarios.getUsuario(nombreUsuario);
+		u.setPassword(password);
+		adaptadorUsuario.modificarUsuario(u);
+	}
+	
 	public String getNombreUsuario(String s) {
 		//Si ha entrado con el nombre de usuario pues lo devolvemos
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(s);
