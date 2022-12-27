@@ -15,6 +15,7 @@ import dao.DAOException;
 import dao.FactoriaDAO;
 import dao.IAdaptadorPublicacionDAO;
 import dao.IAdaptadorUsuarioDAO;
+import dominio.Album;
 import dominio.Foto;
 import dominio.Publicacion;
 import dominio.RepoPublicaciones;
@@ -40,6 +41,11 @@ public class Controlador {
 			unicaInstancia = new Controlador();
 		return unicaInstancia;
 	}
+	
+	
+	///////////////////
+	///// USUARIO /////
+	///////////////////
 	
 	public boolean esUsuarioRegistrado(String nombreUsuario) {
 		return RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario) != null;
@@ -90,31 +96,19 @@ public class Controlador {
 	}
 	
 	public String getNombreUsuario(String s) {
+		
 		//Si ha entrado con el nombre de usuario pues lo devolvemos
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(s);
 		if (u != null ) {
 			return s;
 		}
+		
 		//Si no lo buscamos
 		else {
 			u = RepoUsuarios.getUnicaInstancia().getUsuarioEmail(s);
 			return u.getNombreUsuario();
 		}
 	}
-	
-	/*
-	public String getEmail(String s) {
-		//Si ha entrado con el email pues lo devolvemos
-		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuarioEmail(s);
-		if (u != null ) {
-			return s;
-		}
-		//Si no lo buscamos
-		else {
-			u = RepoUsuarios.getUnicaInstancia().getUsuario(s);
-			return u.getEmail();
-		}
-	}*/
 	
 	public String getDato(String d, String usuario) {
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(usuario);
@@ -144,9 +138,14 @@ public class Controlador {
 	}
 	
 	
-	public List<Foto> getFotos(String nombreUsuario){
+	public List<Foto> getFotos(String nombreUsuario) {
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
 		return u.getFotos();
+	}
+	
+	public List<Album> getAlbumes(String nombreUsuario) {
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
+		return u.getAlbumes();
 	}
 	
 	public Foto getFoto(int id) {
@@ -256,14 +255,51 @@ public class Controlador {
 	}
 	
 	
-	/*
-	public boolean borrarUsuario(Usuario u) {
-		if (!esUsuarioRegistrado(u.getNombre()))
-			return false;
-		UsuarioDAO usuarioDAO = 
+	public boolean existeAlbum(String nombreUsuario, String nombreAlbum) {
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
+		for (Album a : u.getAlbumes()) {
+			if (a.getTitulo().equals(nombreAlbum)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public int registrarAlbum(String nombreUsuario, String nombreAlbum, String comentario, String ruta) {
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);		
+		List<String> hashtags = new LinkedList<String>();
+		Album a = new Album("titulo", LocalDate.now(), comentario, hashtags);
+		a.setUsuario(u);
+
+		Foto f = new Foto("titulo", LocalDate.now(), comentario, hashtags, ruta);
+		f.setUsuario(u);
+		a.addFoto(f);		
 		
-		return true;
-	}*/
+		
+		u.addAlbum(a);
+		//repoPublicaciones.addPublicacion(p);
+		
+		//this.añadirFotoAlbum(a.getId(), ruta, comentario);
+		
+		RepoPublicaciones.getUnicaInstancia().addPublicacion(a);
+		adaptadorPublicacion.registrarPublicacion(a);
+		adaptadorUsuario.modificarUsuario(u);
+		return a.getId();
+	}
+	
+	public void añadirFotoAlbum(int idAlbum, String ruta, String comentario) {
+		//recuperamos album
+		Album a = (Album) RepoPublicaciones.getUnicaInstancia().getPublicacion(idAlbum);
+		//recuperamos usuario
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(a.getUsuario().getNombreUsuario());
+		
+		List<String> hashtags = new LinkedList<String>();
+		Foto f = new Foto("titulo", LocalDate.now(), comentario, hashtags, ruta);
+		f.setUsuario(u);
+		a.addFoto(f);
+		adaptadorUsuario.modificarUsuario(u);
+		adaptadorPublicacion.modificarPublicacion(a);
+	}
 	
 	
 	

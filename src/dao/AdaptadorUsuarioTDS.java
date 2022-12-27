@@ -10,6 +10,7 @@ import java.util.StringTokenizer;
 
 import beans.Entidad;
 import beans.Propiedad;
+import dominio.Album;
 import dominio.Foto;
 import dominio.Publicacion;
 import dominio.Usuario;
@@ -45,6 +46,11 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 			adaptadorPublicacion.registrarPublicacion(foto);
 		}
 		
+		//Registramos los albumes
+		for (Album album : usuario.getAlbumes()) {
+			adaptadorPublicacion.registrarPublicacion(album);
+		}
+		
 		//Registramos los seguidores
 		for (Usuario s : usuario.getSeguidores()) {
 			this.registrarUsuario(s);
@@ -70,14 +76,11 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		Propiedad fotos = new Propiedad("fotos", obtenerIdFotos(usuario.getFotos()));
 		Propiedad seguidores = new Propiedad("seguidores", obtenerIdSeguidores(usuario.getSeguidores()));
 		Propiedad seguidos = new Propiedad("seguidos", obtenerIdSeguidores(usuario.getSeguidos()));
+		Propiedad albumes = new Propiedad("albumes", obtenerIdAlbumes(usuario.getAlbumes()));
 		
 		eUsuario.setPropiedades(new ArrayList<Propiedad>(
 				Arrays.asList(email, nombre, apellidos, nombreUsuario, password, 
-						fechaNaci, fotoPerfil, textoPresentacion, fotos, seguidores, seguidos)));
-		
-		/*eUsuario.setPropiedades(new ArrayList<Propiedad>(
-				Arrays.asList(email, nombre, apellidos, nombreUsuario, password, 
-						fechaNaci, fotoPerfil, textoPresentacion)));*/
+						fechaNaci, fotoPerfil, textoPresentacion, fotos, seguidores, seguidos, albumes)));
 		
 		//registrar la entidad usuario
 		eUsuario = servPersistencia.registrarEntidad(eUsuario);
@@ -124,6 +127,8 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 				p.setValor(obtenerIdSeguidores(usuario.getSeguidores()));
 			} else if(p.getNombre().equals("seguidos")) {
 				p.setValor(obtenerIdSeguidores(usuario.getSeguidos()));
+			} else if(p.getNombre().equals("albumes")) {
+				p.setValor(obtenerIdAlbumes(usuario.getAlbumes()));
 			}
 			servPersistencia.modificarPropiedad(p);
 		}
@@ -148,6 +153,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		List<Foto> fotos = new LinkedList<Foto>();
 		List<Usuario> seguidores = new LinkedList<Usuario>();
 		List<Usuario> seguidos = new LinkedList<Usuario>();
+		List<Album> albumes = new LinkedList<Album>();
 
 		eUsuario = servPersistencia.recuperarEntidad(id);
 		
@@ -171,6 +177,11 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		fotos = obtenerFotosDesdeId(servPersistencia.recuperarPropiedadEntidad(eUsuario, "fotos"));
 		for (Foto f : fotos) {
 			usuario.addFoto(f);
+		}
+		
+		albumes = obtenerAlbumesDesdeId(servPersistencia.recuperarPropiedadEntidad(eUsuario, "albumes"));
+		for (Album a : albumes) {
+			usuario.addAlbum(a);
 		}
 		
 		seguidores = obtenerSeguidoresDesdeId(servPersistencia.recuperarPropiedadEntidad(eUsuario, "seguidores"));
@@ -214,6 +225,26 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 			listaFotos.add((Foto)f);
 		}
 		return listaFotos;
+	}
+	
+	private String obtenerIdAlbumes(List<Album> listaAlbumes) {
+		String aux = "";
+		for(Album a : listaAlbumes) {
+			aux += a.getId() + " ";
+		}
+		return aux.trim();
+	}
+	
+	private List<Album> obtenerAlbumesDesdeId(String albumes){
+		Publicacion a;
+		List<Album> listaAlbumes = new LinkedList<Album>();
+		StringTokenizer strTok = new StringTokenizer(albumes, " ");
+		AdaptadorPublicacionTDS adaptadorPublicacion = AdaptadorPublicacionTDS.getUnicaInstancia();
+		while(strTok.hasMoreTokens()) {
+			a = adaptadorPublicacion.recuperarPublicacion(Integer.valueOf((String) strTok.nextElement()));
+			listaAlbumes.add((Album)a);
+		}
+		return listaAlbumes;
 	}
 	
 	private String obtenerIdSeguidores(List<Usuario> listaSeguidores) {

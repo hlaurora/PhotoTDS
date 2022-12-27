@@ -12,7 +12,7 @@ import dao.IAdaptadorPublicacionDAO;
 public class RepoPublicaciones {
 	
 	private Map<Integer, Publicacion> fotosPorId;
-	//private Map<Integer, Publicacion> albumesPorId;
+	private Map<Integer, Publicacion> albumesPorId;
 	private static RepoPublicaciones unicainstancia = new RepoPublicaciones();
 	private FactoriaDAO dao;
 	private IAdaptadorPublicacionDAO adaptadorPublicacion;
@@ -22,7 +22,7 @@ public class RepoPublicaciones {
 			dao = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS);
 			adaptadorPublicacion = dao.getPublicacionDAO();
 			fotosPorId = new HashMap<Integer, Publicacion>();
-			//albumesPorId = new HashMap<Integer, Publicacion>();
+			albumesPorId = new HashMap<Integer, Publicacion>();
 			this.cargarRepositorio();
 		} catch (DAOException e) {
 			e.printStackTrace();
@@ -36,12 +36,22 @@ public class RepoPublicaciones {
 	
 	// Devuelve todas las fotos
 	public List<Publicacion> getPublicaciones(){
-		return new LinkedList<Publicacion>(fotosPorId.values());
+		List<Publicacion> publicaciones = new LinkedList<Publicacion>();
+		for (Publicacion f : fotosPorId.values()) {
+			publicaciones.add(f);
+		}
+		for (Publicacion a : albumesPorId.values()) {
+			publicaciones.add(a);
+		}
+		return publicaciones;
+		//return new LinkedList<Publicacion>(fotosPorId.values());
 	}
 	
 	// Devuelve una foto	
 	public Publicacion getPublicacion(int id) {
-		return fotosPorId.get(id);	
+		if (fotosPorId.containsKey(id))
+			return fotosPorId.get(id);	
+		else return albumesPorId.get(id);
 	}
 
 	// Añade publicacion al repositorio (por id)
@@ -49,18 +59,17 @@ public class RepoPublicaciones {
 		if (publicacion.getClass().equals(Foto.class)) {
 			fotosPorId.put(publicacion.getId(), publicacion);
 		}
-		/*
+		
 		else 
-			albumesPorId.put(publicacion.getId(), publicacion);*/
+			albumesPorId.put(publicacion.getId(), publicacion);
 	}
 	
 	public void removePublicacion(Publicacion publicacion) {
 		if (publicacion.getClass().equals(Foto.class)) {
 			fotosPorId.remove(publicacion.getId());
 		}
-		/*else 
+		else 
 			albumesPorId.remove(publicacion.getId(), publicacion);
-		publicacionesPorId.remove(publicacion.getId());*/
 	}
 	
 	/*
@@ -73,11 +82,11 @@ public class RepoPublicaciones {
 	
 	private void cargarRepositorio() throws DAOException{
 		List<Publicacion> publicacionesBD = adaptadorPublicacion.recuperarTodasPublicaciones();
-		for (Publicacion publicacion: publicacionesBD) {
-			fotosPorId.put(publicacion.getId(), publicacion);
-			
-		}
-			
+		for (Publicacion p: publicacionesBD) {
+			if (p.getClass().equals(Foto.class))
+				fotosPorId.put(p.getId(), p);
+			else albumesPorId.put(p.getId(), p);
+		}			
 	}
 
 }

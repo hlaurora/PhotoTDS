@@ -252,7 +252,9 @@ public class VentanaPrincipal extends JPanel{
 					selectedFile = fileChooser.getSelectedFile();
 					VentanaAñadirPublicacion vap = new VentanaAñadirPublicacion(usuarioActual,
 							selectedFile.getPath(), ventanaPrincipal);
-					vap.setVisible(true);	
+					vap.setVisible(true);
+					vap.setLocationRelativeTo(btnAddFoto);
+					vap.compartirFoto();
 				}				
 			}
 		});

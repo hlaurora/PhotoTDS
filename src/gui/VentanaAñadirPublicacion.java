@@ -47,29 +47,11 @@ public class VentanaAñadirPublicacion extends JFrame {
 	
 	private JPanel ventanaActual;
 	
-	/*
-	/**
-	 * Launch the application.
-	 */ /*
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaAñadirPublicacion frame = new VentanaAñadirPublicacion();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
 
 	/**
 	 * Create the frame.
 	 */
-	public VentanaAñadirPublicacion(String u, String r, JPanel p) {
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+	public VentanaAñadirPublicacion(String u, String r, JPanel p) {		
 		this.ruta = r;
 		this.usuarioActual = u;
 			
@@ -134,7 +116,7 @@ public class VentanaAñadirPublicacion extends JFrame {
 		contentPane.add(panelBotones, gbc_panelBotones);
 		
 		btnCompartir = new JButton("Compartir");
-		this.addManejadorBtnCompartir(btnCompartir);
+		//this.addManejadorBtnCompartir(btnCompartir);
 		btnCompartir.setForeground(LILA);
 		btnCompartir.setFont(fontBtn);
 		panelBotones.add(btnCompartir);
@@ -147,7 +129,7 @@ public class VentanaAñadirPublicacion extends JFrame {
 	}
 	
 	private void addManejadorBtnCancelar(JButton btn) {
-		btnCancelar.addActionListener(new ActionListener() {
+		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
@@ -155,21 +137,41 @@ public class VentanaAñadirPublicacion extends JFrame {
 	}
 	
 	private void addManejadorBtnCompartir(JButton btn) {
-		btnCompartir.addActionListener(new ActionListener() {
+		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				comentario = textArea.getText();
 				if (Controlador.getUnicaInstancia().registrarFoto(usuarioActual, ruta, comentario)) {
 					dispose();
-					
 					if (ventanaActual.getClass() == PanelPerfilUsuario.class)
 						((PanelPerfilUsuario)ventanaActual).actualizar();
-					else if (ventanaActual.getClass() == VentanaPrincipal.class)
+					else if (ventanaActual.getClass() == VentanaPrincipal.class) 
 						((VentanaPrincipal)ventanaActual).mostrarPublicaciones();
 				}
 			}
 		});
 	}
 		
+	private void addManejadorBtnCrearAlbum(JButton btn) {
+		btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				comentario = textArea.getText();
+				Controlador.getUnicaInstancia().registrarAlbum(usuarioActual, ruta, comentario, ruta);
+				((PanelPerfilUsuario)ventanaActual).actualizar();
+				dispose();
+			}
+		});
+	}
+	
+	public void compartirFoto() {
+		this.addManejadorBtnCompartir(btnCompartir);
+	}
+	
+	public void crearAlbum() {
+		btnCompartir.setText("Crear Album");
+		
+		this.addManejadorBtnCrearAlbum(btnCompartir);
+	}
+	
 	private Icon mostrarFoto(String ruta) {
 		ImageIcon image = new ImageIcon(ruta);
 		Icon icono = new ImageIcon(image.getImage().getScaledInstance(

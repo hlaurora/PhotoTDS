@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import beans.Entidad;
 import beans.Propiedad;
@@ -31,32 +32,6 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 		servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
 	}
 	
-	/*
-	public void registrarPublicacion(Publicacion publicacion) {
-		Entidad ePublicacion = null;
-		
-		//Si ya está registrada no la registramos
-		ePublicacion = servPersistencia.recuperarEntidad(publicacion.getId());
-		if (ePublicacion != null) return;
-		
-		//Crear entidad Publicacion
-		ePublicacion = new Entidad();
-		ePublicacion.setNombre("publicacion");
-		
-		Propiedad titulo = new Propiedad("titulo", publicacion.getTitulo());
-		Propiedad fecha = new Propiedad("fecha", publicacion.getFecha().toString());
-		Propiedad descripcion = new Propiedad("descripcion", publicacion.getDescripcion());
-		Propiedad meGustas = new Propiedad("meGustas", String.valueOf(publicacion.getMeGustas()));
-		Propiedad hashtags = new Propiedad("hashtags", publicacion.getHashtags().toString());
-
-		ePublicacion.setPropiedades(new ArrayList<Propiedad>(
-				Arrays.asList(titulo, fecha, descripcion, meGustas, hashtags)));
-		
-		//registrar la entidad publicacion
-		ePublicacion = servPersistencia.registrarEntidad(ePublicacion);
-		//asignar identificador único(el que genera el servicio de persistencia)
-		publicacion.setId(ePublicacion.getId());		
-	}*/
 	
 	//Registramos la publicación (dif si es foto o álbum)
 	public void registrarPublicacion(Publicacion publicacion) {
@@ -66,13 +41,19 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 		ePublicacion = servPersistencia.recuperarEntidad(publicacion.getId());
 		if (ePublicacion != null) return;
 		
+		//Si es un álbum, registramos primero las fotos
+		if (publicacion.getClass().equals(Album.class)) {
+			for (Foto f : ((Album)publicacion).getFotos()) {
+				this.registrarPublicacion(f);
+			}
+		}
+		
 		//Registramos el usuario
 		AdaptadorUsuarioTDS adaptadorUsuario = AdaptadorUsuarioTDS.getUnicaInstancia();
 		adaptadorUsuario.registrarUsuario(publicacion.getUsuario());
 		
 		//Crear entidad Publicacion
 		ePublicacion = new Entidad();
-		//ePublicacion.setNombre("publicacion");
 		
 		Propiedad titulo = new Propiedad("titulo", publicacion.getTitulo());
 		Propiedad usuario = new Propiedad("usuario", String.valueOf(publicacion.getUsuario().getId()));
@@ -92,11 +73,11 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 		//Si es un álbum
 		
 		else {
+			Propiedad fotos = new Propiedad("fotos", obtenerIdFotos(((Album)publicacion).getFotos()));
 			ePublicacion.setNombre("album");
 			ePublicacion.setPropiedades(new ArrayList<Propiedad>(
-					Arrays.asList(titulo, fecha, descripcion, hashtags, usuario, meGustas)));
+					Arrays.asList(titulo, fecha, descripcion, hashtags, usuario, meGustas, fotos)));
 		}
-
 		
 		//registrar la entidad publicacion
 		ePublicacion = servPersistencia.registrarEntidad(ePublicacion);
@@ -137,7 +118,9 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 			} else if(p.getNombre().equals("meGustas")) {
 				p.setValor(String.valueOf(publicacion.getMeGustas()));
 			} else if (p.getNombre().equals("ruta")) {
-				p.setValor( ((Foto)publicacion).getRuta());
+				p.setValor(((Foto)publicacion).getRuta());
+			} else if (p.getNombre().equals("fotos")) {
+				p.setValor(obtenerIdFotos(((Album)publicacion).getFotos()));
 			}
 			servPersistencia.modificarPropiedad(p);
 		}
@@ -176,12 +159,15 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 		}
 		
 		else {
+			List<Foto> fotos = obtenerFotosDesdeId(servPersistencia.recuperarPropiedadEntidad(ePublicacion, "fotos"));
 			publicacion = new Album(titulo, fecha, descripcion, hashtags);
+			for (Foto f : fotos) {
+				((Album)publicacion).addFoto(f);
+			}			
 		}
 		
 		publicacion.setId(id);
 		publicacion.setMeGustas(meGustas);
-
 		
 		//añadirlo al pool
 		PoolDAO.getUnicaInstancia().addObjeto(id, publicacion);
@@ -206,6 +192,27 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 		}
 		
 		return publicaciones;
+	}
+	
+	
+	private String obtenerIdFotos(List<Foto> listaFotos) {
+		String aux = "";
+		for(Foto f : listaFotos) {
+			aux += f.getId() + " ";
+		}
+		return aux.trim();
+	}
+	
+	private List<Foto> obtenerFotosDesdeId(String fotos){
+		Publicacion f;
+		List<Foto> listaFotos = new LinkedList<Foto>();
+		StringTokenizer strTok = new StringTokenizer(fotos, " ");
+		AdaptadorPublicacionTDS adaptadorPublicacion = AdaptadorPublicacionTDS.getUnicaInstancia();
+		while(strTok.hasMoreTokens()) {
+			f = adaptadorPublicacion.recuperarPublicacion(Integer.valueOf((String) strTok.nextElement()));
+			listaFotos.add((Foto)f);
+		}
+		return listaFotos;
 	}
 
 

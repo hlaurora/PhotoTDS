@@ -18,10 +18,12 @@ import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 
 import controlador.Controlador;
+import dominio.Album;
 import dominio.Foto;
 
 import java.awt.GridLayout;
@@ -83,15 +85,19 @@ public class PanelPerfilUsuario extends JPanel {
 	private JPanel panelAlbumes;
 	private JLabel lblNewLabel;
 	private JTable tableFotos;
-	private DefaultTableModel tm;
+	private DefaultTableModel tmFotos;
+	private JTable tableAlbumes;
+	private DefaultTableModel tmAlbum;
 	
 	private String usuario;
 	private String usuarioActual;
 	private String email;
 	private String fotoPerfil;
 	private List<Foto> fotosUsuario;
+	private List<Album> albumesUsuario;
 	private JScrollPane scrollPane;
 	private int numFotos;
+	private int numAlbumes;
 	private PanelPerfilUsuario panelAct;
 	
 	private Font fontBtn = new Font("HP Simplified Hans", Font.BOLD, 20);
@@ -110,6 +116,8 @@ public class PanelPerfilUsuario extends JPanel {
 		//Recuperamos la lista de fotos
 		fotosUsuario = Controlador.getUnicaInstancia().getFotos(usuario);
 		//numFotos = fotosUsuario.size();
+		//Recuperamos la lsita de albumes
+		albumesUsuario = Controlador.getUnicaInstancia().getAlbumes(usuario);
 		
 		setSize(575, 624);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -157,6 +165,8 @@ public class PanelPerfilUsuario extends JPanel {
 		}
 		{
 			btnAddAlbum = new JButton("A+");
+			if (usuario.equals(usuarioActual)) 
+				this.addManejadorAddAlbum(btnAddAlbum);
 			btnAddAlbum.setForeground(Lila);
 			btnAddAlbum.setFont(fontBtn);
 			GridBagConstraints gbc_btnAddAlbum = new GridBagConstraints();
@@ -362,25 +372,24 @@ public class PanelPerfilUsuario extends JPanel {
 	
 	private void crearPanelPublicaciones() {
 		panelPublicaciones = new JPanel();
-		this.fixedSize(panelPublicaciones, 600, 500);
+		this.fixedSize(panelPublicaciones, 600, 400);
 		panelPublicaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		add(panelPublicaciones);
 		panelPublicaciones.setLayout(new CardLayout(0, 0));
 		{
+			//scrollPane = new JScrollPane();
+			//scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 			panelFotos = new JPanel();
 			panelPublicaciones.add(panelFotos, "panelFotos");
+			//scrollPane.setViewportView(panelFotos);
+			//panelPublicaciones.add(scrollPane, "panelFotos");
 			{
 				String titulos[] = {"col1", "col2", "col3"};
-				tm = new DefaultTableModel(null, titulos);
+				tmFotos = new DefaultTableModel(null, titulos);
 				{
-					//scrollPane = new JScrollPane();
-					//scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-					//scrollPane.setPreferredSize(getPreferredSize());
-					//panelFotos.add(scrollPane);
 					tableFotos = new JTable();
-					//scrollPane.setViewportView(tableFotos);
 					tableFotos.setRowHeight(70);
-					tableFotos.setModel(tm);
+					tableFotos.setModel(tmFotos);
 					tableFotos.setTableHeader(null);
 					tableFotos.setDefaultRenderer(Object.class, new ImgTabla());
 				}
@@ -396,48 +405,66 @@ public class PanelPerfilUsuario extends JPanel {
 			panelAlbumes = new JPanel();
 			panelPublicaciones.add(panelAlbumes, "panelAlbumes");
 			{
-				lblNewLabel = new JLabel("Albumes");
-				panelAlbumes.add(lblNewLabel);
+				String titulos[] = {"col1", "col2", "col3", "col4"};
+				tmAlbum = new DefaultTableModel(null, titulos);
+				{
+					tableAlbumes = new JTable();
+					tableAlbumes.setRowHeight(70);
+					tableAlbumes.setModel(tmAlbum);
+					tableAlbumes.setTableHeader(null);
+					tableAlbumes.setDefaultRenderer(Object.class, new ImgTabla());
+				}
+				tableAlbumes.setDefaultEditor(Object.class, null);  
+				for (int i = 0; i < 4; i++) {
+					tableAlbumes.getColumnModel().getColumn(i).setPreferredWidth(120);
+				}
+				this.mostrarAlbumes();
+				panelAlbumes.add(tableAlbumes);
 			}
 		}
 	}
-	
-	/*
+
+	//////////////////////////////////////
+	///// MANEJADORES DE LOS BOTONES /////
+	//////////////////////////////////////
+
+	// Botón addFoto
 	private void addManejadorBotonAddFoto(JButton btn) {
-		btnAddFoto.addActionListener(new ActionListener() {
+		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				fileChooser = new JFileChooser();
-				int seleccion = fileChooser.showOpenDialog(btnAddFoto);
-				if (seleccion != JFileChooser.CANCEL_OPTION) {
-					selectedFile = fileChooser.getSelectedFile();					
-					Controlador.getUnicaInstancia().registrarFoto(usuarioActual, 
-							selectedFile.getPath());
-					lblNumPublicaciones.setText(fotosUsuario.size() + " Publicaciones");
-					mostrarFotos();
-				}
-			}
-		});
-	}*/
-	
-	private void addManejadorBotonAddFoto(JButton btn) {
-		btnAddFoto.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				fileChooser = new JFileChooser();
-				int seleccion = fileChooser.showOpenDialog(btnAddFoto);
+				int seleccion = fileChooser.showOpenDialog(btn);
 				if (seleccion != JFileChooser.CANCEL_OPTION) {
 					selectedFile = fileChooser.getSelectedFile();
 					VentanaAñadirPublicacion vap = new VentanaAñadirPublicacion(usuarioActual,
 							selectedFile.getPath(), panelAct);
 					vap.setVisible(true);	
+					vap.setLocationRelativeTo(btnAddFoto);
+					vap.compartirFoto();
 				}
 			}
 		});
-		//actualizar();
 	}
 	
-	public void actualizar() {
-		lblNumPublicaciones.setText(fotosUsuario.size() + " Publicaciones");
-		mostrarFotos();
+	// Botón addAlbum
+	private void addManejadorAddAlbum(JButton btn) {
+		btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+	            String nombreAlbum = JOptionPane.showInputDialog("Introduzca el nombre del nuevo álbum:");
+	            if (!Controlador.getUnicaInstancia().existeAlbum(usuarioActual, nombreAlbum)) {
+	            	fileChooser = new JFileChooser();
+					int seleccion = fileChooser.showOpenDialog(btn);
+					if (seleccion != JFileChooser.CANCEL_OPTION) {
+						selectedFile = fileChooser.getSelectedFile();
+						VentanaAñadirPublicacion vap = new VentanaAñadirPublicacion(usuarioActual,
+								selectedFile.getPath(), panelAct);
+						vap.setVisible(true);	
+						vap.setLocationRelativeTo(btnAddAlbum);
+						vap.crearAlbum();
+					}
+	            }
+			}
+		});
 	}
 	
 	//Botón buscar (usuarios cuyo nombre/nombreUsuario/email coincide con el buscado)
@@ -454,6 +481,7 @@ public class PanelPerfilUsuario extends JPanel {
 		});
 	}
 	
+	// Botón editarPerfil
 	private void addManejadorBotonEditarPerfil() {
 		btnEditarPerfil.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -465,6 +493,7 @@ public class PanelPerfilUsuario extends JPanel {
 		});
 	}
 	
+	// Botón seguir
 	private void addManejadorBotonSeguir() {
 		btnEditarPerfil.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -474,12 +503,12 @@ public class PanelPerfilUsuario extends JPanel {
 		});
 	}
 	
-	
+
 	private void mostrarFotos() {
 		
 		//Limpiamos la tabla
 		for (int i = 0; i < tableFotos.getRowCount(); i++) {
-			tm.removeRow(i);
+			tmFotos.removeRow(i);
 			i-=1;
 		}
 		
@@ -499,32 +528,91 @@ public class PanelPerfilUsuario extends JPanel {
 		int f = 0;
 		
 		if (numFilas == 1) {
-			tm.addRow(new Object[] {null,null, null});
+			tmFotos.addRow(new Object[] {null,null, null});
 			for (j = 0; j < fotosUsuario.size(); j++) {
 				ruta = fotosUsuario.get(j).getRuta();
-				tm.setValueAt(new JLabel(imagenCelda(ruta)), 0, j);
+				tmFotos.setValueAt(new JLabel(imagenCelda(ruta)), 0, j);
 			}
 		}
 		
 		else {
 			int i = 0;
 			while (i < numFilas-1) {
-				tm.addRow(new Object[] {null,null, null});
+				tmFotos.addRow(new Object[] {null,null, null});
 				for (j = 0; j<3; j++) {
 					ruta = fotosUsuario.get(f).getRuta();
-					tm.setValueAt(new JLabel(imagenCelda(ruta)), i, j);
+					tmFotos.setValueAt(new JLabel(imagenCelda(ruta)), i, j);
 					f++;
 				}
 				i++;
 			}
 			//Última fila
-			tm.addRow(new Object[] {null, null, null});
+			tmFotos.addRow(new Object[] {null, null, null});
 			while (f < numFotos) {
 				ruta = fotosUsuario.get(f).getRuta();
-				tm.setValueAt(new JLabel(imagenCelda(ruta)), i, f%3);
+				tmFotos.setValueAt(new JLabel(imagenCelda(ruta)), i, f%3);
 				f++;
 			}
 		}		
+	}
+	
+	private void mostrarAlbumes() {
+		
+		//Limpiamos la tabla
+		for (int i = 0; i < tableAlbumes.getRowCount(); i++) {
+			tmAlbum.removeRow(i);
+			i-=1;
+		}
+		
+		numAlbumes = albumesUsuario.size();
+		
+		Collections.reverse(albumesUsuario);
+		String ruta;
+		//Calculamos el número de filas
+		int numFilas = 0;
+		if ((0 < numFotos) && (numFotos <= 4)) {
+			numFilas = 1;
+		}
+		else if (numFotos > 3) numFilas = (numFotos/4) + 1;
+		
+		//Rellenamos la tabla
+		int j;
+		int f = 0;
+		
+		if (numFilas == 1) {
+			tmAlbum.addRow(new Object[] {null, null, null, null});
+			for (j = 0; j < albumesUsuario.size(); j++) {
+				ruta = albumesUsuario.get(j).getFotos().get(0).getRuta();
+				tmAlbum.setValueAt(new JLabel(imagenCelda(ruta)), 0, j);
+			}
+		}
+		
+		else {
+			int i = 0;
+			while (i < numFilas-1) {
+				tmAlbum.addRow(new Object[] {null ,null, null, null});
+				for (j = 0; j<4; j++) {
+					ruta = albumesUsuario.get(f).getFotos().get(0).getRuta();
+					tmAlbum.setValueAt(new JLabel(imagenCelda(ruta)), i, j);
+					f++;
+				}
+				i++;
+			}
+			//Última fila
+			tmAlbum.addRow(new Object[] {null, null, null, null});
+			while (f < numAlbumes) {
+				ruta = albumesUsuario.get(f).getFotos().get(0).getRuta();
+				tmAlbum.setValueAt(new JLabel(imagenCelda(ruta)), i, f%4);
+				f++;
+			}
+		}	
+	}
+	
+	
+	public void actualizar() {
+		lblNumPublicaciones.setText(fotosUsuario.size() + " Publicaciones");
+		mostrarFotos();
+		mostrarAlbumes();
 	}
 	
 
