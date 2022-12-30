@@ -463,6 +463,10 @@ public class PanelPerfilUsuario extends JPanel {
 						vap.crearAlbum(nombreAlbum);
 					}
 	            }
+	            else {
+	            	JOptionPane.showMessageDialog(panelAct, "Ya existe un album con este nombre.\n",
+							"PanelPerfilUsuario", JOptionPane.ERROR_MESSAGE);
+	            }
 			}
 		});
 	}
@@ -504,14 +508,35 @@ public class PanelPerfilUsuario extends JPanel {
 	}
 	
 	
-	private void addManejadorTabla(JTable tabla) {
+	private void addManejadorTablaAlbum(JTable tabla) {
+		int numFilas = tabla.getRowCount();
 		tabla.addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mouseClicked(MouseEvent evt) {
 		        int row = tabla.rowAtPoint(evt.getPoint());
 		        int col = tabla.columnAtPoint(evt.getPoint());
 		        if (row >= 0 && col >= 0) {
-		        	VentanaAlbum va = new VentanaAlbum(albumesUsuario.get(row));
+		        	int pos = (col+((row%numFilas)*4));
+		        	VentanaAlbum va = new VentanaAlbum(albumesUsuario.get(pos));
+		        	va.setLocationRelativeTo(tabla);
+		        	va.setVisible(true);
+		       }
+		    }
+		});
+	}
+	
+	private void addManejadorTablaFotos(JTable tabla) {
+		int numFilas = tabla.getRowCount();
+		tabla.addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mouseClicked(MouseEvent evt) {
+		        int row = tabla.rowAtPoint(evt.getPoint());
+		        int col = tabla.columnAtPoint(evt.getPoint());
+		        if (row >= 0 && col >= 0) {
+		        	int pos = (col+((row%numFilas)*4));
+		        	VentanaAñadirPublicacion va = new VentanaAñadirPublicacion(usuarioActual,
+		        			fotosUsuario.get(pos).getRuta(), panelAct);
+		        	//VentanaAlbum va = new VentanaAlbum(albumesUsuario.get(pos));
 		        	va.setLocationRelativeTo(tabla);
 		        	va.setVisible(true);
 		       }
@@ -569,7 +594,8 @@ public class PanelPerfilUsuario extends JPanel {
 				tmFotos.setValueAt(new JLabel(imagenCelda(ruta)), i, f%3);
 				f++;
 			}
-		}		
+		}	
+		this.addManejadorTablaFotos(tableFotos);
 	}
 	
 	private void mostrarAlbumes() {
@@ -622,7 +648,7 @@ public class PanelPerfilUsuario extends JPanel {
 				f++;
 			}
 		}	
-		this.addManejadorTabla(tableAlbumes);
+		this.addManejadorTablaAlbum(tableAlbumes);
 	}
 	
 	
