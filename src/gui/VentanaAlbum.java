@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import controlador.Controlador;
 import dominio.Album;
 import dominio.Foto;
 
@@ -64,6 +65,10 @@ public class VentanaAlbum extends JFrame {
 
 	private Color LILA = new Color(134, 46, 150);
 	private Font fontBtn = new Font("HP Simplified Hans", Font.BOLD, 15);
+	private JButton btnNewButton;
+	private JLabel lblNumMg;
+	private JLabel lblFotoPerfil;
+	private JButton btnMeGusta;
 
 
 	/**
@@ -96,17 +101,21 @@ public class VentanaAlbum extends JFrame {
 		contentPane.add(panelNorte, BorderLayout.NORTH);
 		panelNorte.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		{
-			btnAddFoto = new JButton(" + ");
-			btnAddFoto.setAlignmentX(Component.CENTER_ALIGNMENT);
-			btnAddFoto.setForeground(LILA);
-			btnAddFoto.setFont(fontBtn);
-			this.addManejadorBtnAddFoto(btnAddFoto);
-			panelNorte.add(btnAddFoto);
-		}
-		{
 			lblTitulo = new JLabel(titulo);
+			lblTitulo.setForeground(LILA);
+			lblTitulo.setFont(fontBtn);
 			lblTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
 			panelNorte.add(lblTitulo);
+		}
+		{
+			lblNumMg = new JLabel(album.getMeGustas() + " Me gustas");
+			panelNorte.add(lblNumMg);
+		}
+		{
+			lblFotoPerfil = new JLabel("");
+			lblFotoPerfil.setIcon(escalarImagen(lblFotoPerfil, 
+					album.getUsuario().getFotoPerfil().getPath()));
+			panelNorte.add(lblFotoPerfil);
 		}
 	}
 	
@@ -147,6 +156,20 @@ public class VentanaAlbum extends JFrame {
 	private void crearPanelSur() {
 		panelSur = new JPanel();
 		contentPane.add(panelSur, BorderLayout.SOUTH);
+		{
+			btnMeGusta = new JButton("");
+			this.addManejadorBotonMeGusta(btnMeGusta);
+			btnMeGusta.setIcon(new ImageIcon(PanelPublicacion.class.getResource("/imagenes/icons8-me-gusta-16.png")));
+			panelSur.add(btnMeGusta);
+		}
+		{
+			btnAddFoto = new JButton(" + ");
+			btnAddFoto.setAlignmentX(Component.CENTER_ALIGNMENT);
+			btnAddFoto.setForeground(LILA);
+			btnAddFoto.setFont(fontBtn);
+			this.addManejadorBtnAddFoto(btnAddFoto);
+			panelSur.add(btnAddFoto);
+		}
 		{
 			btnCerrar = new JButton("Cerrar");
 			btnCerrar.setAlignmentX(Component.RIGHT_ALIGNMENT);
@@ -223,6 +246,15 @@ public class VentanaAlbum extends JFrame {
 		});
 	}
 	
+	private void addManejadorBotonMeGusta(JButton btn) {
+		btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Controlador.getUnicaInstancia().darMeGusta(album.getId());
+				lblNumMg.setText(album.getMeGustas() + " Me gustas");
+				//lblNumMg.setText(Controlador.getUnicaInstancia().getMeGustas(album.getId()) + " Me gustas");
+			}
+		});
+	}
 	
 	private void addManejadorBtnCerrar(JButton btn) {
 		btn.addActionListener(new ActionListener() {
@@ -237,6 +269,15 @@ public class VentanaAlbum extends JFrame {
 		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
 				170, 
 				70-4, 
+				Image.SCALE_DEFAULT));
+		return icono;
+	}
+	
+	private Icon escalarImagen(JLabel lbl, String ruta) {
+		ImageIcon image = new ImageIcon(ruta);
+		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
+				lbl.getWidth()-4, 
+				lbl.getHeight()-4, 
 				Image.SCALE_DEFAULT));
 		return icono;
 	}

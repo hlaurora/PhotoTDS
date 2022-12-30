@@ -210,9 +210,18 @@ public class Controlador {
 	}
 	
 	public void darMeGusta(int id) {
-		Foto f = (Foto) repoPublicaciones.getPublicacion(id);
-		f.addMeGustas();
-		adaptadorPublicacion.modificarPublicacion(f);
+		/*Foto f = (Foto) repoPublicaciones.getPublicacion(id);
+		f.addMeGustas();*/
+		Publicacion p = repoPublicaciones.getPublicacion(id);
+		if (p.getClass().equals(Album.class)) {
+			for (Foto f : ((Album)p).getFotos()) {
+				f.addMeGustas();
+				adaptadorPublicacion.modificarPublicacion(f);
+			}
+		}
+		p.addMeGustas();
+			
+		adaptadorPublicacion.modificarPublicacion(p);
 	}
 	
 	public List<Usuario> buscarUsuarios (String cadena) {

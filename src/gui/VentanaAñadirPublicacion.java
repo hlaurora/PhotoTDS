@@ -152,11 +152,11 @@ public class VentanaAñadirPublicacion extends JFrame {
 		});
 	}
 		
-	private void addManejadorBtnCrearAlbum(JButton btn) {
+	private void addManejadorBtnCrearAlbum(JButton btn, String nombreAlbum) {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				comentario = textArea.getText();
-				Album a = Controlador.getUnicaInstancia().registrarAlbum(comentario, comentario, usuarioActual);
+				Album a = Controlador.getUnicaInstancia().registrarAlbum(nombreAlbum, comentario, usuarioActual);
 				Controlador.getUnicaInstancia().añadirFotoAlbum(a.getId(), ruta, comentario);
 				((PanelPerfilUsuario)ventanaActual).actualizar();
 				dispose();
@@ -179,9 +179,9 @@ public class VentanaAñadirPublicacion extends JFrame {
 		this.addManejadorBtnCompartir(btnCompartir);
 	}
 	
-	public void crearAlbum() {
+	public void crearAlbum(String nombreAlbum) {
 		btnCompartir.setText("Crear Album");
-		this.addManejadorBtnCrearAlbum(btnCompartir);
+		this.addManejadorBtnCrearAlbum(btnCompartir, nombreAlbum);
 	}
 	
 	public void añadirFotoAlbum(int idAlbum, String ruta) {

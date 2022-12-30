@@ -460,7 +460,7 @@ public class PanelPerfilUsuario extends JPanel {
 								selectedFile.getPath(), panelAct);
 						vap.setVisible(true);	
 						vap.setLocationRelativeTo(btnAddAlbum);
-						vap.crearAlbum();
+						vap.crearAlbum(nombreAlbum);
 					}
 	            }
 			}
