@@ -503,6 +503,22 @@ public class PanelPerfilUsuario extends JPanel {
 		});
 	}
 	
+	
+	private void addManejadorTabla(JTable tabla) {
+		tabla.addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mouseClicked(MouseEvent evt) {
+		        int row = tabla.rowAtPoint(evt.getPoint());
+		        int col = tabla.columnAtPoint(evt.getPoint());
+		        if (row >= 0 && col >= 0) {
+		        	VentanaAlbum va = new VentanaAlbum(albumesUsuario.get(row));
+		        	va.setLocationRelativeTo(tabla);
+		        	va.setVisible(true);
+		       }
+		    }
+		});
+	}
+	
 
 	private void mostrarFotos() {
 		
@@ -570,10 +586,10 @@ public class PanelPerfilUsuario extends JPanel {
 		String ruta;
 		//Calculamos el número de filas
 		int numFilas = 0;
-		if ((0 < numFotos) && (numFotos <= 4)) {
+		if ((0 < numAlbumes) && (numAlbumes <= 4)) {
 			numFilas = 1;
 		}
-		else if (numFotos > 3) numFilas = (numFotos/4) + 1;
+		else if (numAlbumes > 3) numFilas = (numAlbumes/4) + 1;
 		
 		//Rellenamos la tabla
 		int j;
@@ -606,6 +622,7 @@ public class PanelPerfilUsuario extends JPanel {
 				f++;
 			}
 		}	
+		this.addManejadorTabla(tableAlbumes);
 	}
 	
 	

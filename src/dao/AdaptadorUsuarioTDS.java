@@ -73,10 +73,18 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		Propiedad fechaNaci = new Propiedad("fechaNacimiento", usuario.getFechaNacimiento().toString());
 		Propiedad fotoPerfil = new Propiedad("fotoPerfil", usuario.getFotoPerfil().toString());
 		Propiedad textoPresentacion = new Propiedad("textoPresentacion", usuario.getTextoPresentacion());
-		Propiedad fotos = new Propiedad("fotos", obtenerIdFotos(usuario.getFotos()));
+		List<Publicacion> fotosUsuario = new LinkedList<Publicacion>();
+		for (Foto f : usuario.getFotos()) {
+			fotosUsuario.add(f);
+		}
+		Propiedad fotos = new Propiedad("fotos", obtenerIdPublicaciones(fotosUsuario));
 		Propiedad seguidores = new Propiedad("seguidores", obtenerIdSeguidores(usuario.getSeguidores()));
 		Propiedad seguidos = new Propiedad("seguidos", obtenerIdSeguidores(usuario.getSeguidos()));
-		Propiedad albumes = new Propiedad("albumes", obtenerIdAlbumes(usuario.getAlbumes()));
+		List<Publicacion> albumesUsuario = new LinkedList<Publicacion>();
+		for (Album a : usuario.getAlbumes()) {
+			albumesUsuario.add(a);
+		}
+		Propiedad albumes = new Propiedad("albumes", obtenerIdPublicaciones(albumesUsuario));
 		
 		eUsuario.setPropiedades(new ArrayList<Propiedad>(
 				Arrays.asList(email, nombre, apellidos, nombreUsuario, password, 
@@ -122,13 +130,21 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 			} else if(p.getNombre().equals("textoPresentacion")) {
 				p.setValor(usuario.getTextoPresentacion());
 			} else if(p.getNombre().equals("fotos")) {
-				p.setValor(obtenerIdFotos(usuario.getFotos()));
+				List<Publicacion> publicaciones = new LinkedList<Publicacion>();
+				for (Foto f : usuario.getFotos()) {
+					publicaciones.add(f);
+				}
+				p.setValor(obtenerIdPublicaciones(publicaciones));
 			} else if(p.getNombre().equals("seguidores")) {
 				p.setValor(obtenerIdSeguidores(usuario.getSeguidores()));
 			} else if(p.getNombre().equals("seguidos")) {
 				p.setValor(obtenerIdSeguidores(usuario.getSeguidos()));
 			} else if(p.getNombre().equals("albumes")) {
-				p.setValor(obtenerIdAlbumes(usuario.getAlbumes()));
+				List<Publicacion> publicaciones = new LinkedList<Publicacion>();
+				for (Album a : usuario.getAlbumes()) {
+					publicaciones.add(a);
+				}
+				p.setValor(obtenerIdPublicaciones(publicaciones));
 			}
 			servPersistencia.modificarPropiedad(p);
 		}
@@ -150,10 +166,12 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		LocalDate fechaNaci;
 		File fotoPerfil;
 		String textoPresentacion;
-		List<Foto> fotos = new LinkedList<Foto>();
+		//List<Foto> fotos = new LinkedList<Foto>();
+		List<Publicacion> fotos = new LinkedList<Publicacion>();
 		List<Usuario> seguidores = new LinkedList<Usuario>();
 		List<Usuario> seguidos = new LinkedList<Usuario>();
-		List<Album> albumes = new LinkedList<Album>();
+		List<Publicacion> albumes = new LinkedList<Publicacion>();
+		//List<Album> albumes = new LinkedList<Album>();
 
 		eUsuario = servPersistencia.recuperarEntidad(id);
 		
@@ -174,14 +192,15 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		//añadirlo al pool
 		PoolDAO.getUnicaInstancia().addObjeto(id, usuario);
 
-		fotos = obtenerFotosDesdeId(servPersistencia.recuperarPropiedadEntidad(eUsuario, "fotos"));
-		for (Foto f : fotos) {
-			usuario.addFoto(f);
+		//fotos = obtenerFotosDesdeId(servPersistencia.recuperarPropiedadEntidad(eUsuario, "fotos"));
+		fotos = obtenerPublicacionesDesdeId(servPersistencia.recuperarPropiedadEntidad(eUsuario, "fotos"));
+		for (Publicacion f : fotos) {
+			usuario.addFoto((Foto)f);
 		}
 		
-		albumes = obtenerAlbumesDesdeId(servPersistencia.recuperarPropiedadEntidad(eUsuario, "albumes"));
-		for (Album a : albumes) {
-			usuario.addAlbum(a);
+		albumes = obtenerPublicacionesDesdeId(servPersistencia.recuperarPropiedadEntidad(eUsuario, "albumes"));
+		for (Publicacion a : albumes) {
+			usuario.addAlbum((Album)a);
 		}
 		
 		seguidores = obtenerSeguidoresDesdeId(servPersistencia.recuperarPropiedadEntidad(eUsuario, "seguidores"));
@@ -207,7 +226,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		return usuarios;
 	}
 	
-	private String obtenerIdFotos(List<Foto> listaFotos) {
+	/*private String obtenerIdFotos(List<Foto> listaFotos) {
 		String aux = "";
 		for(Foto f : listaFotos) {
 			aux += f.getId() + " ";
@@ -245,6 +264,27 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 			listaAlbumes.add((Album)a);
 		}
 		return listaAlbumes;
+	}*/
+	
+	//Obtiene el id de la lista de fotos o de albumes pasada como parámetro
+	private String obtenerIdPublicaciones(List<Publicacion> listaPublicaciones) {
+		String aux = "";
+		for(Publicacion p : listaPublicaciones) {
+			aux += p.getId() + " ";
+		}
+		return aux.trim();
+	}
+	
+	private List<Publicacion> obtenerPublicacionesDesdeId(String ids){
+		Publicacion p;
+		List<Publicacion> listaPublicaciones = new LinkedList<Publicacion>();
+		StringTokenizer strTok = new StringTokenizer(ids, " ");
+		AdaptadorPublicacionTDS adaptadorPublicacion = AdaptadorPublicacionTDS.getUnicaInstancia();
+		while(strTok.hasMoreTokens()) {
+			p = adaptadorPublicacion.recuperarPublicacion(Integer.valueOf((String) strTok.nextElement()));
+			listaPublicaciones.add(p);
+		}
+		return listaPublicaciones;
 	}
 	
 	private String obtenerIdSeguidores(List<Usuario> listaSeguidores) {

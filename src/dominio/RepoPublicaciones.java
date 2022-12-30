@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.plaf.synth.SynthOptionPaneUI;
+
 import dao.DAOException;
 import dao.FactoriaDAO;
 import dao.IAdaptadorPublicacionDAO;
@@ -34,7 +36,7 @@ public class RepoPublicaciones {
 	}
 	
 	
-	// Devuelve todas las fotos
+	// Devuelve todas las publicaciones
 	public List<Publicacion> getPublicaciones(){
 		List<Publicacion> publicaciones = new LinkedList<Publicacion>();
 		for (Publicacion f : fotosPorId.values()) {
@@ -51,7 +53,9 @@ public class RepoPublicaciones {
 	public Publicacion getPublicacion(int id) {
 		if (fotosPorId.containsKey(id))
 			return fotosPorId.get(id);	
-		else return albumesPorId.get(id);
+		else {
+			return albumesPorId.get(id);
+		}
 	}
 
 	// Añade publicacion al repositorio (por id)
@@ -62,6 +66,10 @@ public class RepoPublicaciones {
 		
 		else 
 			albumesPorId.put(publicacion.getId(), publicacion);
+	}
+	
+	public void addAlbum(Publicacion publicacion) {
+		albumesPorId.put(publicacion.getId(), publicacion);
 	}
 	
 	public void removePublicacion(Publicacion publicacion) {

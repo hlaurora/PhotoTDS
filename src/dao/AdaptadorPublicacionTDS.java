@@ -93,8 +93,11 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 	
 	
 	public void borrarTodasPublicaciones() {
-		ArrayList<Entidad> ePublicaciones = servPersistencia.recuperarEntidades("foto");
-		for (Entidad eu : ePublicaciones) 
+		ArrayList<Entidad> eFotos = servPersistencia.recuperarEntidades("foto");
+		ArrayList<Entidad> eAlbumes = servPersistencia.recuperarEntidades("album");
+		for (Entidad eu : eFotos) 
+			servPersistencia.borrarEntidad(eu);
+		for (Entidad eu : eAlbumes) 
 			servPersistencia.borrarEntidad(eu);
 	}
 
@@ -165,7 +168,6 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 				((Album)publicacion).addFoto(f);
 			}			
 		}
-		
 		publicacion.setId(id);
 		publicacion.setMeGustas(meGustas);
 		
@@ -184,10 +186,15 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 	
 	
 	public List<Publicacion> recuperarTodasPublicaciones(){
-		List<Entidad> ePublicaciones = servPersistencia.recuperarEntidades("foto");
+		List<Entidad> eFotos = servPersistencia.recuperarEntidades("foto");
+		List<Entidad> eAlbumes = servPersistencia.recuperarEntidades("album");
 		List<Publicacion> publicaciones = new LinkedList<Publicacion>();
 		
-		for (Entidad ePublicacion : ePublicaciones) {
+		for (Entidad ePublicacion : eFotos) {
+			publicaciones.add(recuperarPublicacion(ePublicacion.getId()));
+		}
+		
+		for (Entidad ePublicacion : eAlbumes) {
 			publicaciones.add(recuperarPublicacion(ePublicacion.getId()));
 		}
 		

@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import controlador.Controlador;
+import dominio.Album;
 
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
@@ -155,8 +156,20 @@ public class VentanaAñadirPublicacion extends JFrame {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				comentario = textArea.getText();
-				Controlador.getUnicaInstancia().registrarAlbum(usuarioActual, ruta, comentario, ruta);
+				Album a = Controlador.getUnicaInstancia().registrarAlbum(comentario, comentario, usuarioActual);
+				Controlador.getUnicaInstancia().añadirFotoAlbum(a.getId(), ruta, comentario);
 				((PanelPerfilUsuario)ventanaActual).actualizar();
+				dispose();
+			}
+		});
+	}
+	
+	private void addManejadorBtnAñadirFotoAlbum(JButton btn, int idAlbum, String ruta) {
+		btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				comentario = textArea.getText();
+				Controlador.getUnicaInstancia().añadirFotoAlbum(idAlbum, ruta, comentario);
+				//((VentanaAlbum)ventanaActual).mostrarFotos();
 				dispose();
 			}
 		});
@@ -168,8 +181,12 @@ public class VentanaAñadirPublicacion extends JFrame {
 	
 	public void crearAlbum() {
 		btnCompartir.setText("Crear Album");
-		
 		this.addManejadorBtnCrearAlbum(btnCompartir);
+	}
+	
+	public void añadirFotoAlbum(int idAlbum, String ruta) {
+		btnCompartir.setText("Añadir Foto");
+		this.addManejadorBtnAñadirFotoAlbum(btnCompartir, idAlbum, ruta);
 	}
 	
 	private Icon mostrarFoto(String ruta) {

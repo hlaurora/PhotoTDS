@@ -46,7 +46,7 @@ public class PanelPublicacion extends JPanel {
 		this.ruta = foto.getRuta();
 		this.fotoPerfil = foto.getUsuario().getFotoPerfil().getPath();
 		this.nombreUsuario = foto.getUsuario().getNombreUsuario();		
-		
+		this.idFoto = foto.getId();
 		
 		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		GridBagLayout gridBagLayout = new GridBagLayout();

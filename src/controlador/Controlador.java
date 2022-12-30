@@ -204,7 +204,8 @@ public class Controlador {
 	
 	
 	public int getMeGustas(int id) {
-		Foto f = (Foto) repoPublicaciones.getPublicacion(id);
+		//Foto f = (Foto) repoPublicaciones.getPublicacion(id);
+		Foto f = (Foto) RepoPublicaciones.getUnicaInstancia().getPublicacion(id);
 		return f.getMeGustas();
 	}
 	
@@ -265,40 +266,71 @@ public class Controlador {
 		return false;
 	}
 	
-	public int registrarAlbum(String nombreUsuario, String nombreAlbum, String comentario, String ruta) {
-		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);		
+	/*public void registrarAlbum(String nombreUsuario, String nombreAlbum, String comentario, String ruta) {
+		Usuario u = repoUsuarios.getUsuario(nombreUsuario);		
 		List<String> hashtags = new LinkedList<String>();
-		Album a = new Album("titulo", LocalDate.now(), comentario, hashtags);
-		a.setUsuario(u);
+		
+		Publicacion p = new Album("titulo", LocalDate.now(), comentario, hashtags);
+		p.setUsuario(u);
+		u.addAlbum((Album)p);
 
 		Foto f = new Foto("titulo", LocalDate.now(), comentario, hashtags, ruta);
 		f.setUsuario(u);
-		a.addFoto(f);		
+		((Album)p).addFoto(f);		
 		
 		
-		u.addAlbum(a);
 		//repoPublicaciones.addPublicacion(p);
 		
 		//this.añadirFotoAlbum(a.getId(), ruta, comentario);
+		repoPublicaciones.addPublicacion(p);
+
+		adaptadorPublicacion.registrarPublicacion((Album)p);
+		adaptadorUsuario.modificarUsuario(u);	
 		
-		RepoPublicaciones.getUnicaInstancia().addPublicacion(a);
-		adaptadorPublicacion.registrarPublicacion(a);
-		adaptadorUsuario.modificarUsuario(u);
-		return a.getId();
-	}
+	}*/
 	
-	public void añadirFotoAlbum(int idAlbum, String ruta, String comentario) {
+	/*public void añadirFotoAlbum(int idAlbum, String ruta, String comentario) {
 		//recuperamos album
-		Album a = (Album) RepoPublicaciones.getUnicaInstancia().getPublicacion(idAlbum);
+		//System.out.println(idAlbum);
+		Publicacion a = repoPublicaciones.getPublicacion(idAlbum);
+		//System.out.println(a.getId());
 		//recuperamos usuario
-		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(a.getUsuario().getNombreUsuario());
+		Usuario u = a.getUsuario();
 		
 		List<String> hashtags = new LinkedList<String>();
 		Foto f = new Foto("titulo", LocalDate.now(), comentario, hashtags, ruta);
 		f.setUsuario(u);
-		a.addFoto(f);
+		((Album)a).addFoto(f);
 		adaptadorUsuario.modificarUsuario(u);
 		adaptadorPublicacion.modificarPublicacion(a);
+	}*/
+	
+	public Album registrarAlbum(String titulo, String comentario, String nombreUsuario) {
+		Usuario u = repoUsuarios.getUsuario(nombreUsuario);
+		List<String> hashtags = new LinkedList<String>();
+		Album album = new Album(titulo, LocalDate.now(), comentario, hashtags);
+		album.setUsuario(u);
+		u.addAlbum(album);
+		adaptadorPublicacion.registrarPublicacion(album);
+		repoPublicaciones.addAlbum(album);
+		adaptadorUsuario.modificarUsuario(u);
+		return album;
+	}
+	
+	public void añadirFotoAlbum(int idAlbum, String ruta, String comentario) {
+		Album a = (Album)repoPublicaciones.getPublicacion(idAlbum);
+		
+		Usuario u = repoUsuarios.getUsuario(a.getUsuario().getNombreUsuario());
+		List<String> hashtags = new LinkedList<String>();
+		Publicacion p = new Foto("titulo", LocalDate.now(), comentario, hashtags, ruta);
+		p.setUsuario(u);
+		//u.addFoto((Foto)p);
+		RepoPublicaciones.getUnicaInstancia().addPublicacion((Foto)p);
+		adaptadorPublicacion.registrarPublicacion((Foto)p);
+
+		a.addFoto((Foto)p);
+		
+		adaptadorPublicacion.modificarPublicacion(a);		
 	}
 	
 	
