@@ -436,7 +436,7 @@ public class PanelPerfilUsuario extends JPanel {
 				int seleccion = fileChooser.showOpenDialog(btn);
 				if (seleccion != JFileChooser.CANCEL_OPTION) {
 					selectedFile = fileChooser.getSelectedFile();
-					VentanaAñadirPublicacion vap = new VentanaAñadirPublicacion(usuarioActual,
+					VentanaPublicacion vap = new VentanaPublicacion(usuarioActual,
 							selectedFile.getPath(), panelAct);
 					vap.setVisible(true);	
 					vap.setLocationRelativeTo(btnAddFoto);
@@ -456,7 +456,7 @@ public class PanelPerfilUsuario extends JPanel {
 					int seleccion = fileChooser.showOpenDialog(btn);
 					if (seleccion != JFileChooser.CANCEL_OPTION) {
 						selectedFile = fileChooser.getSelectedFile();
-						VentanaAñadirPublicacion vap = new VentanaAñadirPublicacion(usuarioActual,
+						VentanaPublicacion vap = new VentanaPublicacion(usuarioActual,
 								selectedFile.getPath(), panelAct);
 						vap.setVisible(true);	
 						vap.setLocationRelativeTo(btnAddAlbum);
@@ -534,10 +534,11 @@ public class PanelPerfilUsuario extends JPanel {
 		        int col = tabla.columnAtPoint(evt.getPoint());
 		        if (row >= 0 && col >= 0) {
 		        	int pos = (col+((row%numFilas)*4));
-		        	VentanaAñadirPublicacion va = new VentanaAñadirPublicacion(usuarioActual,
+		        	VentanaPublicacion va = new VentanaPublicacion(usuarioActual,
 		        			fotosUsuario.get(pos).getRuta(), panelAct);
 		        	//VentanaAlbum va = new VentanaAlbum(albumesUsuario.get(pos));
 		        	va.setLocationRelativeTo(tabla);
+		        	va.verFoto();
 		        	va.setVisible(true);
 		       }
 		    }

@@ -250,7 +250,7 @@ public class VentanaPrincipal extends JPanel{
 				int seleccion = fileChooser.showOpenDialog(btnAddFoto);
 				if (seleccion != JFileChooser.CANCEL_OPTION) {
 					selectedFile = fileChooser.getSelectedFile();
-					VentanaAñadirPublicacion vap = new VentanaAñadirPublicacion(usuarioActual,
+					VentanaPublicacion vap = new VentanaPublicacion(usuarioActual,
 							selectedFile.getPath(), ventanaPrincipal);
 					vap.setVisible(true);
 					vap.setLocationRelativeTo(btnAddFoto);

@@ -227,6 +227,27 @@ public class VentanaAlbum extends JFrame {
 				f++;
 			}
 		}	
+		this.addManejadorTablaFotos(tablaFotos);
+	}
+	
+	private void addManejadorTablaFotos(JTable tabla) {
+		int numFilas = tabla.getRowCount();
+		tabla.addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mouseClicked(MouseEvent evt) {
+		        int row = tabla.rowAtPoint(evt.getPoint());
+		        int col = tabla.columnAtPoint(evt.getPoint());
+		        if (row >= 0 && col >= 0) {
+		        	int pos = (col+((row%numFilas)*4));
+		        	VentanaPublicacion va = new VentanaPublicacion(album.getUsuario().getNombreUsuario(),
+		        			album.getFotos().get(pos).getRuta(), panelAct);
+		        	//VentanaAlbum va = new VentanaAlbum(albumesUsuario.get(pos));
+		        	va.setLocationRelativeTo(tabla);
+		        	va.verFoto();
+		        	va.setVisible(true);
+		       }
+		    }
+		});
 	}
 	
 	private void addManejadorBtnAddFoto(JButton btn) {
@@ -236,7 +257,7 @@ public class VentanaAlbum extends JFrame {
 				int seleccion = fileChooser.showOpenDialog(btn);
 				if (seleccion != JFileChooser.CANCEL_OPTION) {
 					selectedFile = fileChooser.getSelectedFile();
-					VentanaAñadirPublicacion vap = new VentanaAñadirPublicacion(album.getUsuario().getNombreUsuario(),
+					VentanaPublicacion vap = new VentanaPublicacion(album.getUsuario().getNombreUsuario(),
 							selectedFile.getPath(), panelAct);
 					vap.setVisible(true);	
 					vap.setLocationRelativeTo(btnAddFoto);

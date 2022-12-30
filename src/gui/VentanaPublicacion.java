@@ -28,7 +28,7 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class VentanaAñadirPublicacion extends JFrame {
+public class VentanaPublicacion extends JFrame {
 
 	private JPanel contentPane;
 
@@ -36,7 +36,7 @@ public class VentanaAñadirPublicacion extends JFrame {
 	private JLabel lblFoto;
 	private JTextArea textArea;
 	private JPanel panelBotones;
-	private JButton btnCompartir;
+	private JButton btnAceptar;
 	private JButton btnCancelar;
 	
 	private String ruta;
@@ -52,7 +52,7 @@ public class VentanaAñadirPublicacion extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public VentanaAñadirPublicacion(String u, String r, JPanel p) {		
+	public VentanaPublicacion(String u, String r, JPanel p) {		
 		this.ruta = r;
 		this.usuarioActual = u;
 			
@@ -116,11 +116,11 @@ public class VentanaAñadirPublicacion extends JFrame {
 		gbc_panelBotones.gridy = 3;
 		contentPane.add(panelBotones, gbc_panelBotones);
 		
-		btnCompartir = new JButton("Compartir");
+		btnAceptar = new JButton("Aceptar");
 		//this.addManejadorBtnCompartir(btnCompartir);
-		btnCompartir.setForeground(LILA);
-		btnCompartir.setFont(fontBtn);
-		panelBotones.add(btnCompartir);
+		btnAceptar.setForeground(LILA);
+		btnAceptar.setFont(fontBtn);
+		panelBotones.add(btnAceptar);
 		
 		btnCancelar = new JButton("Cancelar");
 		this.addManejadorBtnCancelar(btnCancelar);
@@ -175,18 +175,23 @@ public class VentanaAñadirPublicacion extends JFrame {
 		});
 	}
 	
+	public void verFoto() {
+		lblTitulo.setText("");
+	}
+	
 	public void compartirFoto() {
-		this.addManejadorBtnCompartir(btnCompartir);
+		btnAceptar.setText("Compartir");
+		this.addManejadorBtnCompartir(btnAceptar);
 	}
 	
 	public void crearAlbum(String nombreAlbum) {
-		btnCompartir.setText("Crear Album");
-		this.addManejadorBtnCrearAlbum(btnCompartir, nombreAlbum);
+		btnAceptar.setText("Crear Album");
+		this.addManejadorBtnCrearAlbum(btnAceptar, nombreAlbum);
 	}
 	
 	public void añadirFotoAlbum(int idAlbum, String ruta) {
-		btnCompartir.setText("Añadir Foto");
-		this.addManejadorBtnAñadirFotoAlbum(btnCompartir, idAlbum, ruta);
+		btnAceptar.setText("Agregar al Album");
+		this.addManejadorBtnAñadirFotoAlbum(btnAceptar, idAlbum, ruta);
 	}
 	
 	private Icon mostrarFoto(String ruta) {
