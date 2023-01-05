@@ -191,12 +191,12 @@ public class Controlador {
 	
 	public boolean registrarFoto(String nombreUsuario, String ruta, String comentario) {
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);		
-		List<String> hashtags = new LinkedList<String>();
+		List<String> hashtags = this.extraerHashtags(comentario);
 		Publicacion p = new Foto("titulo", LocalDate.now(), comentario, hashtags, ruta);
 		p.setUsuario(u);
 		u.addFoto((Foto)p);
-		//repoPublicaciones.addPublicacion(p);
-		RepoPublicaciones.getUnicaInstancia().addPublicacion((Foto)p);
+		repoPublicaciones.addPublicacion(p);
+		//RepoPublicaciones.getUnicaInstancia().addPublicacion((Foto)p);
 		adaptadorPublicacion.registrarPublicacion((Foto)p);
 		adaptadorUsuario.modificarUsuario(u);
 		return true;
@@ -340,6 +340,36 @@ public class Controlador {
 		a.addFoto((Foto)p);
 		
 		adaptadorPublicacion.modificarPublicacion(a);		
+	}
+	
+	public List<String> buscarHashtags(String hashtag) {
+		//HashMap<String, Foto> lista = new HashMap<String, Foto>();
+		List <String> lista = new LinkedList<String>();	
+		for(Publicacion p : repoPublicaciones.getPublicaciones()) {
+			for(String h : p.getHashtags()) {
+				//System.out.println(h);
+				if(h.contains(hashtag)) {
+					lista.add(h.substring(1) + " -> " + p.getUsuario().getSeguidores().size());
+					/*if(p.getClass().equals(Album.class)) {
+						lista.put(hashtag, ((Album)p).getFotos().get(0));
+					}
+					else
+						lista.put(h, (Foto)p);*/
+				}
+			}
+		}
+		
+		return lista;
+	}
+	
+	private List<String> extraerHashtags(String com) {
+		List<String> hashtags = new LinkedList<String>();
+		String[] palabras = com.split(" ");
+		for (String p : palabras) {
+			if (p.startsWith("#"))
+				hashtags.add(p);
+		}
+		return hashtags;
 	}
 	
 	

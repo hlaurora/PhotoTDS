@@ -5,6 +5,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.MenuItem;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -34,6 +35,7 @@ import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.JScrollPane;
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -169,10 +171,13 @@ public class VentanaPrincipal extends JPanel{
 		panelNorte.add(btnPerfil);
 
 		//-------------MENU
-		menu = new JMenu("New menu");
+		menu = new JMenu(" Menu ");
+		//popupMenu = new JPopupMenu();
+		//addPopup(menu, popupMenu);
+		menu.add(new JMenuItem("premium"));
 		panelNorte.add(menu);
-		popupMenu = new JPopupMenu();
-		addPopup(menu, popupMenu);
+
+		
 	}
 	
 	//Crear el panel de las publicaciones

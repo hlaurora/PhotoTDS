@@ -17,7 +17,9 @@ import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.JTextField;
+import javax.swing.Popup;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
@@ -31,6 +33,7 @@ import java.awt.Image;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.PopupMenu;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
@@ -544,6 +547,38 @@ public class PanelPerfilUsuario extends JPanel {
 		    }
 		});
 	}
+	
+	private void addManejadorEliminarFoto(JTable tabla) {
+		int numFilas = tabla.getRowCount();
+		tabla.addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mouseClicked(MouseEvent evt) {
+		    	if (evt.getButton() == MouseEvent.BUTTON1) {
+			        int row = tabla.rowAtPoint(evt.getPoint());
+			        int col = tabla.columnAtPoint(evt.getPoint());
+			        if (row >= 0 && col >= 0) {
+			        	int pos = (col+((row%numFilas)*4));
+			        	VentanaPublicacion va = new VentanaPublicacion(usuarioActual,
+			        			fotosUsuario.get(pos).getRuta(), panelAct);
+			        	//VentanaAlbum va = new VentanaAlbum(albumesUsuario.get(pos));
+			        	va.setLocationRelativeTo(tabla);
+			        	va.verFoto();
+			        	va.setVisible(true);
+			        }
+		       }
+		    }
+		});
+	}
+	
+	
+	/*private void addPopup(JLabel lbl) {
+		
+		JPopupMenu pop = new JPopupMenu();
+		lbl.addMouseListener(pop);
+		JMenuItem i = new JMenuItem("Eliminar");
+		pop.add(i);
+		
+	}*/
 	
 
 	private void mostrarFotos() {
