@@ -189,15 +189,17 @@ public class VentanaPrincipal extends JPanel{
 	//Crear el panel de las publicaciones
 	private void crearPanelPublicaciones() {
 		panelPublicaciones = new JPanel();
-		frmPrincipal.getContentPane().add(panelPublicaciones, BorderLayout.CENTER);
-		scrollPane = new JScrollPane();
 		
-		panelPublicaciones.add(scrollPane);
+		
+		frmPrincipal.getContentPane().add(panelPublicaciones, BorderLayout.CENTER);
+		scrollPane = new JScrollPane(panelPublicaciones);
+		this.fixedSize(scrollPane, 600, 450);
+
+		//panelPublicaciones.add(scrollPane);
 		
 		//scrollPane.setViewportView(panelPublicaciones);
-		//frmPrincipal.getContentPane().add(scrollPane, BorderLayout.CENTER);
+		frmPrincipal.getContentPane().add(scrollPane, BorderLayout.CENTER);
 		panelPublicaciones.setLayout(new BoxLayout(panelPublicaciones, BoxLayout.Y_AXIS));
-		//scrollPane.VERTICAL_SCROLLBAR_ALWAYS;
 		
 		this.mostrarPublicaciones();
 	}
