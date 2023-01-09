@@ -72,7 +72,7 @@ public class PanelPerfilUsuario extends JPanel {
 	private JTextField textBuscar;
 	private JButton btnBuscar;
 	private JLabel lblFotoPerfil;
-	private JButton btnNewButton;
+	private JButton btnMenu;
 	private JLabel lblFotoPerfilGrande;
 	private JLabel lblNumPublicaciones;
 	private JLabel lblNumSeguidores;
@@ -90,7 +90,6 @@ public class PanelPerfilUsuario extends JPanel {
 	private JButton btnAlbumes;
 	private JPanel panelFotos;
 	private JPanel panelAlbumes;
-	private JLabel lblNewLabel;
 	private JTable tableFotos;
 	private DefaultTableModel tmFotos;
 	private JTable tableAlbumes;
@@ -108,8 +107,7 @@ public class PanelPerfilUsuario extends JPanel {
 	private PanelPerfilUsuario panelAct;
 	
 	private Font fontBtn = new Font("HP Simplified Hans", Font.BOLD, 20);
-	private JPopupMenu popupMenu;
-	private JButton btnEliminarFoto;
+	private JPopupMenu popupEliminar;
 
 	/**
 	 * Create the panel.
@@ -131,8 +129,9 @@ public class PanelPerfilUsuario extends JPanel {
 		
 		this.crearPanelNorte();
 		this.crearPanelPerfil();
+		this.crearMenuEliminar();
 		this.crearPanelPublicaciones();
-
+		
 		panelAct = this;
 	}
 	
@@ -220,12 +219,12 @@ public class PanelPerfilUsuario extends JPanel {
 			panelNorte.add(lblFotoPerfil, gbc_lblFotoPerfil);
 		}
 		{
-			btnNewButton = new JButton("HUECO");
-			GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
-			gbc_btnNewButton.insets = new Insets(0, 0, 0, 5);
-			gbc_btnNewButton.gridx = 12;
-			gbc_btnNewButton.gridy = 1;
-			panelNorte.add(btnNewButton, gbc_btnNewButton);
+			btnMenu = new JButton("MENU");
+			GridBagConstraints gbc_btnMenu = new GridBagConstraints();
+			gbc_btnMenu.insets = new Insets(0, 0, 0, 5);
+			gbc_btnMenu.gridx = 12;
+			gbc_btnMenu.gridy = 1;
+			panelNorte.add(btnMenu, gbc_btnMenu);
 		}
 	}
 	
@@ -406,10 +405,7 @@ public class PanelPerfilUsuario extends JPanel {
 					tableFotos.getColumnModel().getColumn(i).setPreferredWidth(170);
 				}
 				this.mostrarFotos();
-				
-				//Añadimos popupMenu
-				this.crearMenuEliminar();
-				
+							
 				panelFotos.add(tableFotos);
 				
 				//JScrollPane scrollPane = new JScrollPane(tableFotos);
@@ -439,11 +435,19 @@ public class PanelPerfilUsuario extends JPanel {
 			}
 		}
 	}
+	
+	public void crearMenuEliminar() {
+		popupEliminar = new JPopupMenu();
+		eliminar = new JMenuItem("Eliminar");
+		popupEliminar.add(eliminar);
+		
+	}
 
 	//////////////////////////////////////
 	///// MANEJADORES DE LOS BOTONES /////
 	//////////////////////////////////////
 
+	
 	// Botón addFoto
 	private void addManejadorBotonAddFoto(JButton btn) {
 		btn.addActionListener(new ActionListener() {
@@ -544,7 +548,7 @@ public class PanelPerfilUsuario extends JPanel {
 				        	va.setVisible(true);
 				        } 
 				        else if (SwingUtilities.isRightMouseButton(evt)) {
-			    	        popupMenu.show(tabla, evt.getX(), evt.getY());
+				        	popupEliminar.show(tabla, evt.getX(), evt.getY());
 				    	    addManejadorEliminar(eliminar, fotosUsuario.get(pos)); 
 				    	}
 		        	}
@@ -587,7 +591,7 @@ public class PanelPerfilUsuario extends JPanel {
 				        	va.setVisible(true);
 		        		}
 		        		else if (SwingUtilities.isRightMouseButton(evt)) {
-		        			popupMenu.show(tabla, evt.getX(), evt.getY());
+		        			popupEliminar.show(tabla, evt.getX(), evt.getY());
 				    	    addManejadorEliminar(eliminar, albumesUsuario.get(pos)); 
 		        		}
 		        	}
@@ -595,14 +599,6 @@ public class PanelPerfilUsuario extends JPanel {
 		    }
 		});
 	}
-	
-	public void crearMenuEliminar() {
-		popupMenu = new JPopupMenu();
-		eliminar = new JMenuItem("eliminar");
-		popupMenu.add(eliminar);
-		
-	}
-
 	
 	private void mostrarFotos() {
 		
@@ -718,7 +714,7 @@ public class PanelPerfilUsuario extends JPanel {
 	}
 	
 
-	private static void addPopup(Component component, final JPopupMenu popup) {
+	/*private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				if (e.isPopupTrigger()) {
@@ -734,7 +730,7 @@ public class PanelPerfilUsuario extends JPanel {
 				popup.show(e.getComponent(), e.getX(), e.getY());
 			}
 		});
-	}
+	}*/
 	
 	
 	/**

@@ -63,19 +63,22 @@ public class VentanaPrincipal extends JPanel{
 	private JButton btnBuscar;
 	private JScrollPane scrollPane;
 	private Component rigidArea_1;
-	private JMenu menu;
 	private JPopupMenu popupMenu;
+	private JButton btnMenu;
 	private JFileChooser fileChooser;
 	private File selectedFile;
+	
 	
 	private String usuarioActual;
 	private String fotoPerfil;
 	private Color LILA = new Color(134, 46, 150);
+	private Font fontBtn = new Font("HP Simplified Hans", Font.BOLD, 15);
 		
 	private PanelPerfilUsuario panelPerfilUsuario;
 	private JPanel panelPublicaciones;
 	
 	private VentanaPrincipal ventanaPrincipal;
+	private Component rigidArea_2;
 	
 
 	/*public void mostrarVentana() {
@@ -106,6 +109,7 @@ public class VentanaPrincipal extends JPanel{
 
 		crearPanelNorte();
 		crearPanelPublicaciones();
+		crearPopupMenu();
 		ventanaPrincipal = this;
 	}
 	
@@ -154,7 +158,7 @@ public class VentanaPrincipal extends JPanel{
 		btnBuscar = new JButton("Buscar");
 		this.addManejadorBotonBuscar();
 		btnBuscar.setForeground(LILA);
-		btnBuscar.setFont(new Font("HP Simplified Hans", Font.BOLD, 15));
+		btnBuscar.setFont(fontBtn);
 		btnBuscar.setAlignmentX(Component.CENTER_ALIGNMENT);
 		this.fixedSize(btnBuscar, 70, 40);
 		panel.add(btnBuscar);
@@ -169,14 +173,16 @@ public class VentanaPrincipal extends JPanel{
 		this.fixedSize(btnPerfil, 50, 50);
 		this.añadirPerfil(btnPerfil, fotoPerfil);
 		panelNorte.add(btnPerfil);
-
-		//-------------MENU
-		menu = new JMenu(" Menu ");
-		//popupMenu = new JPopupMenu();
-		//addPopup(menu, popupMenu);
-		menu.add(new JMenuItem("premium"));
-		panelNorte.add(menu);
-
+		
+		rigidArea_2 = Box.createRigidArea(new Dimension(20, 20));
+		panelNorte.add(rigidArea_2);
+		
+		btnMenu = new JButton("Menu");
+		btnMenu.setForeground(LILA);
+		btnMenu.setFont(fontBtn);
+		this.fixedSize(btnMenu, 60, 40);
+		panelNorte.add(btnMenu);
+		this.addManejadorBotonMenu(btnMenu);
 		
 	}
 	
@@ -207,24 +213,6 @@ public class VentanaPrincipal extends JPanel{
 			panelPublicaciones.add(publi);
 		}
 	}
-
-	private static void addPopup(Component component, final JPopupMenu popup) {
-		component.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					showMenu(e);
-				}
-			}
-			public void mouseReleased(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					showMenu(e);
-				}
-			}
-			private void showMenu(MouseEvent e) {
-				popup.show(e.getComponent(), e.getX(), e.getY());
-			}
-		});
-	}
 	
 	
 	private void añadirPerfil(JButton btn, String ruta) {
@@ -236,7 +224,23 @@ public class VentanaPrincipal extends JPanel{
 		btn.setIcon(icono);
 	}
 	
+	private void crearPopupMenu() {
+		popupMenu = new JPopupMenu();
+		JMenuItem premium = new JMenuItem("Premium");
+		popupMenu.add(premium);
+	}
+	
 	//MANEJADORES DE LOS BOTONES
+	
+	// Botón menú
+	private void addManejadorBotonMenu(JButton btn) {
+		btn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				popupMenu.show(btn, e.getX() , e.getY());
+			}
+		});
+	}
 	
 	//Botón Perfil (abre el perfil del usuario actual)
 	private void addManejadorBotonPerfil(JButton btn) {
