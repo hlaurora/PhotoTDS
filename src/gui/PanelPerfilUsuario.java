@@ -27,6 +27,7 @@ import javax.swing.table.DefaultTableModel;
 import controlador.Controlador;
 import dominio.Album;
 import dominio.Foto;
+import dominio.Publicacion;
 
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -531,36 +532,43 @@ public class PanelPerfilUsuario extends JPanel {
 		        int row = tabla.rowAtPoint(evt.getPoint());
 		        int col = tabla.columnAtPoint(evt.getPoint());
 		        if (row >= 0 && col >= 0) {
-		        	int pos = (col+((row%numFilas)*4));
-			        if (SwingUtilities.isLeftMouseButton(evt)) {
-			        	VentanaPublicacion va = new VentanaPublicacion(usuarioActual,
-			        			fotosUsuario.get(pos).getRuta(), panelAct);
-			        	//VentanaAlbum va = new VentanaAlbum(albumesUsuario.get(pos));
-			        	va.setLocationRelativeTo(tabla);
-			        	va.verFoto();
-			        	va.setVisible(true);
-			        } 
-			        else if (SwingUtilities.isRightMouseButton(evt)) {
-		    	        popupMenu.show(tabla, evt.getX(), evt.getY());
-
-		    	        ActionListener[] listeners = eliminar.getActionListeners();
-		    	        //Eliminar todos los ActionListeners del botón
-		    	        for(ActionListener listener : listeners){
-		    	        	eliminar.removeActionListener(listener);
-		    	        }
-		    	        
-			        	eliminar.addActionListener(new ActionListener() {
-			    			@Override
-			    			public void actionPerformed(ActionEvent e) {
-			    				if(Controlador.getUnicaInstancia().eliminarFoto(fotosUsuario.get(pos))) {
-			    					mostrarFotos();
-			    				}
-			    			}
-			    		 });
-			    	}
+		        	
+		        	int pos = (col+((row%numFilas)*3));
+		        	if (pos <= fotosUsuario.size()-1) {
+				        if (SwingUtilities.isLeftMouseButton(evt)) {
+				        	VentanaPublicacion va = new VentanaPublicacion(usuarioActual,
+				        			fotosUsuario.get(pos).getRuta(), panelAct);
+				        	//VentanaAlbum va = new VentanaAlbum(albumesUsuario.get(pos));
+				        	va.setLocationRelativeTo(tabla);
+				        	va.verFoto();
+				        	va.setVisible(true);
+				        } 
+				        else if (SwingUtilities.isRightMouseButton(evt)) {
+			    	        popupMenu.show(tabla, evt.getX(), evt.getY());
+				    	    addManejadorEliminar(eliminar, fotosUsuario.get(pos)); 
+				    	}
+		        	}
 		        }
 		    }
 		});
+	}
+	
+	private void addManejadorEliminar(JMenuItem item, Publicacion p) {
+		ActionListener[] listeners = eliminar.getActionListeners();
+        //Eliminar todos los ActionListeners del botón
+        for(ActionListener listener : listeners){
+        	eliminar.removeActionListener(listener);
+        }
+        
+    	eliminar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(Controlador.getUnicaInstancia().eliminarPublicacion(p)) {
+					mostrarFotos();
+					mostrarAlbumes();
+				}
+			}
+		 });
 	}
 	
 	private void addManejadorTablaAlbum(JTable tabla) {
@@ -572,14 +580,22 @@ public class PanelPerfilUsuario extends JPanel {
 		        int col = tabla.columnAtPoint(evt.getPoint());
 		        if (row >= 0 && col >= 0) {
 		        	int pos = (col+((row%numFilas)*4));
-		        	VentanaAlbum va = new VentanaAlbum(albumesUsuario.get(pos));
-		        	va.setLocationRelativeTo(tabla);
-		        	va.setVisible(true);
+		        	if (pos <= albumesUsuario.size()-1) {
+		        		if (SwingUtilities.isLeftMouseButton(evt)) {
+				        	VentanaAlbum va = new VentanaAlbum(albumesUsuario.get(pos));
+				        	va.setLocationRelativeTo(tabla);
+				        	va.setVisible(true);
+		        		}
+		        		else if (SwingUtilities.isRightMouseButton(evt)) {
+		        			popupMenu.show(tabla, evt.getX(), evt.getY());
+				    	    addManejadorEliminar(eliminar, albumesUsuario.get(pos)); 
+		        		}
+		        	}
 		       }
 		    }
 		});
 	}
-
+	
 	public void crearMenuEliminar() {
 		popupMenu = new JPopupMenu();
 		eliminar = new JMenuItem("eliminar");

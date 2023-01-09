@@ -203,14 +203,18 @@ public class Controlador {
 		return true;
 	}
 	
-	public boolean eliminarFoto(Foto foto) {
-		Usuario u = foto.getUsuario();
-		u.removeFoto(foto);
+	public boolean eliminarPublicacion(Publicacion p) {
+		Usuario u = p.getUsuario();
+		
+		if (p.getClass().equals(Foto.class))
+			u.removeFoto((Foto)p);
+		else
+			u.removeAlbum((Album)p);
+		
+		repoPublicaciones.removePublicacion(p);
+		adaptadorPublicacion.borrarPublicacion(p);
 		
 		adaptadorUsuario.modificarUsuario(u);
-		
-		repoPublicaciones.removePublicacion(foto);
-		adaptadorPublicacion.borrarPublicacion(foto);
 		
 		return true;
 	}
