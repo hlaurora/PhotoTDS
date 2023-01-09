@@ -407,9 +407,7 @@ public class PanelPerfilUsuario extends JPanel {
 				this.mostrarFotos();
 				
 				//Añadimos popupMenu
-				popupMenu = new JPopupMenu();
-				eliminar = new JMenuItem("eliminar");
-				popupMenu.add(eliminar);
+				this.crearMenuEliminar();
 				
 				panelFotos.add(tableFotos);
 				
@@ -543,7 +541,22 @@ public class PanelPerfilUsuario extends JPanel {
 			        	va.setVisible(true);
 			        } 
 			        else if (SwingUtilities.isRightMouseButton(evt)) {
-		    	         popupMenu.show(tabla, evt.getX(), evt.getY());
+		    	        popupMenu.show(tabla, evt.getX(), evt.getY());
+
+		    	        ActionListener[] listeners = eliminar.getActionListeners();
+		    	        //Eliminar todos los ActionListeners del botón
+		    	        for(ActionListener listener : listeners){
+		    	        	eliminar.removeActionListener(listener);
+		    	        }
+		    	        
+			        	eliminar.addActionListener(new ActionListener() {
+			    			@Override
+			    			public void actionPerformed(ActionEvent e) {
+			    				if(Controlador.getUnicaInstancia().eliminarFoto(fotosUsuario.get(pos))) {
+			    					mostrarFotos();
+			    				}
+			    			}
+			    		 });
 			    	}
 		        }
 		    }
@@ -566,18 +579,15 @@ public class PanelPerfilUsuario extends JPanel {
 		    }
 		});
 	}
-	
-	public void manejarEliminar(int pos) {
-		eliminar.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("eliminar " + pos);
-			}
-		});
+
+	public void crearMenuEliminar() {
+		popupMenu = new JPopupMenu();
+		eliminar = new JMenuItem("eliminar");
+		popupMenu.add(eliminar);
 		
 	}
 
-
+	
 	private void mostrarFotos() {
 		
 		//Limpiamos la tabla

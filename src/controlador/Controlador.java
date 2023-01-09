@@ -199,7 +199,19 @@ public class Controlador {
 		//RepoPublicaciones.getUnicaInstancia().addPublicacion((Foto)p);
 		adaptadorPublicacion.registrarPublicacion((Foto)p);
 		adaptadorUsuario.modificarUsuario(u);
-		System.out.println(p.getDescripcion());
+		//System.out.println(p.getDescripcion());
+		return true;
+	}
+	
+	public boolean eliminarFoto(Foto foto) {
+		Usuario u = foto.getUsuario();
+		u.removeFoto(foto);
+		
+		adaptadorUsuario.modificarUsuario(u);
+		
+		repoPublicaciones.removePublicacion(foto);
+		adaptadorPublicacion.borrarPublicacion(foto);
+		
 		return true;
 	}
 	
