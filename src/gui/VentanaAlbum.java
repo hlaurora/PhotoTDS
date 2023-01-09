@@ -22,6 +22,8 @@ import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -253,15 +255,23 @@ public class VentanaAlbum extends JFrame {
 	private void addManejadorBtnAddFoto(JButton btn) {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				fileChooser = new JFileChooser();
-				int seleccion = fileChooser.showOpenDialog(btn);
-				if (seleccion != JFileChooser.CANCEL_OPTION) {
-					selectedFile = fileChooser.getSelectedFile();
-					VentanaPublicacion vap = new VentanaPublicacion(album.getUsuario().getNombreUsuario(),
-							selectedFile.getPath(), panelAct);
-					vap.setVisible(true);	
-					vap.setLocationRelativeTo(btnAddFoto);
-					vap.añadirFotoAlbum(album.getId(), selectedFile.getPath());
+				
+				if(album.getFotos().size() >= 16) {
+					JOptionPane.showMessageDialog(panelAct, "Un album no puede contener mas de 16 fotos.\n",
+							"VentanaAlbum", JOptionPane.ERROR_MESSAGE);
+				}
+				
+				else {
+					fileChooser = new JFileChooser();
+					int seleccion = fileChooser.showOpenDialog(btn);
+					if (seleccion != JFileChooser.CANCEL_OPTION) {
+						selectedFile = fileChooser.getSelectedFile();
+						VentanaPublicacion vap = new VentanaPublicacion(album.getUsuario().getNombreUsuario(),
+								selectedFile.getPath(), panelAct);
+						vap.setVisible(true);	
+						vap.setLocationRelativeTo(btnAddFoto);
+						vap.añadirFotoAlbum(album.getId(), selectedFile.getPath());
+					}
 				}
 			}
 		});

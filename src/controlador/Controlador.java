@@ -199,6 +199,7 @@ public class Controlador {
 		//RepoPublicaciones.getUnicaInstancia().addPublicacion((Foto)p);
 		adaptadorPublicacion.registrarPublicacion((Foto)p);
 		adaptadorUsuario.modificarUsuario(u);
+		System.out.println(p.getDescripcion());
 		return true;
 	}
 	
@@ -275,44 +276,6 @@ public class Controlador {
 		return false;
 	}
 	
-	/*public void registrarAlbum(String nombreUsuario, String nombreAlbum, String comentario, String ruta) {
-		Usuario u = repoUsuarios.getUsuario(nombreUsuario);		
-		List<String> hashtags = new LinkedList<String>();
-		
-		Publicacion p = new Album("titulo", LocalDate.now(), comentario, hashtags);
-		p.setUsuario(u);
-		u.addAlbum((Album)p);
-
-		Foto f = new Foto("titulo", LocalDate.now(), comentario, hashtags, ruta);
-		f.setUsuario(u);
-		((Album)p).addFoto(f);		
-		
-		
-		//repoPublicaciones.addPublicacion(p);
-		
-		//this.añadirFotoAlbum(a.getId(), ruta, comentario);
-		repoPublicaciones.addPublicacion(p);
-
-		adaptadorPublicacion.registrarPublicacion((Album)p);
-		adaptadorUsuario.modificarUsuario(u);	
-		
-	}*/
-	
-	/*public void añadirFotoAlbum(int idAlbum, String ruta, String comentario) {
-		//recuperamos album
-		//System.out.println(idAlbum);
-		Publicacion a = repoPublicaciones.getPublicacion(idAlbum);
-		//System.out.println(a.getId());
-		//recuperamos usuario
-		Usuario u = a.getUsuario();
-		
-		List<String> hashtags = new LinkedList<String>();
-		Foto f = new Foto("titulo", LocalDate.now(), comentario, hashtags, ruta);
-		f.setUsuario(u);
-		((Album)a).addFoto(f);
-		adaptadorUsuario.modificarUsuario(u);
-		adaptadorPublicacion.modificarPublicacion(a);
-	}*/
 	
 	public Album registrarAlbum(String titulo, String comentario, String nombreUsuario) {
 		Usuario u = repoUsuarios.getUsuario(nombreUsuario);
@@ -363,11 +326,16 @@ public class Controlador {
 	}
 	
 	private List<String> extraerHashtags(String com) {
+		//Máximo 4 hashtags
+		//Símbolo '#' seguido de una palabra que tiene un máximo de 15 letras
 		List<String> hashtags = new LinkedList<String>();
 		String[] palabras = com.split(" ");
+		int numHash = 0;
 		for (String p : palabras) {
-			if (p.startsWith("#"))
+			if (p.startsWith("#") && (p.length()<=16) && (numHash<4)) {
 				hashtags.add(p);
+				numHash++;
+			}
 		}
 		return hashtags;
 	}

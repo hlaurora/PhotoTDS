@@ -8,6 +8,7 @@ import javax.swing.border.EmptyBorder;
 
 import controlador.Controlador;
 import dominio.Album;
+import dominio.Foto;
 
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
@@ -45,7 +46,7 @@ public class VentanaPublicacion extends JFrame {
 	private String comentario = "";
 	private Color LILA = new Color(134, 46, 150);
 	private Font fontBtn = new Font("HP Simplified Hans", Font.BOLD, 15);
-	
+	private Foto foto;
 	private JPanel ventanaActual;
 	
 
@@ -55,7 +56,7 @@ public class VentanaPublicacion extends JFrame {
 	public VentanaPublicacion(String u, String r, JPanel p) {		
 		this.ruta = r;
 		this.usuarioActual = u;
-			
+		
 		this.ventanaActual = p;
 		//this.panelPerfil = p;
 		

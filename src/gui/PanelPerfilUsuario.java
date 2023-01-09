@@ -33,6 +33,7 @@ import java.awt.Image;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.PopupMenu;
 import java.awt.Rectangle;
 import java.io.File;
@@ -54,6 +55,7 @@ import java.awt.image.BufferedImage;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.JPopupMenu;
 
 public class PanelPerfilUsuario extends JPanel {
@@ -79,6 +81,7 @@ public class PanelPerfilUsuario extends JPanel {
 	private JLabel lblNombreUsuario;
 	private JFileChooser fileChooser;
 	private File selectedFile;
+	private JMenuItem eliminar;
 	
 	private Font fuenteLabel = new Font("HP Simplified Hans", Font.PLAIN, 15);
 	private Color Lila = new Color(134, 46, 150);
@@ -379,6 +382,7 @@ public class PanelPerfilUsuario extends JPanel {
 		panelPublicaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		add(panelPublicaciones);
 		panelPublicaciones.setLayout(new CardLayout(0, 0));
+		
 		{
 			//scrollPane = new JScrollPane();
 			//scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -401,7 +405,17 @@ public class PanelPerfilUsuario extends JPanel {
 					tableFotos.getColumnModel().getColumn(i).setPreferredWidth(170);
 				}
 				this.mostrarFotos();
+				
+				//Añadimos popupMenu
+				popupMenu = new JPopupMenu();
+				eliminar = new JMenuItem("eliminar");
+				popupMenu.add(eliminar);
+				
 				panelFotos.add(tableFotos);
+				
+				//JScrollPane scrollPane = new JScrollPane(tableFotos);
+				//panelFotos.add(scrollPane);
+				
 			}
 		}
 		{
@@ -511,6 +525,31 @@ public class PanelPerfilUsuario extends JPanel {
 	}
 	
 	
+	private void addManejadorTablaFotos(JTable tabla) {
+		int numFilas = tabla.getRowCount();
+		tabla.addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mouseClicked(MouseEvent evt) {
+		        int row = tabla.rowAtPoint(evt.getPoint());
+		        int col = tabla.columnAtPoint(evt.getPoint());
+		        if (row >= 0 && col >= 0) {
+		        	int pos = (col+((row%numFilas)*4));
+			        if (SwingUtilities.isLeftMouseButton(evt)) {
+			        	VentanaPublicacion va = new VentanaPublicacion(usuarioActual,
+			        			fotosUsuario.get(pos).getRuta(), panelAct);
+			        	//VentanaAlbum va = new VentanaAlbum(albumesUsuario.get(pos));
+			        	va.setLocationRelativeTo(tabla);
+			        	va.verFoto();
+			        	va.setVisible(true);
+			        } 
+			        else if (SwingUtilities.isRightMouseButton(evt)) {
+		    	         popupMenu.show(tabla, evt.getX(), evt.getY());
+			    	}
+		        }
+		    }
+		});
+	}
+	
 	private void addManejadorTablaAlbum(JTable tabla) {
 		int numFilas = tabla.getRowCount();
 		tabla.addMouseListener(new MouseAdapter() {
@@ -528,58 +567,16 @@ public class PanelPerfilUsuario extends JPanel {
 		});
 	}
 	
-	private void addManejadorTablaFotos(JTable tabla) {
-		int numFilas = tabla.getRowCount();
-		tabla.addMouseListener(new MouseAdapter() {
-		    @Override
-		    public void mouseClicked(MouseEvent evt) {
-		        int row = tabla.rowAtPoint(evt.getPoint());
-		        int col = tabla.columnAtPoint(evt.getPoint());
-		        if (row >= 0 && col >= 0) {
-		        	int pos = (col+((row%numFilas)*4));
-		        	VentanaPublicacion va = new VentanaPublicacion(usuarioActual,
-		        			fotosUsuario.get(pos).getRuta(), panelAct);
-		        	//VentanaAlbum va = new VentanaAlbum(albumesUsuario.get(pos));
-		        	va.setLocationRelativeTo(tabla);
-		        	va.verFoto();
-		        	va.setVisible(true);
-		       }
-		    }
+	public void manejarEliminar(int pos) {
+		eliminar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("eliminar " + pos);
+			}
 		});
-	}
-	
-	private void addManejadorEliminarFoto(JTable tabla) {
-		int numFilas = tabla.getRowCount();
-		tabla.addMouseListener(new MouseAdapter() {
-		    @Override
-		    public void mouseClicked(MouseEvent evt) {
-		    	if (evt.getButton() == MouseEvent.BUTTON1) {
-			        int row = tabla.rowAtPoint(evt.getPoint());
-			        int col = tabla.columnAtPoint(evt.getPoint());
-			        if (row >= 0 && col >= 0) {
-			        	int pos = (col+((row%numFilas)*4));
-			        	VentanaPublicacion va = new VentanaPublicacion(usuarioActual,
-			        			fotosUsuario.get(pos).getRuta(), panelAct);
-			        	//VentanaAlbum va = new VentanaAlbum(albumesUsuario.get(pos));
-			        	va.setLocationRelativeTo(tabla);
-			        	va.verFoto();
-			        	va.setVisible(true);
-			        }
-		       }
-		    }
-		});
-	}
-	
-	
-	/*private void addPopup(JLabel lbl) {
 		
-		JPopupMenu pop = new JPopupMenu();
-		lbl.addMouseListener(pop);
-		JMenuItem i = new JMenuItem("Eliminar");
-		pop.add(i);
-		
-	}*/
-	
+	}
+
 
 	private void mostrarFotos() {
 		
