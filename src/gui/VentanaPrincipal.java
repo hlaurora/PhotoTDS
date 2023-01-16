@@ -1,22 +1,13 @@
 package gui;
 
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Image;
-import java.awt.Insets;
-import java.awt.MenuItem;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.border.EtchedBorder;
+
 import controlador.Controlador;
 import dominio.Foto;
-import dominio.Usuario;
-
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -30,18 +21,18 @@ import javax.swing.Box;
 import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
+import javax.swing.ListSelectionModel;
 import javax.swing.JScrollPane;
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.awt.event.ActionListener;
@@ -67,12 +58,11 @@ public class VentanaPrincipal extends JPanel{
 	private JButton btnMenu;
 	private JFileChooser fileChooser;
 	private File selectedFile;
-	
+	private JList<String> jListaDescuentos;
 	
 	private String usuarioActual;
 	private String fotoPerfil;
-	private Color LILA = new Color(134, 46, 150);
-	private Font fontBtn = new Font("HP Simplified Hans", Font.BOLD, 15);
+	private Font fontBtn = new Font("Arial", Font.BOLD, 15);
 		
 	private PanelPerfilUsuario panelPerfilUsuario;
 	private JPanel panelPublicaciones;
@@ -109,7 +99,10 @@ public class VentanaPrincipal extends JPanel{
 
 		crearPanelNorte();
 		crearPanelPublicaciones();
-		crearPopupMenu();
+		if (Controlador.getUnicaInstancia().isPremium(usuarioActual))
+			crearMenuOpcionesPremium();
+		else
+			crearPopupMenu();
 		ventanaPrincipal = this;
 	}
 	
@@ -122,7 +115,7 @@ public class VentanaPrincipal extends JPanel{
 		this.fixedSize(panelNorte, 550, 50);
 		
 		lblPhotoTDS = new JLabel("PhotoTDS");
-		lblPhotoTDS.setForeground(LILA);
+		lblPhotoTDS.setForeground(Constantes.LILA);
 		lblPhotoTDS.setFont(new Font("HP Simplified Hans", Font.PLAIN, 30));
 		lblPhotoTDS.setPreferredSize(new Dimension(170, 0));
 		panelNorte.add(lblPhotoTDS);
@@ -134,7 +127,7 @@ public class VentanaPrincipal extends JPanel{
 		//Botón para añadir fotos
 		btnAddFoto = new JButton("+");
 		this.addManejadorBotonAddFoto(btnAddFoto);
-		btnAddFoto.setForeground(LILA);
+		btnAddFoto.setForeground(Constantes.LILA);
 		btnAddFoto.setFont(new Font("HP Simplified Hans", Font.BOLD, 20));
 		this.fixedSize(btnAddFoto, 40, 40);
 		panelNorte.add(btnAddFoto);
@@ -157,7 +150,7 @@ public class VentanaPrincipal extends JPanel{
 		//Botón para buscar
 		btnBuscar = new JButton("Buscar");
 		this.addManejadorBotonBuscar();
-		btnBuscar.setForeground(LILA);
+		btnBuscar.setForeground(Constantes.LILA);
 		btnBuscar.setFont(fontBtn);
 		btnBuscar.setAlignmentX(Component.CENTER_ALIGNMENT);
 		this.fixedSize(btnBuscar, 70, 40);
@@ -178,7 +171,7 @@ public class VentanaPrincipal extends JPanel{
 		panelNorte.add(rigidArea_2);
 		
 		btnMenu = new JButton("Menu");
-		btnMenu.setForeground(LILA);
+		btnMenu.setForeground(Constantes.LILA);
 		btnMenu.setFont(fontBtn);
 		this.fixedSize(btnMenu, 60, 40);
 		panelNorte.add(btnMenu);
@@ -190,11 +183,11 @@ public class VentanaPrincipal extends JPanel{
 	private void crearPanelPublicaciones() {
 		panelPublicaciones = new JPanel();
 		
-		
 		frmPrincipal.getContentPane().add(panelPublicaciones, BorderLayout.CENTER);
 		scrollPane = new JScrollPane(panelPublicaciones);
+		frmPrincipal.setResizable(true);
 		this.fixedSize(scrollPane, 600, 450);
-
+		//this.fixedSize(scrollPane, 600, (frmPrincipal.getHeight()-panelNorte.getHeight()));
 		//panelPublicaciones.add(scrollPane);
 		
 		//scrollPane.setViewportView(panelPublicaciones);
@@ -208,9 +201,11 @@ public class VentanaPrincipal extends JPanel{
 	public void mostrarPublicaciones() {
 		panelPublicaciones.removeAll();
 		JPanel publi;
+		int i = 0;
 		List<Foto> fotos = Controlador.getUnicaInstancia().getFotosSeguidos(usuarioActual);
 		for (Foto f : fotos) {
-			publi = new PanelPublicacion(f);
+			publi = new PanelPublicacion(f, i, frmPrincipal);
+			i++;
 			this.fixedSize(publi, frmPrincipal.getWidth()-40, 90);
 			panelPublicaciones.add(publi);
 		}
@@ -230,6 +225,83 @@ public class VentanaPrincipal extends JPanel{
 		popupMenu = new JPopupMenu();
 		JMenuItem premium = new JMenuItem("Premium");
 		popupMenu.add(premium);
+		premium.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				addListaDescuentos();
+			}
+		});
+	}
+	
+	private void crearMenuOpcionesPremium() {
+		popupMenu = new JPopupMenu();
+		JMenuItem generarPdf = new JMenuItem("Generar PDF");
+		popupMenu.add(generarPdf);
+		
+	}
+	
+	private void addListaDescuentos() {
+		//List<String> listaHashtags = Controlador.getUnicaInstancia().buscarHashtags(hashtag);
+		
+		List<String> listaDescuentos = new LinkedList<String>();
+		listaDescuentos.add("Descuento por edad");
+		listaDescuentos.add("Descuento por MeGustas");
+		
+		jListaDescuentos = new JList<String>(listaDescuentos.toArray
+								(new String[listaDescuentos.size()]));
+		jListaDescuentos.setCellRenderer(createListRenderer());
+		jListaDescuentos.setPreferredSize(new Dimension(200, ABORT));
+		jListaDescuentos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+		JScrollPane scrollListaFotos = new JScrollPane(jListaDescuentos);
+
+		JDialog dialog = new JDialog();
+		dialog.setLocationRelativeTo(btnMenu);
+		dialog.setTitle("Descuentos premium");
+		dialog.setSize(200, 200);
+		dialog.add(scrollListaFotos);
+		dialog.setVisible(true);
+		
+		
+		jListaDescuentos.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				String d;
+				if ((d = jListaDescuentos.getSelectedValue()) != null) {
+					int result = JOptionPane.showConfirmDialog(frmPrincipal, "Va a pagar " + d,
+							"Confirm Dialog", JOptionPane.CANCEL_OPTION);	
+					if (result == JOptionPane.YES_OPTION) {
+						dialog.setVisible(false);
+						Controlador.getUnicaInstancia().hacerPremium(usuarioActual);
+					   // Handle 'Yes'
+					} else {
+					   // Handle 'No'
+					}
+				}
+			}
+		});
+
+		
+	}
+	
+	private static ListCellRenderer<? super String> createListRenderer() {
+		return new DefaultListCellRenderer() {
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value,
+					int index, boolean isSelected,
+					boolean cellHasFocus) {
+			{
+				Component c = super.getListCellRendererComponent(
+							list, value, index, isSelected, cellHasFocus);
+				if (c instanceof JLabel) {
+					JLabel label = (JLabel) c;
+					String descuento = (String) value;
+					label.setText(descuento);
+					}
+				return c;
+			}
+		};
+		};
 	}
 	
 	//MANEJADORES DE LOS BOTONES

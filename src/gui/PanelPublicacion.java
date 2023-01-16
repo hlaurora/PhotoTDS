@@ -15,9 +15,14 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.ActionEvent;
 
 public class PanelPublicacion extends JPanel {
@@ -26,27 +31,31 @@ public class PanelPublicacion extends JPanel {
 	private String fotoPerfil;
 	private String nombreUsuario;
 	private int idFoto;
+	private int pos;
 
 	private JLabel lblNumMg;
 	private JLabel lblImagen;
 	private Foto foto;
+	private JFrame frame;
 	
 	/**
 	 * Create the panel.
 	 */
 	//public PanelPublicacion(int id, String r, String fp, String nu) {
-	public PanelPublicacion(Foto foto) {
+	public PanelPublicacion(Foto foto, int p, JFrame f) {
 		/*this.ruta = r;
 		this.fotoPerfil = fp;
 		this.nombreUsuario = nu;
 		this.idFoto = id;*/
 		//this.idFoto = id;
 		//this.foto = Controlador.getUnicaInstancia().getFoto(id);
+		this.frame = f;
 		this.foto = foto;
 		this.ruta = foto.getRuta();
 		this.fotoPerfil = foto.getUsuario().getFotoPerfil().getPath();
 		this.nombreUsuario = foto.getUsuario().getNombreUsuario();		
 		this.idFoto = foto.getId();
+		this.pos = p;
 		
 		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -84,6 +93,7 @@ public class PanelPublicacion extends JPanel {
 		lblImagen = new JLabel("");
 		this.fixedSize(lblImagen, 150, 90);
 		lblImagen.setIcon(escalarImagen(lblImagen, ruta));
+		this.addManejadorFoto(lblImagen);
 		GridBagConstraints gbc_lblImagen = new GridBagConstraints();
 		gbc_lblImagen.gridheight = 5;
 		gbc_lblImagen.insets = new Insets(0, 0, 5, 5);
@@ -109,6 +119,15 @@ public class PanelPublicacion extends JPanel {
 
 	}
 	
+	private void addManejadorFoto(JLabel lbl) {
+		lbl.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				verFoto(ruta);
+		
+			}
+		});
+	}
+	
 	private void addManejadorBotonMeGusta(JButton btn) {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -117,6 +136,27 @@ public class PanelPublicacion extends JPanel {
 				lblNumMg.setText(Controlador.getUnicaInstancia().getMeGustas(idFoto) + " Me gustas");
 			}
 		});
+	}
+	
+	public int getIndex() {
+		return this.pos;
+	}
+	
+	private void verFoto(String ruta) {
+		System.out.println(ruta);
+		JDialog dialog = new JDialog(frame, false);
+		
+		dialog.setTitle("  ");
+		JLabel label = new JLabel();
+		this.fixedSize(label, 80, 80);
+		//Cargar la imagen
+		label.setIcon(escalarImagen(label, ruta));
+		//Establecer la imagen en el label
+		//label.setIcon(icon);
+		//Agregar el label a la ventana de diálogo
+		dialog.add(label);
+		//Mostrar la ventana de diálogo
+		dialog.setVisible(true);
 	}
 	
 	

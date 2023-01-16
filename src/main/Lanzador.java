@@ -10,8 +10,8 @@ public class Lanzador {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaEntrada window = new VentanaEntrada();
-					window.frmEntrada.setVisible(true);
+					VentanaEntrada ventanaEntrada = new VentanaEntrada();
+					ventanaEntrada.mostrarVentana();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

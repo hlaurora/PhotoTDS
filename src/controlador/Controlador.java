@@ -269,6 +269,17 @@ public class Controlador {
 		return false;
 	}
 	
+	public boolean isPremium(String nombreUsuario) {
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
+		return u.getPremium();
+	}
+	
+	public void hacerPremium(String nombreUsuario) {
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
+		u.setPremium(true);
+		adaptadorUsuario.modificarUsuario(u);
+	}
+	
 	public void seguirUsuario (String seguidor, String seguido) {
 		//recuperamos seguidor
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(seguidor);

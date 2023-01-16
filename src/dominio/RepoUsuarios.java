@@ -67,13 +67,6 @@ public class RepoUsuarios {
 		usuariosPorEmail.remove(usuario.getEmail());
 	}
 	
-	/*
-	public void removeTodosUsuarios() {
-		//usuarios.remove(usuario.getId());
-		for (Usuario u : usuariosPorNombreUs.values()) {
-			usuariosPorNombreUs.remove(u);
-		}
-	}*/
 	
 	private void cargarRepositorio() throws DAOException{
 		//adaptadorUsuario.borrarTodosUsuario();

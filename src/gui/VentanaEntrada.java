@@ -29,37 +29,24 @@ import java.awt.event.ActionListener;
 
 public class VentanaEntrada {
 
-	public JFrame frmEntrada;
+	private JFrame frmEntrada;
 	private JPasswordField passwordField;
 	private JTextField textUsuario;
 	private JButton btnIniciarSesion;
 	
-	public Color Lila = new Color(134, 46, 150);
 	public Font lblFont = new Font("Arial", Font.PLAIN, 15);
 	public Font btnFont = new Font("Arial", Font.BOLD, 15);
 
-	/**
-	 * Launch the application.
-	 */
-	/*
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaEntrada window = new VentanaEntrada();
-					window.frmEntrada.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-*/
 	/**
 	 * Create the application.
 	 */
 	public VentanaEntrada() {
 		initialize();
+	}
+
+	public void mostrarVentana() {
+		frmEntrada.setLocationRelativeTo(null);
+		frmEntrada.setVisible(true);
 	}
 
 	/**
@@ -87,7 +74,6 @@ public class VentanaEntrada {
 	
 	private void crearPanelTitulo() {
 		JPanel panelTitulo = new JPanel();
-		//panelNorte.setBackground(new Color(255, 255, 255));
 		frmEntrada.getContentPane().add(panelTitulo);
 		
 		JLabel lblPhotoTDS = new JLabel("PhotoTDS");
@@ -146,7 +132,7 @@ public class VentanaEntrada {
 		panelInicioSesion.add(passwordField, gbc_passwordField);
 		
 		btnIniciarSesion = new JButton("Iniciar Sesión");
-		btnIniciarSesion.setForeground(Lila);
+		btnIniciarSesion.setForeground(Constantes.LILA);
 		btnIniciarSesion.setFont(btnFont);
 		GridBagConstraints gbc_btnIniciarSesion = new GridBagConstraints();
 		gbc_btnIniciarSesion.fill = GridBagConstraints.BOTH;
@@ -160,7 +146,6 @@ public class VentanaEntrada {
 	
 	private void crearPanelSur() {
 		JPanel panelSur = new JPanel();
-		//panelSur.setBackground(Color.WHITE);
 		frmEntrada.getContentPane().add(panelSur);
 		panelSur.setLayout(new BoxLayout(panelSur, BoxLayout.Y_AXIS));
 		
@@ -179,7 +164,7 @@ public class VentanaEntrada {
 		btnCrearCuenta.setMaximumSize(new Dimension(350, 40));
 		btnCrearCuenta.setPreferredSize(new Dimension(200, 23));
 		btnCrearCuenta.setSize(new Dimension(500, 23));
-		btnCrearCuenta.setForeground(Lila);
+		btnCrearCuenta.setForeground(Constantes.LILA);
 		btnCrearCuenta.setFont(btnFont);
 		btnCrearCuenta.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panelSur.add(btnCrearCuenta);
@@ -221,8 +206,8 @@ public class VentanaEntrada {
 		btnCrearCuenta.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				VentanaRegistro window = new VentanaRegistro(frmEntrada);
-				window.frmRegistro.setVisible(true);
+				VentanaRegistro ventanaRegistro = new VentanaRegistro(frmEntrada);
+				ventanaRegistro.mostrarVentana();
 				frmEntrada.dispose();
 			}
 		});

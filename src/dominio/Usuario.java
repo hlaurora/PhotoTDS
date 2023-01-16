@@ -161,11 +161,11 @@ public class Usuario {
 		albumes.remove(album);
 	}
 	
-	public Boolean getIsPremium() {
+	public Boolean getPremium() {
 		return isPremium;
 	}
 	
-	public void setIsPremium(Boolean isPremium) {
+	public void setPremium(Boolean isPremium) {
 		this.isPremium = isPremium;
 	}
 

@@ -84,8 +84,6 @@ public class PanelPerfilUsuario extends JPanel {
 	private File selectedFile;
 	private JMenuItem eliminar;
 	
-	private Font fuenteLabel = new Font("HP Simplified Hans", Font.PLAIN, 15);
-	private Color Lila = new Color(134, 46, 150);
 	private JButton btnFotos;
 	private JButton btnAlbumes;
 	private JPanel panelFotos;
@@ -106,7 +104,6 @@ public class PanelPerfilUsuario extends JPanel {
 	private int numAlbumes;
 	private PanelPerfilUsuario panelAct;
 	
-	private Font fontBtn = new Font("HP Simplified Hans", Font.BOLD, 20);
 	private JPopupMenu popupEliminar;
 
 	/**
@@ -141,14 +138,14 @@ public class PanelPerfilUsuario extends JPanel {
 		this.fixedSize(panelNorte, 300, 60);
 		add(panelNorte);
 		GridBagLayout gbl_panelNorte = new GridBagLayout();
-		gbl_panelNorte.columnWidths = new int[]{10, 0, 0, 20, 0, 0, 0, 0, 0, 0, 20, 0, 0, 10, 0};
+		gbl_panelNorte.columnWidths = new int[]{10, 0, 0, 30, 0, 0, 0, 0, 0, 0, 20, 0, 0, 10, 0};
 		gbl_panelNorte.rowHeights = new int[]{0, 0, 0};
 		gbl_panelNorte.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gbl_panelNorte.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		panelNorte.setLayout(gbl_panelNorte);
 		{
 			lblPhotoTDS = new JLabel("PhotoTDS");
-			lblPhotoTDS.setForeground(Lila);
+			lblPhotoTDS.setForeground(Constantes.LILA);
 			lblPhotoTDS.setFont(new Font("HP Simplified Hans", Font.PLAIN, 25));
 			GridBagConstraints gbc_lblPhotoTDS = new GridBagConstraints();
 			gbc_lblPhotoTDS.gridwidth = 2;
@@ -161,8 +158,8 @@ public class PanelPerfilUsuario extends JPanel {
 			btnAddFoto = new JButton(" + ");
 			if (usuario.equals(usuarioActual))
 				this.addManejadorBotonAddFoto(btnAddFoto);
-			btnAddFoto.setForeground(Lila);
-			btnAddFoto.setFont(fontBtn);
+			btnAddFoto.setForeground(Constantes.LILA);
+			btnAddFoto.setFont(Constantes.NEGRITA_20);
 			GridBagConstraints gbc_btnAddFoto = new GridBagConstraints();
 			gbc_btnAddFoto.insets = new Insets(0, 0, 0, 5);
 			gbc_btnAddFoto.gridx = 5;
@@ -173,8 +170,8 @@ public class PanelPerfilUsuario extends JPanel {
 			btnAddAlbum = new JButton("A+");
 			if (usuario.equals(usuarioActual)) 
 				this.addManejadorAddAlbum(btnAddAlbum);
-			btnAddAlbum.setForeground(Lila);
-			btnAddAlbum.setFont(fontBtn);
+			btnAddAlbum.setForeground(Constantes.LILA);
+			btnAddAlbum.setFont(Constantes.NEGRITA_20);
 			GridBagConstraints gbc_btnAddAlbum = new GridBagConstraints();
 			gbc_btnAddAlbum.insets = new Insets(0, 0, 0, 5);
 			gbc_btnAddAlbum.gridx = 6;
@@ -196,9 +193,9 @@ public class PanelPerfilUsuario extends JPanel {
 		{
 			btnBuscar = new JButton("Buscar");
 			this.addManejadorBotonBuscar();
-			btnBuscar.setForeground(Lila);
-			btnBuscar.setFont(new Font("HP Simplified Hans", Font.BOLD, 15));
-			this.fixedSize(btnBuscar, 65, 35);
+			btnBuscar.setForeground(Constantes.LILA);
+			btnBuscar.setFont(Constantes.NEGRITA_15);
+			this.fixedSize(btnBuscar, 75, 35);
 			GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
 			gbc_btnBuscar.insets = new Insets(0, 0, 0, 5);
 			gbc_btnBuscar.gridx = 9;
@@ -259,7 +256,7 @@ public class PanelPerfilUsuario extends JPanel {
 			email = Controlador.getUnicaInstancia().getDato("email", usuario);
 			lblEmail = new JLabel(email);
 
-			lblEmail.setFont(fuenteLabel);
+			lblEmail.setFont(Constantes.NORMAL_15);
 			GridBagConstraints gbc_lblEmail = new GridBagConstraints();
 			gbc_lblEmail.anchor = GridBagConstraints.WEST;
 			gbc_lblEmail.gridwidth = 2;
@@ -286,8 +283,8 @@ public class PanelPerfilUsuario extends JPanel {
 				this.addManejadorBotonSeguir();
 			}
 
-			btnEditarPerfil.setForeground(Lila);
-			btnEditarPerfil.setFont(fuenteLabel);
+			btnEditarPerfil.setForeground(Constantes.LILA);
+			btnEditarPerfil.setFont(Constantes.NEGRITA_15);
 			GridBagConstraints gbc_btnEditarPerfil = new GridBagConstraints();
 			gbc_btnEditarPerfil.insets = new Insets(0, 0, 5, 5);
 			gbc_btnEditarPerfil.gridx = 6;
@@ -297,7 +294,7 @@ public class PanelPerfilUsuario extends JPanel {
 		{
 			lblNumPublicaciones = new JLabel("");
 			lblNumPublicaciones.setText(fotosUsuario.size() + " Publicaciones");
-			lblNumPublicaciones.setFont(fuenteLabel);
+			lblNumPublicaciones.setFont(Constantes.NORMAL_15);
 			GridBagConstraints gbc_lblNumPublicaciones = new GridBagConstraints();
 			gbc_lblNumPublicaciones.anchor = GridBagConstraints.WEST;
 			gbc_lblNumPublicaciones.gridwidth = 2;
@@ -308,7 +305,7 @@ public class PanelPerfilUsuario extends JPanel {
 		}
 		{
 			lblNumSeguidores = new JLabel(Controlador.getUnicaInstancia().getNumSeguidores(usuario) + " Seguidores");
-			lblNumSeguidores.setFont(fuenteLabel);
+			lblNumSeguidores.setFont(Constantes.NORMAL_15);
 			GridBagConstraints gbc_lblNumSeguidores = new GridBagConstraints();
 			gbc_lblNumSeguidores.anchor = GridBagConstraints.WEST;
 			gbc_lblNumSeguidores.insets = new Insets(0, 0, 5, 5);
@@ -318,7 +315,7 @@ public class PanelPerfilUsuario extends JPanel {
 		}
 		{
 			lblNumSeguidos = new JLabel(Controlador.getUnicaInstancia().getNumSeguidos(usuario) + " Seguidos");
-			lblNumSeguidos.setFont(fuenteLabel);
+			lblNumSeguidos.setFont(Constantes.NORMAL_15);
 			GridBagConstraints gbc_lblNumSeguidos = new GridBagConstraints();
 			gbc_lblNumSeguidos.anchor = GridBagConstraints.WEST;
 			gbc_lblNumSeguidos.insets = new Insets(0, 0, 5, 0);
@@ -328,7 +325,7 @@ public class PanelPerfilUsuario extends JPanel {
 		}
 		{
 			lblNombreUsuario = new JLabel(usuario);
-			lblNombreUsuario.setFont(fuenteLabel);
+			lblNombreUsuario.setFont(Constantes.NORMAL_15);
 			GridBagConstraints gbc_lblNombreUsuario = new GridBagConstraints();
 			gbc_lblNombreUsuario.anchor = GridBagConstraints.WEST;
 			gbc_lblNombreUsuario.gridwidth = 4;
@@ -346,8 +343,8 @@ public class PanelPerfilUsuario extends JPanel {
 				}
 			});
 			this.fixedSize(btnFotos, 80, 30);
-			btnFotos.setFont(fuenteLabel);
-			btnFotos.setForeground(Lila);
+			btnFotos.setFont(Constantes.NEGRITA_15);
+			btnFotos.setForeground(Constantes.LILA);
 			GridBagConstraints gbc_btnFotos = new GridBagConstraints();
 			gbc_btnFotos.anchor = GridBagConstraints.EAST;
 			gbc_btnFotos.gridwidth = 2;
@@ -357,16 +354,16 @@ public class PanelPerfilUsuario extends JPanel {
 			panelPerfil.add(btnFotos, gbc_btnFotos);
 		}
 		{
-			btnAlbumes = new JButton("ALBUMES");
+			btnAlbumes = new JButton("ÁLBUMES");
 			btnAlbumes.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					CardLayout cl = (CardLayout)(panelPublicaciones.getLayout());
 					cl.show(panelPublicaciones, "panelAlbumes");
 				}
 			});
-			this.fixedSize(btnAlbumes, 80, 30);
-			btnAlbumes.setFont(fuenteLabel);
-			btnAlbumes.setForeground(Lila);
+			this.fixedSize(btnAlbumes, 100, 30);
+			btnAlbumes.setFont(Constantes.NEGRITA_15);
+			btnAlbumes.setForeground(Constantes.LILA);
 			GridBagConstraints gbc_btnAlbumes = new GridBagConstraints();
 			gbc_btnAlbumes.anchor = GridBagConstraints.WEST;
 			gbc_btnAlbumes.insets = new Insets(0, 0, 5, 5);
@@ -509,10 +506,9 @@ public class PanelPerfilUsuario extends JPanel {
 	private void addManejadorBotonEditarPerfil() {
 		btnEditarPerfil.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				VentanaRegistro vr = new VentanaRegistro(ventanaPrincipal.frmPrincipal);
-				vr.editarPerfil(usuario);
-				//vr.setLocationRelativeTo(ventanaPrincipal);
-				vr.frmRegistro.setVisible(true);
+				VentanaRegistro ventanaRegistro = new VentanaRegistro(ventanaPrincipal.frmPrincipal);
+				ventanaRegistro.editarPerfil(usuario);
+				ventanaRegistro.mostrarVentana();
 			}
 		});
 	}
@@ -713,25 +709,6 @@ public class PanelPerfilUsuario extends JPanel {
 		mostrarAlbumes();
 	}
 	
-
-	/*private static void addPopup(Component component, final JPopupMenu popup) {
-		component.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					showMenu(e);
-				}
-			}
-			public void mouseReleased(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					showMenu(e);
-				}
-			}
-			private void showMenu(MouseEvent e) {
-				popup.show(e.getComponent(), e.getX(), e.getY());
-			}
-		});
-	}*/
-	
 	
 	/**
 	 * Fija el tamaño de un componente
@@ -744,7 +721,6 @@ public class PanelPerfilUsuario extends JPanel {
 		o.setSize(d);
 	}
 	
-
 	
 	private void añadirPerfil(JLabel lbl, String ruta) {
 		ImageIcon image = new ImageIcon(ruta);

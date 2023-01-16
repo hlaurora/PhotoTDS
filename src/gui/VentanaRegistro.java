@@ -24,7 +24,7 @@ import javax.swing.border.TitledBorder;
 @SuppressWarnings("serial")
 public class VentanaRegistro extends JDialog {
 
-	public JFrame frmRegistro;
+	private JFrame frmRegistro;
 	
 	private JTextArea textDescripcion;
 	private JTextField textEmail;
@@ -64,7 +64,6 @@ public class VentanaRegistro extends JDialog {
 	private JFileChooser fileChooser;
 	private File fotoPerfil;
 	
-	public Color Lila = new Color(134, 46, 150);
 	public Font lblFont = new Font("Arial", Font.PLAIN, 15);
 	public Font btnFont = new Font("Arial", Font.BOLD, 15);
 	private int seleccion = 5;
@@ -80,6 +79,9 @@ public class VentanaRegistro extends JDialog {
 		crearPanelRegistro();
 	}
 	
+	public void mostrarVentana() {
+		this.frmRegistro.setVisible(true);
+	}
 	
 	private void crearPanelRegistro() {
 		try {
@@ -117,7 +119,7 @@ public class VentanaRegistro extends JDialog {
 		
 		textDescripcion = new JTextArea();
 		textDescripcion.setFont(btnFont);
-		textDescripcion.setForeground(Lila);
+		textDescripcion.setForeground(Constantes.LILA);
 		textDescripcion.setMaximumSize(new Dimension(2147483647, 50));
 		textDescripcion.setLineWrap(true);
 		textDescripcion.setText(" Si te registras podrás compartir fotos y ver las fotos de tus amigos");
@@ -283,13 +285,12 @@ public class VentanaRegistro extends JDialog {
 		btnElegirFoto = new JButton("+");
 		btnElegirFoto.setPreferredSize(new Dimension(43, 23));
 		btnElegirFoto.setFont(btnFont);
-		btnElegirFoto.setForeground(Lila);
+		btnElegirFoto.setForeground(Constantes.LILA);
 		btnElegirFoto.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				fileChooser = new JFileChooser();
 				seleccion = fileChooser.showOpenDialog(frmRegistro);
-				//System.out.println(seleccion);
 			}
 		});
 		
@@ -315,7 +316,7 @@ public class VentanaRegistro extends JDialog {
 		btnPresentacion = new JButton("...");
 		btnPresentacion.setPreferredSize(new Dimension(50, 23));
 		btnPresentacion.setFont(btnFont);
-		btnPresentacion.setForeground(Lila);
+		btnPresentacion.setForeground(Constantes.LILA);
 		btnPresentacion.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -351,7 +352,7 @@ public class VentanaRegistro extends JDialog {
 		btnRegistrar = new JButton("Registrar");
 		GridBagConstraints gbc_btnRegistrar = new GridBagConstraints();
 		btnRegistrar.setFont(btnFont);
-		btnRegistrar.setForeground(Lila);
+		btnRegistrar.setForeground(Constantes.LILA);
 		gbc_btnRegistrar.insets = new Insets(0, 0, 5, 5);
 		gbc_btnRegistrar.gridx = 7;
 		gbc_btnRegistrar.gridy = 1;
@@ -359,7 +360,7 @@ public class VentanaRegistro extends JDialog {
 		
 		btnCancelar = new JButton("Cancelar");
 		btnCancelar.setFont(btnFont);
-		btnCancelar.setForeground(Lila);
+		btnCancelar.setForeground(Constantes.LILA);
 		GridBagConstraints gbc_btnCancelar = new GridBagConstraints();
 		gbc_btnCancelar.insets = new Insets(0, 0, 5, 5);
 		gbc_btnCancelar.gridx = 8;
@@ -393,7 +394,6 @@ public class VentanaRegistro extends JDialog {
 					
 					if (abreTextArea) {
 						textoPresentacion = ventanaTexto.getTexto();
-						//if(!ventanaTexto.getTexto().isEmpty()) {
 						if (!textoPresentacion.isEmpty()) {
 							Controlador.getUnicaInstancia().registrarTextoPresentacion(nombreUsuario, textoPresentacion);
 						}
@@ -403,7 +403,7 @@ public class VentanaRegistro extends JDialog {
 						JOptionPane.showMessageDialog(frmRegistro, "Usuario registrado correctamente.", "Registro",
 								JOptionPane.INFORMATION_MESSAGE);
 						VentanaEntrada entrada = new VentanaEntrada();
-						entrada.frmEntrada.setVisible(true);
+						entrada.mostrarVentana();
 						frmRegistro.dispose();
 					} 
 					else {

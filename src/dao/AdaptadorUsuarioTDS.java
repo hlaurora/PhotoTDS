@@ -73,6 +73,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		Propiedad fechaNaci = new Propiedad("fechaNacimiento", usuario.getFechaNacimiento().toString());
 		Propiedad fotoPerfil = new Propiedad("fotoPerfil", usuario.getFotoPerfil().toString());
 		Propiedad textoPresentacion = new Propiedad("textoPresentacion", usuario.getTextoPresentacion());
+		Propiedad premium = new Propiedad("premium", usuario.getPremium().toString());
 		List<Publicacion> fotosUsuario = new LinkedList<Publicacion>();
 		for (Foto f : usuario.getFotos()) {
 			fotosUsuario.add(f);
@@ -87,7 +88,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		Propiedad albumes = new Propiedad("albumes", obtenerIdPublicaciones(albumesUsuario));
 		
 		eUsuario.setPropiedades(new ArrayList<Propiedad>(
-				Arrays.asList(email, nombre, apellidos, nombreUsuario, password, 
+				Arrays.asList(email, nombre, apellidos, nombreUsuario, password, premium, 
 						fechaNaci, fotoPerfil, textoPresentacion, fotos, seguidores, seguidos, albumes)));
 		
 		//registrar la entidad usuario
@@ -129,6 +130,8 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 				p.setValor(usuario.getFotoPerfil().toString());
 			} else if(p.getNombre().equals("textoPresentacion")) {
 				p.setValor(usuario.getTextoPresentacion());
+			} else if(p.getNombre().equals("premium")) {
+				p.setValor(usuario.getPremium().toString());
 			} else if(p.getNombre().equals("fotos")) {
 				List<Publicacion> publicaciones = new LinkedList<Publicacion>();
 				for (Foto f : usuario.getFotos()) {
@@ -166,6 +169,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		LocalDate fechaNaci;
 		File fotoPerfil;
 		String textoPresentacion;
+		Boolean premium;
 		//List<Foto> fotos = new LinkedList<Foto>();
 		List<Publicacion> fotos = new LinkedList<Publicacion>();
 		List<Usuario> seguidores = new LinkedList<Usuario>();
@@ -184,7 +188,9 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		fechaNaci = LocalDate.parse(servPersistencia.recuperarPropiedadEntidad(eUsuario, "fechaNacimiento"));
 		fotoPerfil = new File(servPersistencia.recuperarPropiedadEntidad(eUsuario, "fotoPerfil"));
 		textoPresentacion = servPersistencia.recuperarPropiedadEntidad(eUsuario, "textoPresentacion");
+		premium = Boolean.parseBoolean(servPersistencia.recuperarPropiedadEntidad(eUsuario, "premium"));
 		Usuario usuario = new Usuario(email, nombre, apellidos, nombreUsuario, password, fechaNaci);
+		usuario.setPremium(premium);
 		usuario.setFotoPerfil(fotoPerfil);
 		usuario.setTextoPresentacion(textoPresentacion);
 		usuario.setId(id);

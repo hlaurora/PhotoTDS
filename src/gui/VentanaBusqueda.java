@@ -88,7 +88,7 @@ public class VentanaBusqueda extends JFrame {
 	private void addListaHashtags(String hashtag) {
 		List<String> listaHashtags = Controlador.getUnicaInstancia().buscarHashtags(hashtag);
 		
-		//List<String> hashtags = new ArrayList(listaHashtags.values());
+		//List<String> hashtags = new ArrayList(listaHashtags.values());		
 		
 		listaFotos = new JList<String>(listaHashtags.toArray
 								(new String[listaHashtags.size()]));
@@ -96,8 +96,9 @@ public class VentanaBusqueda extends JFrame {
 		listaFotos.setPreferredSize(new Dimension(200, ABORT));
 		listaFotos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		JScrollPane pane = new JScrollPane(listaFotos);
-		panelLista.add(pane);
+		JScrollPane scrollListaFotos = new JScrollPane(listaFotos);
+
+		panelLista.add(scrollListaFotos);
 		
 		/*listaFotos.addMouseListener(new MouseAdapter() {
 			@Override
