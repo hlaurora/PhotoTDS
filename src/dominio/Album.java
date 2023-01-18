@@ -1,6 +1,7 @@
 package dominio;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -8,7 +9,7 @@ public class Album extends Publicacion {
 	
 	private List<Foto> fotos;
 	
-	public Album(String titulo, LocalDate fecha, String descripcion,
+	public Album(String titulo, LocalDateTime fecha, String descripcion,
 			List<String> hashtags) {
 		super(titulo, fecha, descripcion, hashtags);
 		this.fotos = new LinkedList<Foto>();

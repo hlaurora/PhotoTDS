@@ -1,6 +1,7 @@
 package dao;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -142,7 +143,7 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 		Entidad ePublicacion = servPersistencia.recuperarEntidad(id);		
 		
 		String titulo;
-		LocalDate fecha;
+		LocalDateTime fecha;
 		String descripcion;
 		String cadenaHashtags;
 		int meGustas;
@@ -150,7 +151,7 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 		
 		//Recuperar propiedades
 		titulo = servPersistencia.recuperarPropiedadEntidad(ePublicacion, "titulo");
-		fecha = LocalDate.parse(servPersistencia.recuperarPropiedadEntidad(ePublicacion, "fecha"));		
+		fecha = LocalDateTime.parse(servPersistencia.recuperarPropiedadEntidad(ePublicacion, "fecha"));		
 		descripcion = servPersistencia.recuperarPropiedadEntidad(ePublicacion, "descripcion");
 		cadenaHashtags = servPersistencia.recuperarPropiedadEntidad(ePublicacion, "hashtags");
 		hashtags = new ArrayList<String>(Arrays.asList(cadenaHashtags.split(" ")));

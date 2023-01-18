@@ -8,6 +8,8 @@ import javax.swing.JList;
 
 import controlador.Controlador;
 import dominio.Foto;
+import dominio.Usuario;
+
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -26,6 +28,18 @@ import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
+
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
 import javax.swing.JScrollPane;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -33,10 +47,13 @@ import javax.swing.JPopupMenu;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import pulsador.Luz;
 
 //public class VentanaPrincipal extends JFrame{
 public class VentanaPrincipal extends JPanel{
@@ -69,6 +86,7 @@ public class VentanaPrincipal extends JPanel{
 	
 	private VentanaPrincipal ventanaPrincipal;
 	private Component rigidArea_2;
+	private Luz luz;
 	
 
 	/*public void mostrarVentana() {
@@ -99,10 +117,6 @@ public class VentanaPrincipal extends JPanel{
 
 		crearPanelNorte();
 		crearPanelPublicaciones();
-		if (Controlador.getUnicaInstancia().isPremium(usuarioActual))
-			crearMenuOpcionesPremium();
-		else
-			crearPopupMenu();
 		ventanaPrincipal = this;
 	}
 	
@@ -170,6 +184,11 @@ public class VentanaPrincipal extends JPanel{
 		rigidArea_2 = Box.createRigidArea(new Dimension(20, 20));
 		panelNorte.add(rigidArea_2);
 		
+		luz = new Luz();
+		//luz.setBackground(Color.TRANSLUCENT);
+		luz.setColor(Constantes.LILA);
+		panelNorte.add(luz);
+		
 		btnMenu = new JButton("Menu");
 		btnMenu.setForeground(Constantes.LILA);
 		btnMenu.setFont(fontBtn);
@@ -185,6 +204,7 @@ public class VentanaPrincipal extends JPanel{
 		
 		frmPrincipal.getContentPane().add(panelPublicaciones, BorderLayout.CENTER);
 		scrollPane = new JScrollPane(panelPublicaciones);
+				
 		frmPrincipal.setResizable(true);
 		this.fixedSize(scrollPane, 600, 450);
 		//this.fixedSize(scrollPane, 600, (frmPrincipal.getHeight()-panelNorte.getHeight()));
@@ -235,8 +255,20 @@ public class VentanaPrincipal extends JPanel{
 	
 	private void crearMenuOpcionesPremium() {
 		popupMenu = new JPopupMenu();
+		
+		//Para Generar el pdf con los seguidores
 		JMenuItem generarPdf = new JMenuItem("Generar PDF");
 		popupMenu.add(generarPdf);
+		this.addManejadorGenerarPdf(generarPdf);
+		
+		//Para Generar el excel con los seguidores
+		JMenuItem generarExcel = new JMenuItem("Generar Excel");
+		popupMenu.add(generarExcel);
+		this.addManejadorGenerarExcel(generarExcel);
+		
+		JMenuItem topMeGusta = new JMenuItem("Top me Gusta");
+		popupMenu.add(topMeGusta);
+		this.addManejadorTopMeGusta(topMeGusta);
 		
 	}
 	
@@ -259,7 +291,7 @@ public class VentanaPrincipal extends JPanel{
 		dialog.setLocationRelativeTo(btnMenu);
 		dialog.setTitle("Descuentos premium");
 		dialog.setSize(200, 200);
-		dialog.add(scrollListaFotos);
+		dialog.getContentPane().add(scrollListaFotos);
 		dialog.setVisible(true);
 		
 		
@@ -311,6 +343,12 @@ public class VentanaPrincipal extends JPanel{
 		btn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				if(Controlador.getUnicaInstancia().isPremium(usuarioActual)) {
+					crearMenuOpcionesPremium();
+				}
+				else {
+					crearPopupMenu();
+				}
 				popupMenu.show(btn, e.getX() , e.getY());
 			}
 		});
@@ -357,17 +395,165 @@ public class VentanaPrincipal extends JPanel{
 		});
 	}
 	
+	private void addManejadorGenerarPdf(JMenuItem generarPdf) {
+		generarPdf.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				 crearPdf(Controlador.getUnicaInstancia().getUsuario(usuarioActual));
+			}
+		});
+	}
+	
+	private void addManejadorGenerarExcel(JMenuItem generarExcel) {
+		generarExcel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				crearExcel(Controlador.getUnicaInstancia().getUsuario(usuarioActual));
+			}
+		});
+		
+	}
+	
+	private void addManejadorTopMeGusta(JMenuItem topMeGusta) {
+		topMeGusta.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				crearListaTopMg();
+			}
+		});
+	}
+	
 	//Abre perfil del usuario indicado al seleccionar en la lista
 	public void abirPerfil(String nombreUsuario) {
 		frmPrincipal.setContentPane(new PanelPerfilUsuario(this, nombreUsuario));
 	}
 	
-	public int getWidth() {
-		return frmPrincipal.getWidth();
+	
+	
+	public void crearPdf(Usuario u) {
+		FileOutputStream archivo;
+		try {
+			archivo = new FileOutputStream("C:\\Users\\auror\\OneDrive\\Escritorio\\Seguidores.pdf");
+			Document document = new Document();
+	        PdfWriter.getInstance(document, archivo);
+            document.open();
+             
+            PdfPTable table = new PdfPTable(3);          
+            table.addCell("Nombre");
+            table.addCell("Email");
+            table.addCell("Presentacion");
+            
+            for (Usuario w : u.getSeguidores()) {
+            	table.addCell(w.getNombre());
+            	table.addCell(w.getEmail());
+            	table.addCell(w.getTextoPresentacion());
+            }
+                          
+            // Agregamos la tabla al documento            
+            document.add(table);
+            document.close();
+	     	
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (DocumentException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+	
+	public void crearExcel(Usuario u) {
+		try   
+		{  
+		//declare file name to be create   
+		String filename = "C:\\\\Users\\\\auror\\\\OneDrive\\\\Escritorio\\Seguidores.xls";  
+		//creating an instance of HSSFWorkbook class  
+		HSSFWorkbook workbook = new HSSFWorkbook();  
+		//invoking creatSheet() method and passing the name of the sheet to be created   
+		HSSFSheet sheet = workbook.createSheet("Seguidores de " +  usuarioActual);   
+		//creating the 0th row using the createRow() method  
+		HSSFRow rowhead = sheet.createRow((short)0);  
+		//creating cell by using the createCell() method and setting the values to the cell by using the setCellValue() method  
+		rowhead.createCell(0).setCellValue("Nombre");  
+		rowhead.createCell(1).setCellValue("Email");  
+		rowhead.createCell(2).setCellValue("Presentacion");  
+		
+		for (int i = 1; i < u.getSeguidores().size()+1; i++) {
+			Usuario s = u.getSeguidores().get(i-1);
+			HSSFRow row = sheet.createRow((short)i);  
+			//inserting data in the first row  
+			row.createCell(0).setCellValue(s.getNombre());  
+			row.createCell(1).setCellValue(s.getEmail());  
+			row.createCell(2).setCellValue(s.getTextoPresentacion());  
+		}
+		
+		FileOutputStream fileOut = new FileOutputStream(filename);  
+		workbook.write(fileOut);  
+		//closing the Stream  
+		fileOut.close();  
+		//closing the workbook  
+		workbook.close();  
+		//prints the message on the console  
+		System.out.println("Excel file has been generated successfully.");  
+		}   
+		catch (Exception e)   
+		{  
+		e.printStackTrace();  
+		}  
+	}
+	
+	public void crearListaTopMg() {
+		List<Foto> listaTopMg = Controlador.getUnicaInstancia().getTopMeGusta(usuarioActual);
+				
+		JList<Foto> jlistaTopMg = new JList<Foto>(listaTopMg.toArray
+								(new Foto[listaTopMg.size()]));
+		jlistaTopMg.setCellRenderer(createListRendererFotos());
+		//jlistaTopMg.setPreferredSize(new Dimension(400, 500));
+		//jlistaTopMg.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+		JScrollPane scrollListaFotos = new JScrollPane(jlistaTopMg);
+		scrollListaFotos.setPreferredSize(frmPrincipal.getSize());
+		
+		JDialog dialog = new JDialog();
+		dialog.setLocationRelativeTo(btnMenu);
+		dialog.setTitle("Fotos con más Me Gustas");
+		dialog.setSize(400, 500);
+		dialog.getContentPane().add(scrollListaFotos);
+		dialog.setVisible(true);
+	}
+	
+	private static ListCellRenderer<? super Foto> createListRendererFotos() {
+		return new DefaultListCellRenderer() {
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value,
+					int index, boolean isSelected,
+					boolean cellHasFocus) {
+			{
+				Component c = super.getListCellRendererComponent(
+							list, value, index, isSelected, cellHasFocus);
+				if (c instanceof JLabel) {
+					JLabel label = (JLabel) c;
+					Foto foto = (Foto) value;
+					label.setIcon(escalarImagen(foto.getRuta()));
+					label.setText(String.format("%s ", foto.getMeGustas() + " Me gustas"));
+					}
+				return c;
+			}
+		};
+		};
 	}
 	
 	public String getUsuario() {
 		return this.usuarioActual;
+	}
+	
+	private static Icon escalarImagen(String ruta) {
+		ImageIcon image = new ImageIcon(ruta);
+		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
+				40, 
+				40, 
+				Image.SCALE_DEFAULT));
+		return icono;
 	}
 	
 	/**

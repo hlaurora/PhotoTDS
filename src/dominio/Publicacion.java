@@ -1,6 +1,7 @@
 package dominio;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public abstract class Publicacion {
@@ -8,12 +9,12 @@ public abstract class Publicacion {
 	private int id;
 	private String titulo;
 	private Usuario usuario;
-	private LocalDate fecha;
+	private LocalDateTime fecha;
 	private String descripcion;
 	private int meGustas;
 	private List<String> hashtags;
 	
-	public Publicacion(String titulo, LocalDate fecha,
+	public Publicacion(String titulo, LocalDateTime fecha,
 				String descripcion, List<String> hashtags) {
 		this.id = 0;
 		this.titulo = titulo;
@@ -48,7 +49,7 @@ public abstract class Publicacion {
 		this.usuario = usuario;
 	}
 	
-	public LocalDate getFecha() {
+	public LocalDateTime getFecha() {
 		return fecha;
 	}
 

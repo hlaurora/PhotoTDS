@@ -3,13 +3,16 @@ package controlador;
 import java.awt.Image;
 import java.io.File;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
+import java.util.stream.Collectors;
 
 import dao.DAOException;
 import dao.FactoriaDAO;
@@ -155,7 +158,8 @@ public class Controlador {
 	
 	public List<Foto> getFotosSeguidos(String nombreUsuario){
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
-		List<Foto> listaFotos = new ArrayList<>();
+		List<Foto> listaFotos = new ArrayList<>();		
+		
 		for (Usuario s : u.getSeguidos()) {
 			for (Foto f : s.getFotos()) {
 				listaFotos.add(f);
@@ -165,17 +169,24 @@ public class Controlador {
 			listaFotos.add(f);
 		}
 		
-		Collections.sort(listaFotos);
-		Collections.reverse(listaFotos);
+		listaFotos = listaFotos.stream()
+					.sorted(Comparator.comparing(Foto::getFecha).reversed())
+					.limit(20)
+					.collect(Collectors.toList());
 		
-		/*if (listaFotos.size() <= 3) {
-			return listaFotos;
-		}
-		return listaFotos.subList(0, 2);*/
-		if (listaFotos.size() <= 20) {
-			return listaFotos;
-		}
-		return listaFotos.subList(0, 19);
+		return listaFotos;
+	}
+	
+	public List<Foto> getTopMeGusta(String nombreUsuario){
+		
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
+		
+		List<Foto> fotos = u.getFotos().stream()
+				.sorted(Comparator.comparing(Foto::getMeGustas).reversed())
+				.limit(10)
+				.collect(Collectors.toList());
+		
+		return fotos;
 	}
 	
 	public int getNumSeguidores(String nombreUsuario) {
@@ -192,7 +203,7 @@ public class Controlador {
 	public boolean registrarFoto(String nombreUsuario, String ruta, String comentario) {
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);		
 		List<String> hashtags = this.extraerHashtags(comentario);
-		Publicacion p = new Foto("titulo", LocalDate.now(), comentario, hashtags, ruta);
+		Publicacion p = new Foto("titulo", LocalDateTime.now(), comentario, hashtags, ruta);
 		p.setUsuario(u);
 		u.addFoto((Foto)p);
 		repoPublicaciones.addPublicacion(p);
@@ -274,6 +285,10 @@ public class Controlador {
 		return u.getPremium();
 	}
 	
+	public Usuario getUsuario(String nombreUsuario) {
+		return RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
+	}
+	
 	public void hacerPremium(String nombreUsuario) {
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
 		u.setPremium(true);
@@ -307,7 +322,7 @@ public class Controlador {
 	public Album registrarAlbum(String titulo, String comentario, String nombreUsuario) {
 		Usuario u = repoUsuarios.getUsuario(nombreUsuario);
 		List<String> hashtags = new LinkedList<String>();
-		Album album = new Album(titulo, LocalDate.now(), comentario, hashtags);
+		Album album = new Album(titulo, LocalDateTime.now(), comentario, hashtags);
 		album.setUsuario(u);
 		u.addAlbum(album);
 		adaptadorPublicacion.registrarPublicacion(album);
@@ -321,7 +336,7 @@ public class Controlador {
 		
 		Usuario u = repoUsuarios.getUsuario(a.getUsuario().getNombreUsuario());
 		List<String> hashtags = new LinkedList<String>();
-		Publicacion p = new Foto("titulo", LocalDate.now(), comentario, hashtags, ruta);
+		Publicacion p = new Foto("titulo", LocalDateTime.now(), comentario, hashtags, ruta);
 		p.setUsuario(u);
 		//u.addFoto((Foto)p);
 		RepoPublicaciones.getUnicaInstancia().addPublicacion((Foto)p);
