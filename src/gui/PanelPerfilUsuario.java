@@ -28,6 +28,7 @@ import controlador.Controlador;
 import dominio.Album;
 import dominio.Foto;
 import dominio.Publicacion;
+import dominio.Usuario;
 
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -97,12 +98,13 @@ public class PanelPerfilUsuario extends JPanel {
 	private String usuarioActual;
 	private String email;
 	private String fotoPerfil;
-	private List<Foto> fotosUsuario;
-	private List<Album> albumesUsuario;
+	//private List<Foto> fotosUsuario;
+	//private List<Album> albumesUsuario;
 	private JScrollPane scrollPane;
 	private int numFotos;
 	private int numAlbumes;
 	private PanelPerfilUsuario panelAct;
+	//private Usuario us;
 	
 	private JPopupMenu popupEliminar;
 
@@ -113,13 +115,16 @@ public class PanelPerfilUsuario extends JPanel {
 		
 		ventanaPrincipal = vp;
 		this.usuario = nombreUsuario;
+		
+		//this.us = Controlador.getUnicaInstancia().getUsuario(nombreUsuario);
+		
 		this.fotoPerfil = Controlador.getUnicaInstancia().getFotoPerfil(usuario);
 		this.usuarioActual = ventanaPrincipal.getUsuario();
 		//Recuperamos la lista de fotos
-		fotosUsuario = Controlador.getUnicaInstancia().getFotos(usuario);
+		//fotosUsuario = Controlador.getUnicaInstancia().getFotos(usuario);
 		//numFotos = fotosUsuario.size();
 		//Recuperamos la lsita de albumes
-		albumesUsuario = Controlador.getUnicaInstancia().getAlbumes(usuario);
+		//albumesUsuario = Controlador.getUnicaInstancia().getAlbumes(usuario);
 		
 		setSize(575, 624);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -293,7 +298,8 @@ public class PanelPerfilUsuario extends JPanel {
 		}
 		{
 			lblNumPublicaciones = new JLabel("");
-			lblNumPublicaciones.setText(fotosUsuario.size() + " Publicaciones");
+			lblNumPublicaciones.setText(Controlador.getUnicaInstancia().getNumPublicaciones(usuario)+ " Publicaciones");
+			//lblNumPublicaciones.setText(fotosUsuario.size() + " Publicaciones");
 			lblNumPublicaciones.setFont(Constantes.NORMAL_15);
 			GridBagConstraints gbc_lblNumPublicaciones = new GridBagConstraints();
 			gbc_lblNumPublicaciones.anchor = GridBagConstraints.WEST;
@@ -478,6 +484,7 @@ public class PanelPerfilUsuario extends JPanel {
 						vap.setVisible(true);	
 						vap.setLocationRelativeTo(btnAddAlbum);
 						vap.crearAlbum(nombreAlbum);
+						lblNumPublicaciones.setText(Controlador.getUnicaInstancia().getNumPublicaciones(usuario)+ " Publicaciones");
 					}
 	            }
 	            else {
@@ -507,10 +514,16 @@ public class PanelPerfilUsuario extends JPanel {
 		btnEditarPerfil.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				VentanaRegistro ventanaRegistro = new VentanaRegistro(ventanaPrincipal.frmPrincipal);
-				ventanaRegistro.editarPerfil(usuario);
+				ventanaRegistro.editarPerfil(usuario, panelAct);
 				ventanaRegistro.mostrarVentana();
 			}
 		});
+	}
+	
+	//Para actualizar la foto si la cambia
+	public void actualizarFoto() {
+		this.añadirPerfil(lblFotoPerfil, Controlador.getUnicaInstancia().getFotoPerfil(usuario));
+		this.añadirPerfil(lblFotoPerfilGrande, Controlador.getUnicaInstancia().getFotoPerfil(usuario));		
 	}
 	
 	// Botón seguir
@@ -526,6 +539,7 @@ public class PanelPerfilUsuario extends JPanel {
 	
 	private void addManejadorTablaFotos(JTable tabla) {
 		int numFilas = tabla.getRowCount();
+		List<Foto> fotosUsuario = Controlador.getUnicaInstancia().getFotos(usuario);
 		tabla.addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mouseClicked(MouseEvent evt) {
@@ -566,6 +580,7 @@ public class PanelPerfilUsuario extends JPanel {
 				if(Controlador.getUnicaInstancia().eliminarPublicacion(p)) {
 					mostrarFotos();
 					mostrarAlbumes();
+					lblNumPublicaciones.setText(Controlador.getUnicaInstancia().getNumPublicaciones(usuario)+ " Publicaciones");
 				}
 			}
 		 });
@@ -573,6 +588,7 @@ public class PanelPerfilUsuario extends JPanel {
 	
 	private void addManejadorTablaAlbum(JTable tabla) {
 		int numFilas = tabla.getRowCount();
+		List<Album> albumesUsuario = Controlador.getUnicaInstancia().getAlbumes(usuario);
 		tabla.addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mouseClicked(MouseEvent evt) {
@@ -583,6 +599,8 @@ public class PanelPerfilUsuario extends JPanel {
 		        	if (pos <= albumesUsuario.size()-1) {
 		        		if (SwingUtilities.isLeftMouseButton(evt)) {
 				        	VentanaAlbum va = new VentanaAlbum(albumesUsuario.get(pos));
+		        			//VentanaAlbum2 va = new VentanaAlbum2(ventanaPrincipal, albumesUsuario.get(pos));
+		        			//ventanaPrincipal.frmPrincipal.setContentPane(va);
 				        	va.setLocationRelativeTo(tabla);
 				        	va.setVisible(true);
 		        		}
@@ -597,6 +615,8 @@ public class PanelPerfilUsuario extends JPanel {
 	}
 	
 	private void mostrarFotos() {
+		
+		List<Foto> fotosUsuario = Controlador.getUnicaInstancia().getFotos(usuario);
 		
 		//Limpiamos la tabla
 		for (int i = 0; i < tableFotos.getRowCount(); i++) {
@@ -651,6 +671,8 @@ public class PanelPerfilUsuario extends JPanel {
 	
 	private void mostrarAlbumes() {
 		
+		List<Album> albumesUsuario = Controlador.getUnicaInstancia().getAlbumes(usuario);
+		
 		//Limpiamos la tabla
 		for (int i = 0; i < tableAlbumes.getRowCount(); i++) {
 			tmAlbum.removeRow(i);
@@ -704,7 +726,7 @@ public class PanelPerfilUsuario extends JPanel {
 	
 	
 	public void actualizar() {
-		lblNumPublicaciones.setText(fotosUsuario.size() + " Publicaciones");
+		lblNumPublicaciones.setText(Controlador.getUnicaInstancia().getNumPublicaciones(usuario)+ " Publicaciones");
 		mostrarFotos();
 		mostrarAlbumes();
 	}

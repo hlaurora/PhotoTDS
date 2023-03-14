@@ -34,9 +34,6 @@ public class VentanaEntrada {
 	private JTextField textUsuario;
 	private JButton btnIniciarSesion;
 	
-	public Font lblFont = new Font("Arial", Font.PLAIN, 15);
-	public Font btnFont = new Font("Arial", Font.BOLD, 15);
-
 	/**
 	 * Create the application.
 	 */
@@ -95,7 +92,7 @@ public class VentanaEntrada {
 		panelInicioSesion.setLayout(gbl_panelInicioSesion);
 		
 		JLabel lblUsuario = new JLabel("Nombre de usuario o email");
-		lblUsuario.setFont(lblFont);
+		lblUsuario.setFont(Constantes.NORMAL_15);
 		GridBagConstraints gbc_lblUsuario = new GridBagConstraints();
 		gbc_lblUsuario.anchor = GridBagConstraints.WEST;
 		gbc_lblUsuario.insets = new Insets(0, 0, 5, 5);
@@ -114,7 +111,7 @@ public class VentanaEntrada {
 		textUsuario.setColumns(10);
 		
 		JLabel lblContraseña = new JLabel("Contraseña");
-		lblContraseña.setFont(lblFont);
+		lblContraseña.setFont(Constantes.NORMAL_15);
 		GridBagConstraints gbc_lblContraseña = new GridBagConstraints();
 		gbc_lblContraseña.anchor = GridBagConstraints.WEST;
 		gbc_lblContraseña.insets = new Insets(0, 0, 5, 5);
@@ -133,7 +130,7 @@ public class VentanaEntrada {
 		
 		btnIniciarSesion = new JButton("Iniciar Sesión");
 		btnIniciarSesion.setForeground(Constantes.LILA);
-		btnIniciarSesion.setFont(btnFont);
+		btnIniciarSesion.setFont(Constantes.NEGRITA_15);
 		GridBagConstraints gbc_btnIniciarSesion = new GridBagConstraints();
 		gbc_btnIniciarSesion.fill = GridBagConstraints.BOTH;
 		gbc_btnIniciarSesion.gridwidth = 5;
@@ -153,7 +150,7 @@ public class VentanaEntrada {
 		panelSur.add(rigidArea);
 		
 		JLabel lblCrearCuenta = new JLabel("¿No tienes una cuenta?");
-		lblCrearCuenta.setFont(lblFont);
+		lblCrearCuenta.setFont(Constantes.NORMAL_15);
 		lblCrearCuenta.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panelSur.add(lblCrearCuenta);
 		
@@ -165,7 +162,7 @@ public class VentanaEntrada {
 		btnCrearCuenta.setPreferredSize(new Dimension(200, 23));
 		btnCrearCuenta.setSize(new Dimension(500, 23));
 		btnCrearCuenta.setForeground(Constantes.LILA);
-		btnCrearCuenta.setFont(btnFont);
+		btnCrearCuenta.setFont(Constantes.NEGRITA_15);
 		btnCrearCuenta.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panelSur.add(btnCrearCuenta);
 		

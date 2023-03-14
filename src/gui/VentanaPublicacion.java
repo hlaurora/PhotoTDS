@@ -44,8 +44,6 @@ public class VentanaPublicacion extends JFrame {
 	private String usuarioActual;
 	private PanelPerfilUsuario panelPerfil;
 	private String comentario = "";
-	private Color LILA = new Color(134, 46, 150);
-	private Font fontBtn = new Font("HP Simplified Hans", Font.BOLD, 15);
 	private Foto foto;
 	private JPanel ventanaActual;
 	
@@ -119,14 +117,14 @@ public class VentanaPublicacion extends JFrame {
 		
 		btnAceptar = new JButton("Aceptar");
 		//this.addManejadorBtnCompartir(btnCompartir);
-		btnAceptar.setForeground(LILA);
-		btnAceptar.setFont(fontBtn);
+		btnAceptar.setForeground(Constantes.LILA);
+		btnAceptar.setFont(Constantes.NEGRITA_15);
 		panelBotones.add(btnAceptar);
 		
 		btnCancelar = new JButton("Cancelar");
 		this.addManejadorBtnCancelar(btnCancelar);
-		btnCancelar.setForeground(LILA);
-		btnCancelar.setFont(fontBtn);
+		btnCancelar.setForeground(Constantes.LILA);
+		btnCancelar.setFont(Constantes.NEGRITA_15);
 		panelBotones.add(btnCancelar);
 	}
 	
@@ -143,12 +141,12 @@ public class VentanaPublicacion extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				comentario = textArea.getText();
 				if (Controlador.getUnicaInstancia().registrarFoto(usuarioActual, ruta, comentario)) {
-					dispose();
 					if (ventanaActual.getClass() == PanelPerfilUsuario.class)
 						((PanelPerfilUsuario)ventanaActual).actualizar();
 					else if (ventanaActual.getClass() == VentanaPrincipal.class) 
 						((VentanaPrincipal)ventanaActual).mostrarPublicaciones();
 				}
+				dispose();
 			}
 		});
 	}
@@ -170,7 +168,8 @@ public class VentanaPublicacion extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				comentario = textArea.getText();
 				Controlador.getUnicaInstancia().añadirFotoAlbum(idAlbum, ruta, comentario);
-				//((VentanaAlbum)ventanaActual).mostrarFotos();
+				
+				//((VentanaAlbum2)ventanaActual).mostrarFotos();
 				dispose();
 			}
 		});

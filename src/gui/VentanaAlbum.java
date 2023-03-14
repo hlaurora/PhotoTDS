@@ -58,16 +58,13 @@ public class VentanaAlbum extends JFrame {
 	private Album album;
 	private String titulo;
 	private int numFotos;
-	private List<Foto> listaFotos;
+	//private List<Foto> listaFotos;
 	private JPanel panelSur;
 	private JButton btnCerrar;
 	private JFileChooser fileChooser;
 	private File selectedFile;
 	private JPanel panelAct;
 
-	private Color LILA = new Color(134, 46, 150);
-	private Font fontBtn = new Font("HP Simplified Hans", Font.BOLD, 15);
-	private JButton btnNewButton;
 	private JLabel lblNumMg;
 	private JLabel lblFotoPerfil;
 	private JButton btnMeGusta;
@@ -88,7 +85,7 @@ public class VentanaAlbum extends JFrame {
 		this.album = a;
 		this.titulo = album.getTitulo();
 		this.numFotos = album.getFotos().size();
-		this.listaFotos = album.getFotos();
+		//this.listaFotos = album.getFotos();
 		
 		this.crearPanelNorte();
 		this.crearPanelFotos();	
@@ -104,8 +101,8 @@ public class VentanaAlbum extends JFrame {
 		panelNorte.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		{
 			lblTitulo = new JLabel(titulo);
-			lblTitulo.setForeground(LILA);
-			lblTitulo.setFont(fontBtn);
+			lblTitulo.setForeground(Constantes.LILA);
+			lblTitulo.setFont(Constantes.NEGRITA_15);
 			lblTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
 			panelNorte.add(lblTitulo);
 		}
@@ -167,22 +164,24 @@ public class VentanaAlbum extends JFrame {
 		{
 			btnAddFoto = new JButton(" + ");
 			btnAddFoto.setAlignmentX(Component.CENTER_ALIGNMENT);
-			btnAddFoto.setForeground(LILA);
-			btnAddFoto.setFont(fontBtn);
+			btnAddFoto.setForeground(Constantes.LILA);
+			btnAddFoto.setFont(Constantes.NEGRITA_15);
 			this.addManejadorBtnAddFoto(btnAddFoto);
 			panelSur.add(btnAddFoto);
 		}
 		{
 			btnCerrar = new JButton("Cerrar");
 			btnCerrar.setAlignmentX(Component.RIGHT_ALIGNMENT);
-			btnCerrar.setForeground(LILA);
-			btnCerrar.setFont(fontBtn);
+			btnCerrar.setForeground(Constantes.LILA);
+			btnCerrar.setFont(Constantes.NEGRITA_15);
 			this.addManejadorBtnCerrar(btnCerrar);
 			panelSur.add(btnCerrar);
 		}
 	}
 	
 	public void mostrarFotos() {
+		
+		List <Foto> listaFotos = album.getFotos();
 		
 		//Limpiamos la tabla
 		for (int i = 0; i < tablaFotos.getRowCount(); i++) {
@@ -267,7 +266,7 @@ public class VentanaAlbum extends JFrame {
 					if (seleccion != JFileChooser.CANCEL_OPTION) {
 						selectedFile = fileChooser.getSelectedFile();
 						VentanaPublicacion vap = new VentanaPublicacion(album.getUsuario().getNombreUsuario(),
-								selectedFile.getPath(), panelAct);
+								selectedFile.getPath(), contentPane);
 						vap.setVisible(true);	
 						vap.setLocationRelativeTo(btnAddFoto);
 						vap.añadirFotoAlbum(album.getId(), selectedFile.getPath());

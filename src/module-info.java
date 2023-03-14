@@ -12,4 +12,6 @@ module TdsNov {
 	requires itextpdf;
 	requires Luz;
 	requires org.apache.poi.poi;
+	//requires java.xml.bind;
+	//requires fotos.CargadorFotos;
 }

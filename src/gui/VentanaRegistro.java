@@ -64,8 +64,6 @@ public class VentanaRegistro extends JDialog {
 	private JFileChooser fileChooser;
 	private File fotoPerfil;
 	
-	public Font lblFont = new Font("Arial", Font.PLAIN, 15);
-	public Font btnFont = new Font("Arial", Font.BOLD, 15);
 	private int seleccion = 5;
 	
 	private VentanaTextoPresentacion ventanaTexto;
@@ -118,7 +116,7 @@ public class VentanaRegistro extends JDialog {
 		frmRegistro.getContentPane().add(rigidArea_1);
 		
 		textDescripcion = new JTextArea();
-		textDescripcion.setFont(btnFont);
+		textDescripcion.setFont(Constantes.NEGRITA_15);
 		textDescripcion.setForeground(Constantes.LILA);
 		textDescripcion.setMaximumSize(new Dimension(2147483647, 50));
 		textDescripcion.setLineWrap(true);
@@ -139,7 +137,7 @@ public class VentanaRegistro extends JDialog {
 		panelDatos.setLayout(gbl_panelDatos);
 		
 		lblEmail = new JLabel("Email*");
-		lblEmail.setFont(lblFont);
+		lblEmail.setFont(Constantes.NORMAL_15);
 		lblEmail.setRequestFocusEnabled(false);
 		GridBagConstraints gbc_lblEmail = new GridBagConstraints();
 		gbc_lblEmail.anchor = GridBagConstraints.WEST;
@@ -160,7 +158,7 @@ public class VentanaRegistro extends JDialog {
 		
 		lblNombre = new JLabel("Nombre*");
 		GridBagConstraints gbc_lblNombre = new GridBagConstraints();
-		lblNombre.setFont(lblFont);
+		lblNombre.setFont(Constantes.NORMAL_15);
 		gbc_lblNombre.anchor = GridBagConstraints.WEST;
 		gbc_lblNombre.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNombre.gridx = 1;
@@ -179,7 +177,7 @@ public class VentanaRegistro extends JDialog {
 		
 		lblApellidos = new JLabel("Apellidos*");
 		GridBagConstraints gbc_lblApellidos = new GridBagConstraints();
-		lblApellidos.setFont(lblFont);
+		lblApellidos.setFont(Constantes.NORMAL_15);
 		gbc_lblApellidos.anchor = GridBagConstraints.WEST;
 		gbc_lblApellidos.insets = new Insets(0, 0, 5, 5);
 		gbc_lblApellidos.gridx = 1;
@@ -198,7 +196,7 @@ public class VentanaRegistro extends JDialog {
 		
 		lblNombreUsuario = new JLabel("Nombre de usuario*");
 		GridBagConstraints gbc_lblNombreUsuario = new GridBagConstraints();
-		lblNombreUsuario.setFont(lblFont);
+		lblNombreUsuario.setFont(Constantes.NORMAL_15);
 		gbc_lblNombreUsuario.anchor = GridBagConstraints.WEST;
 		gbc_lblNombreUsuario.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNombreUsuario.gridx = 1;
@@ -217,7 +215,7 @@ public class VentanaRegistro extends JDialog {
 		
 		lblContraseña = new JLabel("Contraseña*");
 		GridBagConstraints gbc_lblContraseña = new GridBagConstraints();
-		lblContraseña.setFont(lblFont);
+		lblContraseña.setFont(Constantes.NORMAL_15);
 		gbc_lblContraseña.anchor = GridBagConstraints.WEST;
 		gbc_lblContraseña.insets = new Insets(0, 0, 5, 5);
 		gbc_lblContraseña.gridx = 1;
@@ -235,7 +233,7 @@ public class VentanaRegistro extends JDialog {
 		
 		lblContraseña2 = new JLabel("Repetir contraseña*");
 		GridBagConstraints gbc_lblContraseña2 = new GridBagConstraints();
-		lblContraseña2.setFont(lblFont);
+		lblContraseña2.setFont(Constantes.NORMAL_15);
 		gbc_lblContraseña2.anchor = GridBagConstraints.WEST;
 		gbc_lblContraseña2.insets = new Insets(0, 0, 5, 5);
 		gbc_lblContraseña2.gridx = 1;
@@ -263,7 +261,7 @@ public class VentanaRegistro extends JDialog {
 		panelDatos.add(panelDate, gbc_panelDate);
 		
 		lblDate = new JLabel("Fecha de nacimiento*");
-		lblDate.setFont(lblFont);
+		lblDate.setFont(Constantes.NORMAL_15);
 		panelDate.add(lblDate);
 		
 		dateChooser = new JDateChooser();
@@ -284,7 +282,7 @@ public class VentanaRegistro extends JDialog {
 		
 		btnElegirFoto = new JButton("+");
 		btnElegirFoto.setPreferredSize(new Dimension(43, 23));
-		btnElegirFoto.setFont(btnFont);
+		btnElegirFoto.setFont(Constantes.NEGRITA_15);
 		btnElegirFoto.setForeground(Constantes.LILA);
 		btnElegirFoto.addMouseListener(new MouseAdapter() {
 			@Override
@@ -295,7 +293,7 @@ public class VentanaRegistro extends JDialog {
 		});
 		
 		lblAñadirFoto = new JLabel("Añadir foto del usuario(opcional)");
-		lblAñadirFoto.setFont(lblFont);
+		lblAñadirFoto.setFont(Constantes.NORMAL_15);
 		panelFoto.add(lblAñadirFoto);
 		panelFoto.add(btnElegirFoto);
 		
@@ -310,12 +308,12 @@ public class VentanaRegistro extends JDialog {
 		panelDatos.add(panelPresentacion, gbc_panelPresentacion);
 		
 		lblPresentacion = new JLabel("Añadir presentación (opcional)");
-		lblPresentacion.setFont(lblFont);
+		lblPresentacion.setFont(Constantes.NORMAL_15);
 		panelPresentacion.add(lblPresentacion);
 		
 		btnPresentacion = new JButton("...");
 		btnPresentacion.setPreferredSize(new Dimension(50, 23));
-		btnPresentacion.setFont(btnFont);
+		btnPresentacion.setFont(Constantes.NEGRITA_15);
 		btnPresentacion.setForeground(Constantes.LILA);
 		btnPresentacion.addMouseListener(new MouseAdapter() {
 			@Override
@@ -351,7 +349,7 @@ public class VentanaRegistro extends JDialog {
 		
 		btnRegistrar = new JButton("Registrar");
 		GridBagConstraints gbc_btnRegistrar = new GridBagConstraints();
-		btnRegistrar.setFont(btnFont);
+		btnRegistrar.setFont(Constantes.NEGRITA_15);
 		btnRegistrar.setForeground(Constantes.LILA);
 		gbc_btnRegistrar.insets = new Insets(0, 0, 5, 5);
 		gbc_btnRegistrar.gridx = 7;
@@ -359,7 +357,7 @@ public class VentanaRegistro extends JDialog {
 		panelBotones.add(btnRegistrar, gbc_btnRegistrar);
 		
 		btnCancelar = new JButton("Cancelar");
-		btnCancelar.setFont(btnFont);
+		btnCancelar.setFont(Constantes.NEGRITA_15);
 		btnCancelar.setForeground(Constantes.LILA);
 		GridBagConstraints gbc_btnCancelar = new GridBagConstraints();
 		gbc_btnCancelar.insets = new Insets(0, 0, 5, 5);
@@ -424,7 +422,7 @@ public class VentanaRegistro extends JDialog {
 		});
 	}
 	
-	private void addManejadorBotonEditar(JButton btnEditar, String nombreUsuario){
+	private void addManejadorBotonEditar(JButton btnEditar, String nombreUsuario, PanelPerfilUsuario panelAct){
 		btnRegistrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//ver si ha cambiado la contraseña
@@ -448,6 +446,7 @@ public class VentanaRegistro extends JDialog {
 					Controlador.getUnicaInstancia().registrarFotoPerfil(nombreUsuario, fotoPerfil);
 					JOptionPane.showMessageDialog(frmRegistro, "Foto de perfil modificada correctamente.", 
 							"EditarPerfil", JOptionPane.INFORMATION_MESSAGE);
+					panelAct.actualizarFoto();
 				}
 				
 				//ver si ha cambiado el textoPresentacion
@@ -491,7 +490,7 @@ public class VentanaRegistro extends JDialog {
 	}
 
 	
-	public void editarPerfil(String nombreUsuario) {
+	public void editarPerfil(String nombreUsuario, PanelPerfilUsuario panelAct) {
 		textDescripcion.setVisible(false);
 		lblObligatorio.setVisible(false);
 		
@@ -519,7 +518,7 @@ public class VentanaRegistro extends JDialog {
 		lblPresentacion.setText("Nueva presentación(opcional)");
 		
 		btnRegistrar.setText("Modificar");
-		addManejadorBotonEditar(btnRegistrar, nombreUsuario);
+		addManejadorBotonEditar(btnRegistrar, nombreUsuario, panelAct);
 
 	}
 

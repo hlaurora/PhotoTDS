@@ -12,7 +12,6 @@ import dominio.Usuario;
 
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import java.awt.Color;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListCellRenderer;
@@ -35,8 +34,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
@@ -49,10 +46,13 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.EventObject;
 import java.util.LinkedList;
 import java.util.List;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
+import pulsador.IEncendidoListener;
 import pulsador.Luz;
 
 //public class VentanaPrincipal extends JFrame{
@@ -79,14 +79,13 @@ public class VentanaPrincipal extends JPanel{
 	
 	private String usuarioActual;
 	private String fotoPerfil;
-	private Font fontBtn = new Font("Arial", Font.BOLD, 15);
 		
 	private PanelPerfilUsuario panelPerfilUsuario;
 	private JPanel panelPublicaciones;
 	
 	private VentanaPrincipal ventanaPrincipal;
 	private Component rigidArea_2;
-	private Luz luz;
+	//private Luz luz;
 	
 
 	/*public void mostrarVentana() {
@@ -142,7 +141,7 @@ public class VentanaPrincipal extends JPanel{
 		btnAddFoto = new JButton("+");
 		this.addManejadorBotonAddFoto(btnAddFoto);
 		btnAddFoto.setForeground(Constantes.LILA);
-		btnAddFoto.setFont(new Font("HP Simplified Hans", Font.BOLD, 20));
+		btnAddFoto.setFont(Constantes.NEGRITA_20);
 		this.fixedSize(btnAddFoto, 40, 40);
 		panelNorte.add(btnAddFoto);
 		
@@ -165,7 +164,7 @@ public class VentanaPrincipal extends JPanel{
 		btnBuscar = new JButton("Buscar");
 		this.addManejadorBotonBuscar();
 		btnBuscar.setForeground(Constantes.LILA);
-		btnBuscar.setFont(fontBtn);
+		btnBuscar.setFont(Constantes.NEGRITA_15);
 		btnBuscar.setAlignmentX(Component.CENTER_ALIGNMENT);
 		this.fixedSize(btnBuscar, 70, 40);
 		panel.add(btnBuscar);
@@ -184,14 +183,15 @@ public class VentanaPrincipal extends JPanel{
 		rigidArea_2 = Box.createRigidArea(new Dimension(20, 20));
 		panelNorte.add(rigidArea_2);
 		
-		luz = new Luz();
+		/*luz = new Luz();
 		//luz.setBackground(Color.TRANSLUCENT);
 		luz.setColor(Constantes.LILA);
 		panelNorte.add(luz);
+		this.addManejadorPulsador(luz);*/
 		
 		btnMenu = new JButton("Menu");
 		btnMenu.setForeground(Constantes.LILA);
-		btnMenu.setFont(fontBtn);
+		btnMenu.setFont(Constantes.NEGRITA_15);
 		this.fixedSize(btnMenu, 60, 40);
 		panelNorte.add(btnMenu);
 		this.addManejadorBotonMenu(btnMenu);
@@ -414,6 +414,19 @@ public class VentanaPrincipal extends JPanel{
 		
 	}
 	
+	/*private void addManejadorPulsador(Luz l) {
+		l.addEncendidoListener(new IEncendidoListener() {
+			@Override
+			public void enteradoCambioEncendido(EventObject arg0) {
+				JFileChooser chooseXml = new JFileChooser();
+				int seleccion = chooseXml.showOpenDialog(frmPrincipal);
+				if(seleccion == chooseXml.APPROVE_OPTION) {
+					Controlador.getUnicaInstancia().cargarFotos(chooseXml.getSelectedFile());
+				}
+			}
+		});
+	}*/
+	
 	private void addManejadorTopMeGusta(JMenuItem topMeGusta) {
 		topMeGusta.addActionListener(new ActionListener() {
 			@Override
@@ -513,9 +526,9 @@ public class VentanaPrincipal extends JPanel{
 
 		JScrollPane scrollListaFotos = new JScrollPane(jlistaTopMg);
 		scrollListaFotos.setPreferredSize(frmPrincipal.getSize());
-		
+		scrollListaFotos.setBackground(null);
 		JDialog dialog = new JDialog();
-		dialog.setLocationRelativeTo(btnMenu);
+		dialog.setLocationRelativeTo(panelNorte);
 		dialog.setTitle("Fotos con más Me Gustas");
 		dialog.setSize(400, 500);
 		dialog.getContentPane().add(scrollListaFotos);
@@ -550,8 +563,8 @@ public class VentanaPrincipal extends JPanel{
 	private static Icon escalarImagen(String ruta) {
 		ImageIcon image = new ImageIcon(ruta);
 		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
-				40, 
-				40, 
+				130, 
+				100, 
 				Image.SCALE_DEFAULT));
 		return icono;
 	}

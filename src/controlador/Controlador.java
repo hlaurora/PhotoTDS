@@ -1,17 +1,13 @@
 package controlador;
 
-import java.awt.Image;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
 import java.util.stream.Collectors;
 
 import dao.DAOException;
@@ -24,6 +20,7 @@ import dominio.Publicacion;
 import dominio.RepoPublicaciones;
 import dominio.RepoUsuarios;
 import dominio.Usuario;
+//import umu.tds.fotos.CargadorFotos;
 
 public class Controlador {
 	
@@ -33,6 +30,7 @@ public class Controlador {
 	private IAdaptadorPublicacionDAO adaptadorPublicacion;
 	private RepoUsuarios repoUsuarios;
 	private RepoPublicaciones repoPublicaciones;
+	//private CargadorFotos cargador;
 	
 	private Controlador() {
 		inicializarAdaptadores();
@@ -173,7 +171,6 @@ public class Controlador {
 					.sorted(Comparator.comparing(Foto::getFecha).reversed())
 					.limit(20)
 					.collect(Collectors.toList());
-		
 		return listaFotos;
 	}
 	
@@ -211,6 +208,7 @@ public class Controlador {
 		adaptadorPublicacion.registrarPublicacion((Foto)p);
 		adaptadorUsuario.modificarUsuario(u);
 		//System.out.println(p.getDescripcion());
+		
 		return true;
 	}
 	
@@ -230,6 +228,10 @@ public class Controlador {
 		return true;
 	}
 	
+	public int getNumPublicaciones(String nombreUsuario) {
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
+		return (u.getFotos().size() + u.getAlbumes().size());
+	}
 	
 	public int getMeGustas(int id) {
 		//Foto f = (Foto) repoPublicaciones.getPublicacion(id);
@@ -238,8 +240,22 @@ public class Controlador {
 	}
 	
 	public void darMeGusta(int id) {
-		/*Foto f = (Foto) repoPublicaciones.getPublicacion(id);
-		f.addMeGustas();*/
+	    Publicacion p = repoPublicaciones.getPublicacion(id);
+	    p.addMeGustas();
+	    adaptadorPublicacion.modificarPublicacion(p);
+
+	    if (p instanceof Album) {
+	        ((Album) p).getFotos()
+	                .stream()
+	                .peek(Foto::addMeGustas)
+	                .forEach(adaptadorPublicacion::modificarPublicacion);
+	    }
+	}
+
+	/*
+	public void darMeGusta(int id) {
+		//Foto f = (Foto) repoPublicaciones.getPublicacion(id);
+		//f.addMeGustas();
 		Publicacion p = repoPublicaciones.getPublicacion(id);
 		if (p.getClass().equals(Album.class)) {
 			for (Foto f : ((Album)p).getFotos()) {
@@ -250,8 +266,19 @@ public class Controlador {
 		p.addMeGustas();
 			
 		adaptadorPublicacion.modificarPublicacion(p);
-	}
+	}*/
 	
+	public List<Usuario> buscarUsuarios(String cadena) {
+	    return RepoUsuarios.getUnicaInstancia().getUsuarios()
+	            .stream()
+	            .filter(u -> u.getNombreUsuario().contains(cadena) ||
+	                    u.getNombre().contains(cadena) ||
+	                    u.getEmail().contains(cadena))
+	            .distinct()
+	            .collect(Collectors.toList());
+	}
+
+	/*
 	public List<Usuario> buscarUsuarios (String cadena) {
 		List<Usuario> usuarios = new LinkedList<Usuario>();
 		
@@ -266,7 +293,7 @@ public class Controlador {
 		}
 		
 		return usuarios;
-	}
+	}*/
 	
 	public boolean sigue (String seguidor, String seguido) {
 		//recuperamos seguidor
@@ -308,14 +335,12 @@ public class Controlador {
 	}
 	
 	
+	
 	public boolean existeAlbum(String nombreUsuario, String nombreAlbum) {
-		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
-		for (Album a : u.getAlbumes()) {
-			if (a.getTitulo().equals(nombreAlbum)) {
-				return true;
-			}
-		}
-		return false;
+	    Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
+	    return u.getAlbumes()
+	            .stream()
+	            .anyMatch(a -> a.getTitulo().equals(nombreAlbum));
 	}
 	
 	
@@ -370,18 +395,30 @@ public class Controlador {
 	private List<String> extraerHashtags(String com) {
 		//Máximo 4 hashtags
 		//Símbolo '#' seguido de una palabra que tiene un máximo de 15 letras
-		List<String> hashtags = new LinkedList<String>();
+		//List<String> hashtags = new LinkedList<String>();
 		String[] palabras = com.split(" ");
-		int numHash = 0;
-		for (String p : palabras) {
+		
+		//int numHash = 0;
+		
+		List<String> hashtags = Arrays.stream(palabras)
+			    .filter(p -> p.startsWith("#") && p.length() <= 16)
+			    .limit(4)
+			    .collect(Collectors.toList());
+
+		
+		/*for (String p : palabras) {
 			if (p.startsWith("#") && (p.length()<=16) && (numHash<4)) {
 				hashtags.add(p);
 				numHash++;
 			}
-		}
+		}*/
+		
 		return hashtags;
 	}
 	
+	public void cargarFotos(File archivoXml) {
+		
+	}
 	
 	
 	private void inicializarAdaptadores() {

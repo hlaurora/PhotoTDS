@@ -35,26 +35,6 @@ public class VentanaTextoPresentacion extends JDialog {
 	private JButton btnCancelar;
 	
 	private String textoPresentacion = "";
-	
-	public Color Lila = new Color(134, 46, 150);
-	public Font btnFont = new Font("Arial", Font.BOLD, 15);
-
-	/**
-	 * Launch the application.
-	 */
-	/*
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					TextoPresentacion window = new TextoPresentacion();
-					window.frmPresentacion.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
 
 	/**
 	 * Create the application.
@@ -92,7 +72,7 @@ public class VentanaTextoPresentacion extends JDialog {
 		lblDescripcion = new JLabel("Escribe tu presentación (Máximo 200 caracteres)");
 		lblDescripcion.setFont(new Font("Arial", Font.BOLD, 15));
 		GridBagConstraints gbc_lblDescripcion = new GridBagConstraints();
-		lblDescripcion.setForeground(Lila);
+		lblDescripcion.setForeground(Constantes.LILA);
 		gbc_lblDescripcion.gridwidth = 8;
 		gbc_lblDescripcion.insets = new Insets(0, 0, 5, 5);
 		gbc_lblDescripcion.gridx = 2;
@@ -131,8 +111,8 @@ public class VentanaTextoPresentacion extends JDialog {
 		btnAceptar.setPreferredSize(new Dimension(90, 23));
 		GridBagConstraints gbc_btnAceptar = new GridBagConstraints();
 		gbc_btnAceptar.anchor = GridBagConstraints.EAST;
-		btnAceptar.setFont(btnFont);
-		btnAceptar.setForeground(Lila);
+		btnAceptar.setFont(Constantes.NEGRITA_15);
+		btnAceptar.setForeground(Constantes.LILA);
 		gbc_btnAceptar.insets = new Insets(0, 0, 5, 5);
 		gbc_btnAceptar.gridx = 7;
 		gbc_btnAceptar.gridy = 7;
@@ -147,8 +127,8 @@ public class VentanaTextoPresentacion extends JDialog {
 		});
 		GridBagConstraints gbc_btnCancelar = new GridBagConstraints();
 		gbc_btnCancelar.gridwidth = 2;
-		btnCancelar.setFont(btnFont);
-		btnCancelar.setForeground(Lila);
+		btnCancelar.setFont(Constantes.NEGRITA_15);
+		btnCancelar.setForeground(Constantes.LILA);
 		gbc_btnCancelar.insets = new Insets(0, 0, 5, 5);
 		gbc_btnCancelar.gridx = 8;
 		gbc_btnCancelar.gridy = 7;
