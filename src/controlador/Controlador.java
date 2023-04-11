@@ -222,7 +222,6 @@ public class Controlador {
 		
 		repoPublicaciones.removePublicacion(p);
 		adaptadorPublicacion.borrarPublicacion(p);
-		
 		adaptadorUsuario.modificarUsuario(u);
 		
 		return true;
