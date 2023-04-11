@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Image;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -198,24 +199,25 @@ public class VentanaPrincipal extends JPanel{
 		
 	}
 	
+
 	//Crear el panel de las publicaciones
-	private void crearPanelPublicaciones() {
+	public void crearPanelPublicaciones() {
 		panelPublicaciones = new JPanel();
-		
-		frmPrincipal.getContentPane().add(panelPublicaciones, BorderLayout.CENTER);
+		panelPublicaciones.setLayout(new BoxLayout(panelPublicaciones, BoxLayout.Y_AXIS));
+
 		scrollPane = new JScrollPane(panelPublicaciones);
 				
 		frmPrincipal.setResizable(true);
 		this.fixedSize(scrollPane, 600, 450);
-		//this.fixedSize(scrollPane, 600, (frmPrincipal.getHeight()-panelNorte.getHeight()));
-		//panelPublicaciones.add(scrollPane);
+		//this.fixedSize(scrollPane, (ventanaPrincipal.getHeight()-panelNorte.getHeight()), );
 		
-		//scrollPane.setViewportView(panelPublicaciones);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		frmPrincipal.getContentPane().add(scrollPane, BorderLayout.CENTER);
-		panelPublicaciones.setLayout(new BoxLayout(panelPublicaciones, BoxLayout.Y_AXIS));
+
 		
 		this.mostrarPublicaciones();
 	}
+
 	
 	//Añade las publicaciones al panel
 	public void mostrarPublicaciones() {
@@ -223,6 +225,7 @@ public class VentanaPrincipal extends JPanel{
 		JPanel publi;
 		int i = 0;
 		List<Foto> fotos = Controlador.getUnicaInstancia().getFotosSeguidos(usuarioActual);
+		System.out.println(fotos.size());
 		for (Foto f : fotos) {
 			publi = new PanelPublicacion(f, i, frmPrincipal);
 			i++;
@@ -376,6 +379,10 @@ public class VentanaPrincipal extends JPanel{
 					vap.setVisible(true);
 					vap.setLocationRelativeTo(btnAddFoto);
 					vap.compartirFoto();
+					/*
+					if (vap.compartirFoto()) {
+					 Controlador.getUnicaInstancia().registrarFoto(usuarioActual, selectedFile.getPath(), "");
+					}*/
 				}				
 			}
 		});

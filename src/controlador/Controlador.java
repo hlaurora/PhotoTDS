@@ -96,8 +96,11 @@ public class Controlador {
 		adaptadorUsuario.modificarUsuario(u);
 	}
 	
+	public Usuario getUsuario(String nombreUsuario) {
+		return RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
+	}
+	
 	public String getNombreUsuario(String s) {
-		
 		//Si ha entrado con el nombre de usuario pues lo devolvemos
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(s);
 		if (u != null ) {
@@ -138,7 +141,6 @@ public class Controlador {
 		return ruta;
 	}
 	
-	
 	public List<Foto> getFotos(String nombreUsuario) {
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
 		return u.getFotos();
@@ -149,54 +151,32 @@ public class Controlador {
 		return u.getAlbumes();
 	}
 	
-	public Foto getFoto(int id) {
-		Foto f = (Foto)RepoPublicaciones.getUnicaInstancia().getPublicacion(id);
-		return f;
-	}
-	
-	public List<Foto> getFotosSeguidos(String nombreUsuario){
+	public boolean isPremium(String nombreUsuario) {
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
-		List<Foto> listaFotos = new ArrayList<>();		
-		
-		for (Usuario s : u.getSeguidos()) {
-			for (Foto f : s.getFotos()) {
-				listaFotos.add(f);
-			}
-		}
-		for (Foto f : u.getFotos()) {
-			listaFotos.add(f);
-		}
-		
-		listaFotos = listaFotos.stream()
-					.sorted(Comparator.comparing(Foto::getFecha).reversed())
-					.limit(20)
-					.collect(Collectors.toList());
-		return listaFotos;
+		return u.getPremium();
 	}
 	
-	public List<Foto> getTopMeGusta(String nombreUsuario){
-		
+	public List<Usuario> buscarUsuarios(String cadena) {
+	    return RepoUsuarios.getUnicaInstancia().getUsuarios()
+	            .stream()
+	            .filter(u -> u.getNombreUsuario().contains(cadena) ||
+	                    u.getNombre().contains(cadena) ||
+	                    u.getEmail().contains(cadena))
+	            .distinct()
+	            .collect(Collectors.toList());
+	}
+
+	public void hacerPremium(String nombreUsuario) {
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
-		
-		List<Foto> fotos = u.getFotos().stream()
-				.sorted(Comparator.comparing(Foto::getMeGustas).reversed())
-				.limit(10)
-				.collect(Collectors.toList());
-		
-		return fotos;
-	}
-	
-	public int getNumSeguidores(String nombreUsuario) {
-		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
-		return u.getSeguidores().size();
-	}
-	
-	public int getNumSeguidos(String nombreUsuario) {
-		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
-		return u.getSeguidos().size();
+		u.setPremium(true);
+		adaptadorUsuario.modificarUsuario(u);
 	}
 	
 	
+	///////////////////	
+	///Publicaciones///
+	///////////////////	
+
 	public boolean registrarFoto(String nombreUsuario, String ruta, String comentario) {
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);		
 		List<String> hashtags = this.extraerHashtags(comentario);
@@ -227,113 +207,19 @@ public class Controlador {
 		return true;
 	}
 	
+	public Foto getFoto(int id) {
+		Foto f = (Foto)RepoPublicaciones.getUnicaInstancia().getPublicacion(id);
+		return f;
+	}
+
 	public int getNumPublicaciones(String nombreUsuario) {
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
 		return (u.getFotos().size() + u.getAlbumes().size());
 	}
 	
-	public int getMeGustas(int id) {
-		//Foto f = (Foto) repoPublicaciones.getPublicacion(id);
-		Foto f = (Foto) RepoPublicaciones.getUnicaInstancia().getPublicacion(id);
-		return f.getMeGustas();
-	}
-	
-	public void darMeGusta(int id) {
-	    Publicacion p = repoPublicaciones.getPublicacion(id);
-	    p.addMeGustas();
-	    adaptadorPublicacion.modificarPublicacion(p);
-
-	    if (p instanceof Album) {
-	        ((Album) p).getFotos()
-	                .stream()
-	                .peek(Foto::addMeGustas)
-	                .forEach(adaptadorPublicacion::modificarPublicacion);
-	    }
-	}
-
-	/*
-	public void darMeGusta(int id) {
-		//Foto f = (Foto) repoPublicaciones.getPublicacion(id);
-		//f.addMeGustas();
-		Publicacion p = repoPublicaciones.getPublicacion(id);
-		if (p.getClass().equals(Album.class)) {
-			for (Foto f : ((Album)p).getFotos()) {
-				f.addMeGustas();
-				adaptadorPublicacion.modificarPublicacion(f);
-			}
-		}
-		p.addMeGustas();
-			
-		adaptadorPublicacion.modificarPublicacion(p);
-	}*/
-	
-	public List<Usuario> buscarUsuarios(String cadena) {
-	    return RepoUsuarios.getUnicaInstancia().getUsuarios()
-	            .stream()
-	            .filter(u -> u.getNombreUsuario().contains(cadena) ||
-	                    u.getNombre().contains(cadena) ||
-	                    u.getEmail().contains(cadena))
-	            .distinct()
-	            .collect(Collectors.toList());
-	}
-
-	/*
-	public List<Usuario> buscarUsuarios (String cadena) {
-		List<Usuario> usuarios = new LinkedList<Usuario>();
-		
-		//usuarios = RepoUsuarios.getUnicaInstancia().getUsuarios();
-		
-		for (Usuario u : RepoUsuarios.getUnicaInstancia().getUsuarios()) {
-			if ((u.getNombreUsuario().contains(cadena)) ||
-					(u.getNombre().contains(cadena) && !usuarios.contains(u)) ||
-					 (u.getEmail().contains(cadena) && !usuarios.contains(u))) {
-				usuarios.add(u);
-			}
-		}
-		
-		return usuarios;
-	}*/
-	
-	public boolean sigue (String seguidor, String seguido) {
-		//recuperamos seguidor
-		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(seguidor);
-		//recuperamos seguido
-		Usuario s = RepoUsuarios.getUnicaInstancia().getUsuario(seguido);
-		
-		if (s.getSeguidores().contains(u)) {
-			return true;
-		}
-		return false;
-	}
-	
-	public boolean isPremium(String nombreUsuario) {
-		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
-		return u.getPremium();
-	}
-	
-	public Usuario getUsuario(String nombreUsuario) {
-		return RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
-	}
-	
-	public void hacerPremium(String nombreUsuario) {
-		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
-		u.setPremium(true);
-		adaptadorUsuario.modificarUsuario(u);
-	}
-	
-	public void seguirUsuario (String seguidor, String seguido) {
-		//recuperamos seguidor
-		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(seguidor);
-		//recuperamos seguido
-		Usuario s = RepoUsuarios.getUnicaInstancia().getUsuario(seguido);
-		
-		s.addSeguidor(u);
-		u.addSeguido(s);
-		adaptadorUsuario.modificarUsuario(s);
-		adaptadorUsuario.modificarUsuario(u);
-	}
-	
-	
+	/////////////
+	///Álbumes///
+	/////////////
 	
 	public boolean existeAlbum(String nombreUsuario, String nombreAlbum) {
 	    Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
@@ -341,7 +227,6 @@ public class Controlador {
 	            .stream()
 	            .anyMatch(a -> a.getTitulo().equals(nombreAlbum));
 	}
-	
 	
 	public Album registrarAlbum(String titulo, String comentario, String nombreUsuario) {
 		Usuario u = repoUsuarios.getUsuario(nombreUsuario);
@@ -369,7 +254,104 @@ public class Controlador {
 		a.addFoto((Foto)p);
 		
 		adaptadorPublicacion.modificarPublicacion(a);		
+	}	
+	
+	///////////////
+	///Me gustas///
+	///////////////
+	
+	public int getMeGustas(int id) {
+		Foto f = (Foto) RepoPublicaciones.getUnicaInstancia().getPublicacion(id);
+		return f.getMeGustas();
 	}
+	
+	public void darMeGusta(int id) {
+	    Publicacion p = repoPublicaciones.getPublicacion(id);
+	    p.addMeGustas();
+	    adaptadorPublicacion.modificarPublicacion(p);
+
+	    if (p instanceof Album) {
+	        ((Album) p).getFotos()
+	                .stream()
+	                .peek(Foto::addMeGustas)
+	                .forEach(adaptadorPublicacion::modificarPublicacion);
+	    }
+	}	
+	
+	public List<Foto> getTopMeGusta(String nombreUsuario){	
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
+		
+		List<Foto> fotos = u.getFotos().stream()
+				.sorted(Comparator.comparing(Foto::getMeGustas).reversed())
+				.limit(10)
+				.collect(Collectors.toList());
+		
+		return fotos;
+	}
+	
+	//////////////////
+	////Seguidores////
+	//////////////////
+	
+	public boolean sigue(String seguidor, String seguido) {
+		//recuperamos seguidor
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(seguidor);
+		//recuperamos seguido
+		Usuario s = RepoUsuarios.getUnicaInstancia().getUsuario(seguido);
+		
+		if (s.getSeguidores().contains(u)) {
+			return true;
+		}
+		return false;
+	}
+	
+	public void seguirUsuario (String seguidor, String seguido) {
+		//recuperamos seguidor
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(seguidor);
+		//recuperamos seguido
+		Usuario s = RepoUsuarios.getUnicaInstancia().getUsuario(seguido);
+		
+		if(!this.sigue(seguidor, seguido)) {
+			s.addSeguidor(u);
+			u.addSeguido(s);
+			adaptadorUsuario.modificarUsuario(s);
+			adaptadorUsuario.modificarUsuario(u);
+		}
+	}
+	
+	public int getNumSeguidores(String nombreUsuario) {
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
+		return u.getSeguidores().size();
+	}
+	
+	public int getNumSeguidos(String nombreUsuario) {
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
+		return u.getSeguidos().size();
+	}
+	
+	public List<Foto> getFotosSeguidos(String nombreUsuario){
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
+		List<Foto> listaFotos = new ArrayList<>();		
+		
+		for (Usuario s : u.getSeguidos()) {
+			for (Foto f : s.getFotos()) {
+				listaFotos.add(f);
+			}
+		}
+		for (Foto f : u.getFotos()) {
+			listaFotos.add(f);
+		}
+		
+		listaFotos = listaFotos.stream()
+					.sorted(Comparator.comparing(Foto::getFecha).reversed())
+					.limit(20)
+					.collect(Collectors.toList());
+		return listaFotos;
+	}
+	
+	//////////////
+	///Hashtags///
+	//////////////
 	
 	public List<String> buscarHashtags(String hashtag) {
 		//HashMap<String, Foto> lista = new HashMap<String, Foto>();
@@ -394,26 +376,17 @@ public class Controlador {
 	private List<String> extraerHashtags(String com) {
 		//Máximo 4 hashtags
 		//Símbolo '#' seguido de una palabra que tiene un máximo de 15 letras
-		//List<String> hashtags = new LinkedList<String>();
 		String[] palabras = com.split(" ");
-		
-		//int numHash = 0;
 		
 		List<String> hashtags = Arrays.stream(palabras)
 			    .filter(p -> p.startsWith("#") && p.length() <= 16)
 			    .limit(4)
 			    .collect(Collectors.toList());
 
-		
-		/*for (String p : palabras) {
-			if (p.startsWith("#") && (p.length()<=16) && (numHash<4)) {
-				hashtags.add(p);
-				numHash++;
-			}
-		}*/
-		
 		return hashtags;
 	}
+	
+	
 	
 	public void cargarFotos(File archivoXml) {
 		

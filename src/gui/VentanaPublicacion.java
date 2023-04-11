@@ -143,8 +143,10 @@ public class VentanaPublicacion extends JFrame {
 				if (Controlador.getUnicaInstancia().registrarFoto(usuarioActual, ruta, comentario)) {
 					if (ventanaActual.getClass() == PanelPerfilUsuario.class)
 						((PanelPerfilUsuario)ventanaActual).actualizar();
-					else if (ventanaActual.getClass() == VentanaPrincipal.class) 
-						((VentanaPrincipal)ventanaActual).mostrarPublicaciones();
+					else if (ventanaActual.getClass() == VentanaPrincipal.class) {
+						((VentanaPrincipal)ventanaActual).crearPanelPublicaciones();
+						//((VentanaPrincipal)ventanaActual).mostrarPublicaciones();
+					}
 				}
 				dispose();
 			}
@@ -179,9 +181,10 @@ public class VentanaPublicacion extends JFrame {
 		lblTitulo.setText("");
 	}
 	
-	public void compartirFoto() {
+	public boolean compartirFoto() {
 		btnAceptar.setText("Compartir");
 		this.addManejadorBtnCompartir(btnAceptar);
+		return true;
 	}
 	
 	public void crearAlbum(String nombreAlbum) {
