@@ -1,6 +1,5 @@
 package dao;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,7 +59,6 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 		Propiedad usuario = new Propiedad("usuario", String.valueOf(publicacion.getUsuario().getId()));
 		Propiedad fecha = new Propiedad("fecha", publicacion.getFecha().toString());
 		Propiedad descripcion = new Propiedad("descripcion", publicacion.getDescripcion());
-		//Propiedad hashtags = new Propiedad("hashtags", publicacion.getHashtags().toString());
 		Propiedad hashtags = new Propiedad("hashtags", this.obtenerCasdenaHashtags(publicacion.getHashtags()));
 		Propiedad meGustas = new Propiedad("meGustas", String.valueOf(publicacion.getMeGustas()));
 
@@ -73,7 +71,6 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 		}
 		
 		//Si es un álbum
-		
 		else {
 			Propiedad fotos = new Propiedad("fotos", obtenerIdFotos(((Album)publicacion).getFotos()));
 			ePublicacion.setNombre("album");
@@ -133,8 +130,7 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 	}
 	
 	//Recuperamos foto o álbum
-	public Publicacion recuperarPublicacion(int id) {
-		
+	public Publicacion recuperarPublicacion(int id) {	
 		//Si la entidad está en el pool la devuelve directamente
 		if(PoolDAO.getUnicaInstancia().contiene(id))
 			return (Publicacion) PoolDAO.getUnicaInstancia().getObjeto(id);
@@ -243,6 +239,4 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 		}
 		return listaFotos;
 	}
-
-
 }

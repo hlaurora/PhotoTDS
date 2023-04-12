@@ -225,7 +225,6 @@ public class VentanaPrincipal extends JPanel{
 		JPanel publi;
 		int i = 0;
 		List<Foto> fotos = Controlador.getUnicaInstancia().getFotosSeguidos(usuarioActual);
-		System.out.println(fotos.size());
 		for (Foto f : fotos) {
 			publi = new PanelPublicacion(f, i, frmPrincipal);
 			i++;

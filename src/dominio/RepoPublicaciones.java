@@ -5,8 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.plaf.synth.SynthOptionPaneUI;
-
 import dao.DAOException;
 import dao.FactoriaDAO;
 import dao.IAdaptadorPublicacionDAO;

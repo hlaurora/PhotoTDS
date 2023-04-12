@@ -5,13 +5,12 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -21,7 +20,6 @@ import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import controlador.Controlador;
-import dominio.Foto;
 import dominio.Usuario;
 
 public class VentanaBusqueda extends JFrame {
@@ -32,6 +30,7 @@ public class VentanaBusqueda extends JFrame {
 	private List<Usuario> usuarios;
 	private JList<Usuario> listaUsuarios;
 	private JList<String> listaFotos;
+	private JScrollPane scrollPane;
 	private String perfil="";
 	private VentanaPrincipal ventanaPrincipal;
 
@@ -40,8 +39,7 @@ public class VentanaBusqueda extends JFrame {
 	 */
 	public VentanaBusqueda(VentanaPrincipal vp, String cadena) {
 		this.ventanaPrincipal = vp;
-		//setBounds(100, 100, 230, 300);
-		setBounds(100, 100, 230, 300);
+		setBounds(100, 100, 210, 240);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -66,11 +64,11 @@ public class VentanaBusqueda extends JFrame {
 		listaUsuarios = new JList<Usuario>(usuarios.toArray
 								(new Usuario[usuarios.size()]));
 		listaUsuarios.setCellRenderer(createListRenderer());
-		listaUsuarios.setPreferredSize(new Dimension(200, ABORT));
 		listaUsuarios.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		JScrollPane pane = new JScrollPane(listaUsuarios);
-		panelLista.add(pane);
+		scrollPane = new JScrollPane(listaUsuarios);
+		this.fixedSize(scrollPane, 180, 180);
+		panelLista.add(scrollPane);
 		
 		listaUsuarios.addMouseListener(new MouseAdapter() {
 			@Override
@@ -87,19 +85,16 @@ public class VentanaBusqueda extends JFrame {
 	
 	private void addListaHashtags(String hashtag) {
 		List<String> listaHashtags = Controlador.getUnicaInstancia().buscarHashtags(hashtag);
-		
-		//List<String> hashtags = new ArrayList(listaHashtags.values());		
-		
+				
 		listaFotos = new JList<String>(listaHashtags.toArray
 								(new String[listaHashtags.size()]));
 		listaFotos.setCellRenderer(createListRenderer2());
-		listaFotos.setPreferredSize(new Dimension(200, ABORT));
 		listaFotos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		JScrollPane scrollListaFotos = new JScrollPane(listaFotos);
-
-		panelLista.add(scrollListaFotos);
-		
+		scrollPane = new JScrollPane(listaFotos);
+		this.fixedSize(scrollPane, 180, 180);
+		panelLista.add(scrollPane);
+				
 		/*listaFotos.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -164,5 +159,16 @@ public class VentanaBusqueda extends JFrame {
 				40, 
 				Image.SCALE_DEFAULT));
 		return icono;
+	}
+	
+	/**
+	 * Fija el tamaño de un componente
+	 */
+	public void fixedSize(JComponent o, int x, int y) {
+		Dimension d = new Dimension(x, y);
+		o.setMinimumSize(d);
+		o.setMaximumSize(d);
+		o.setPreferredSize(d);
+		o.setSize(d);
 	}
 }

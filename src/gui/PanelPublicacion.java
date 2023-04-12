@@ -132,8 +132,9 @@ public class PanelPublicacion extends JPanel {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Controlador.getUnicaInstancia().darMeGusta(idFoto);
-				//lblNumMg.setText();
 				lblNumMg.setText(Controlador.getUnicaInstancia().getMeGustas(idFoto) + " Me gustas");
+				//btn.setEnabled(false);
+				btn.setIcon(new ImageIcon(PanelPublicacion.class.getResource("/imagenes/relleno.png")));
 			}
 		});
 	}

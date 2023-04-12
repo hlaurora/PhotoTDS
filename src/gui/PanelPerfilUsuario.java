@@ -2,22 +2,15 @@ package gui;
 
 import javax.swing.JPanel;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JButton;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
-
-import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.JTextField;
-import javax.swing.Popup;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -28,35 +21,23 @@ import controlador.Controlador;
 import dominio.Album;
 import dominio.Foto;
 import dominio.Publicacion;
-import dominio.Usuario;
-
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.Point;
-import java.awt.PopupMenu;
-import java.awt.Rectangle;
 import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.ImageIcon;
-import java.awt.Component;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.geom.Area;
-import java.awt.geom.Ellipse2D;
-import java.awt.image.BufferedImage;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.JPopupMenu;
 
@@ -379,7 +360,7 @@ public class PanelPerfilUsuario extends JPanel {
 		}
 	}
 	
-	private void crearPanelPublicaciones() {
+	public void crearPanelPublicaciones() {
 		panelPublicaciones = new JPanel();
 		this.fixedSize(panelPublicaciones, 600, 400);
 		panelPublicaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -626,7 +607,7 @@ public class PanelPerfilUsuario extends JPanel {
 		
 		numFotos = fotosUsuario.size();
 		
-		Collections.reverse(fotosUsuario);
+		//Collections.reverse(fotosUsuario);
 		String ruta;
 		//Calculamos el número de filas
 		int numFilas = 0;

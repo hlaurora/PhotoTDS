@@ -1,7 +1,5 @@
 package gui;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -10,15 +8,12 @@ import controlador.Controlador;
 import dominio.Album;
 import dominio.Foto;
 
-import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.GridBagConstraints;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Insets;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -143,6 +138,7 @@ public class VentanaPublicacion extends JFrame {
 				if (Controlador.getUnicaInstancia().registrarFoto(usuarioActual, ruta, comentario)) {
 					if (ventanaActual.getClass() == PanelPerfilUsuario.class)
 						((PanelPerfilUsuario)ventanaActual).actualizar();
+						//((PanelPerfilUsuario)ventanaActual).crearPanelPublicaciones();
 					else if (ventanaActual.getClass() == VentanaPrincipal.class) {
 						((VentanaPrincipal)ventanaActual).crearPanelPublicaciones();
 						//((VentanaPrincipal)ventanaActual).mostrarPublicaciones();

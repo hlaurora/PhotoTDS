@@ -140,12 +140,7 @@ public class Controlador {
 		String ruta = u.getFotoPerfil().getPath();
 		return ruta;
 	}
-	
-	public List<Foto> getFotos(String nombreUsuario) {
-		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
-		return u.getFotos();
-	}
-	
+
 	public List<Album> getAlbumes(String nombreUsuario) {
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
 		return u.getAlbumes();
@@ -211,7 +206,15 @@ public class Controlador {
 		Foto f = (Foto)RepoPublicaciones.getUnicaInstancia().getPublicacion(id);
 		return f;
 	}
-
+	
+	public List<Foto> getFotos(String nombreUsuario) {
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);		
+		List<Foto> fotos = u.getFotos().stream()
+				.sorted(Comparator.comparing(Foto::getFecha).reversed())
+				.collect(Collectors.toList());
+		return fotos;
+	}
+		
 	public int getNumPublicaciones(String nombreUsuario) {
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
 		return (u.getFotos().size() + u.getAlbumes().size());
@@ -355,6 +358,7 @@ public class Controlador {
 	
 	public List<String> buscarHashtags(String hashtag) {
 		//HashMap<String, Foto> lista = new HashMap<String, Foto>();
+		hashtag = hashtag.substring(1);
 		List <String> lista = new LinkedList<String>();	
 		for(Publicacion p : repoPublicaciones.getPublicaciones()) {
 			for(String h : p.getHashtags()) {
