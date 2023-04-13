@@ -526,8 +526,7 @@ public class PanelPerfilUsuario extends JPanel {
 		    public void mouseClicked(MouseEvent evt) {
 		        int row = tabla.rowAtPoint(evt.getPoint());
 		        int col = tabla.columnAtPoint(evt.getPoint());
-		        if (row >= 0 && col >= 0) {
-		        	
+		        if (row >= 0 && col >= 0) {   	
 		        	int pos = (col+((row%numFilas)*3));
 		        	if (pos <= fotosUsuario.size()-1) {
 				        if (SwingUtilities.isLeftMouseButton(evt)) {
@@ -538,7 +537,7 @@ public class PanelPerfilUsuario extends JPanel {
 				        	va.verFoto();
 				        	va.setVisible(true);
 				        } 
-				        else if (SwingUtilities.isRightMouseButton(evt)) {
+				        else if (SwingUtilities.isRightMouseButton(evt)&&(usuarioActual.endsWith(usuario))) {
 				        	popupEliminar.show(tabla, evt.getX(), evt.getY());
 				    	    addManejadorEliminar(eliminar, fotosUsuario.get(pos)); 
 				    	}

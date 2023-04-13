@@ -190,7 +190,7 @@ public class VentanaPrincipal extends JPanel{
 		panelNorte.add(luz);
 		this.addManejadorPulsador(luz);*/
 		
-		btnMenu = new JButton("Menu");
+		btnMenu = new JButton("Menú");
 		btnMenu.setForeground(Constantes.LILA);
 		btnMenu.setFont(Constantes.NEGRITA_15);
 		this.fixedSize(btnMenu, 60, 40);

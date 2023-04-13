@@ -174,6 +174,8 @@ public class VentanaPublicacion extends JFrame {
 	}
 	
 	public void verFoto() {
+		btnCancelar.setVisible(false);
+		btnAceptar.setText("OK");
 		lblTitulo.setText("");
 	}
 	
