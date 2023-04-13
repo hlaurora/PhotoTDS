@@ -5,12 +5,15 @@ import java.awt.Image;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import controlador.Controlador;
 import dominio.Album;
 import dominio.Foto;
+import dominio.Publicacion;
+import dominio.RepoPublicaciones;
 
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
@@ -20,8 +23,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import java.awt.Component;
@@ -43,6 +48,7 @@ import java.awt.Font;
 
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 public class VentanaAlbum extends JFrame {
 
@@ -68,7 +74,10 @@ public class VentanaAlbum extends JFrame {
 	private JLabel lblNumMg;
 	private JLabel lblFotoPerfil;
 	private JButton btnMeGusta;
-
+	
+	private JMenuItem eliminar;
+	private JPopupMenu popupEliminar;
+	private VentanaAlbum ventanaAlbum;
 
 	/**
 	 * Create the frame.
@@ -90,8 +99,10 @@ public class VentanaAlbum extends JFrame {
 		this.crearPanelNorte();
 		this.crearPanelFotos();	
 		this.crearPanelSur();
-		
+		this.crearMenuEliminar();
+
 		this.panelAct = this.contentPane;
+		ventanaAlbum = this;
 	}
 
 	
@@ -112,6 +123,7 @@ public class VentanaAlbum extends JFrame {
 		}
 		{
 			lblFotoPerfil = new JLabel("");
+			this.fixedSize(lblFotoPerfil, 60, 60);
 			lblFotoPerfil.setIcon(escalarImagen(lblFotoPerfil, 
 					album.getUsuario().getFotoPerfil().getPath()));
 			panelNorte.add(lblFotoPerfil);
@@ -179,9 +191,18 @@ public class VentanaAlbum extends JFrame {
 		}
 	}
 	
+	public void crearMenuEliminar() {
+		popupEliminar = new JPopupMenu();
+		eliminar = new JMenuItem("Eliminar");
+		popupEliminar.add(eliminar);
+		
+	}
+	
 	public void mostrarFotos() {
 		
+		//album =(Album)RepoPublicaciones.getUnicaInstancia().getPublicacion(album.getId());
 		List <Foto> listaFotos = album.getFotos();
+		numFotos = album.getFotos().size();
 		
 		//Limpiamos la tabla
 		for (int i = 0; i < tablaFotos.getRowCount(); i++) {
@@ -240,21 +261,48 @@ public class VentanaAlbum extends JFrame {
 		        int col = tabla.columnAtPoint(evt.getPoint());
 		        if (row >= 0 && col >= 0) {
 		        	int pos = (col+((row%numFilas)*4));
-		        	VentanaPublicacion va = new VentanaPublicacion(album.getUsuario().getNombreUsuario(),
-		        			album.getFotos().get(pos).getRuta(), panelAct);
-		        	//VentanaAlbum va = new VentanaAlbum(albumesUsuario.get(pos));
-		        	va.setLocationRelativeTo(tabla);
-		        	va.verFoto();
-		        	va.setVisible(true);
+			        if (SwingUtilities.isLeftMouseButton(evt)) {
+			        	VentanaPublicacion va = new VentanaPublicacion(album.getUsuario().getNombreUsuario(),
+			        			album.getFotos().get(pos).getRuta(), panelAct);
+			        	//VentanaAlbum va = new VentanaAlbum(albumesUsuario.get(pos));
+			        	va.setLocationRelativeTo(tabla);
+			        	va.verFoto();
+			        	va.setVisible(true);
+			        }
+			        else if (SwingUtilities.isRightMouseButton(evt)&&(pos != 0)) {
+			        	popupEliminar.show(tabla, evt.getX(), evt.getY());
+			    	    addManejadorEliminar(eliminar, album.getFotos().get(pos)); 
+			    	}
 		       }
 		    }
 		});
 	}
 	
+	private void addManejadorEliminar(JMenuItem item, Foto f) {
+		ActionListener[] listeners = eliminar.getActionListeners();
+        //Eliminar todos los ActionListeners del botón
+        for(ActionListener listener : listeners){
+        	eliminar.removeActionListener(listener);
+        }
+        
+    	eliminar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (Controlador.getUnicaInstancia().eliminarFotoAlbum(album.getId(), f)) {
+					mostrarFotos();
+				}
+			//	if(Controlador.getUnicaInstancia().eliminarPublicacion(p)) {
+					//mostrarFotos();
+					//mostrarAlbumes();
+					//lblNumPublicaciones.setText(Controlador.getUnicaInstancia().getNumPublicaciones(usuario)+ " Publicaciones");
+			//	}
+			}
+		 });
+	}
+	
 	private void addManejadorBtnAddFoto(JButton btn) {
 		btn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
+			public void actionPerformed(ActionEvent e) {	
 				if(album.getFotos().size() >= 16) {
 					JOptionPane.showMessageDialog(panelAct, "Un album no puede contener mas de 16 fotos.\n",
 							"VentanaAlbum", JOptionPane.ERROR_MESSAGE);
@@ -269,7 +317,7 @@ public class VentanaAlbum extends JFrame {
 								selectedFile.getPath(), contentPane);
 						vap.setVisible(true);	
 						vap.setLocationRelativeTo(btnAddFoto);
-						vap.añadirFotoAlbum(album.getId(), selectedFile.getPath());
+						vap.añadirFotoAlbum(album.getId(), selectedFile.getPath(), ventanaAlbum);
 					}
 				}
 			}
@@ -303,11 +351,19 @@ public class VentanaAlbum extends JFrame {
 		return icono;
 	}
 	
+	public void fixedSize(JComponent o, int x, int y) {
+		Dimension d = new Dimension(x, y);
+		o.setMinimumSize(d);
+		o.setMaximumSize(new Dimension(100000, 100));
+		o.setPreferredSize(d);
+		o.setSize(d);
+	}
+	
 	private Icon escalarImagen(JLabel lbl, String ruta) {
 		ImageIcon image = new ImageIcon(ruta);
 		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
-				lbl.getWidth()-4, 
-				lbl.getHeight()-4, 
+				lbl.getWidth(), 
+				lbl.getHeight(),
 				Image.SCALE_DEFAULT));
 		return icono;
 	}

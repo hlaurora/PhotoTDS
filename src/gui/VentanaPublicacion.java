@@ -161,13 +161,12 @@ public class VentanaPublicacion extends JFrame {
 		});
 	}
 	
-	private void addManejadorBtnAñadirFotoAlbum(JButton btn, int idAlbum, String ruta) {
+	private void addManejadorBtnAñadirFotoAlbum(JButton btn, int idAlbum, String ruta, VentanaAlbum va) {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				comentario = textArea.getText();
 				Controlador.getUnicaInstancia().añadirFotoAlbum(idAlbum, ruta, comentario);
-				
-				//((VentanaAlbum2)ventanaActual).mostrarFotos();
+				va.mostrarFotos();
 				dispose();
 			}
 		});
@@ -190,9 +189,9 @@ public class VentanaPublicacion extends JFrame {
 		this.addManejadorBtnCrearAlbum(btnAceptar, nombreAlbum);
 	}
 	
-	public void añadirFotoAlbum(int idAlbum, String ruta) {
+	public void añadirFotoAlbum(int idAlbum, String ruta, VentanaAlbum va) {
 		btnAceptar.setText("Agregar al Album");
-		this.addManejadorBtnAñadirFotoAlbum(btnAceptar, idAlbum, ruta);
+		this.addManejadorBtnAñadirFotoAlbum(btnAceptar, idAlbum, ruta, va);
 	}
 	
 	private Icon mostrarFoto(String ruta) {

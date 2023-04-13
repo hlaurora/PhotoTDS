@@ -243,20 +243,39 @@ public class Controlador {
 		return album;
 	}
 	
-	public void añadirFotoAlbum(int idAlbum, String ruta, String comentario) {
+	public boolean añadirFotoAlbum(int idAlbum, String ruta, String comentario) {
 		Album a = (Album)repoPublicaciones.getPublicacion(idAlbum);
 		
-		Usuario u = repoUsuarios.getUsuario(a.getUsuario().getNombreUsuario());
-		List<String> hashtags = new LinkedList<String>();
-		Publicacion p = new Foto("titulo", LocalDateTime.now(), comentario, hashtags, ruta);
-		p.setUsuario(u);
-		//u.addFoto((Foto)p);
-		RepoPublicaciones.getUnicaInstancia().addPublicacion((Foto)p);
-		adaptadorPublicacion.registrarPublicacion((Foto)p);
+		if (a.getFotos().size() < 16) {
+			Usuario u = repoUsuarios.getUsuario(a.getUsuario().getNombreUsuario());
+			List<String> hashtags = new LinkedList<String>();
+			Publicacion p = new Foto("titulo", LocalDateTime.now(), comentario, hashtags, ruta);
+			p.setUsuario(u);
+			//u.addFoto((Foto)p);
+			RepoPublicaciones.getUnicaInstancia().addPublicacion((Foto)p);
+			adaptadorPublicacion.registrarPublicacion((Foto)p);
 
-		a.addFoto((Foto)p);
+			a.addFoto((Foto)p);
+			
+			//falta modificar el usuario en repo???
+			
+			
+			adaptadorPublicacion.modificarPublicacion(a);
+			adaptadorUsuario.modificarUsuario(u);
+			return true;
+		}
+		return false;
+	}	
+	
+	public boolean eliminarFotoAlbum(int idAlbum, Foto foto) {
+		Album a = (Album)repoPublicaciones.getPublicacion(idAlbum);
+		Usuario u = repoUsuarios.getUsuario(a.getUsuario().getNombreUsuario());
 		
-		adaptadorPublicacion.modificarPublicacion(a);		
+		a.removeFoto(foto);
+		adaptadorPublicacion.modificarPublicacion(a);
+		adaptadorUsuario.modificarUsuario(u);
+
+		return true;
 	}	
 	
 	///////////////

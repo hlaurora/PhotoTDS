@@ -1,7 +1,6 @@
 package gui;
 
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.Image;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -47,14 +46,10 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.EventObject;
 import java.util.LinkedList;
 import java.util.List;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-
-import pulsador.IEncendidoListener;
-import pulsador.Luz;
 
 //public class VentanaPrincipal extends JFrame{
 public class VentanaPrincipal extends JPanel{
