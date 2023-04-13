@@ -156,8 +156,10 @@ public class VentanaAlbum extends JFrame {
 				
 				this.mostrarFotos();
 			
-				//scrollPanelFotos.add(tablaFotos);
-				panelFotos.add(tablaFotos);
+				//panelFotos.add(tablaFotos);
+				scrollPanelFotos = new JScrollPane(tablaFotos);
+				this.fixedSize(scrollPanelFotos, 450, 150);
+				panelFotos.add(scrollPanelFotos);
 			}
 		}
 		
@@ -354,7 +356,8 @@ public class VentanaAlbum extends JFrame {
 	public void fixedSize(JComponent o, int x, int y) {
 		Dimension d = new Dimension(x, y);
 		o.setMinimumSize(d);
-		o.setMaximumSize(new Dimension(100000, 100));
+		//o.setMaximumSize(new Dimension(100000, 100));
+		o.setMaximumSize(d);
 		o.setPreferredSize(d);
 		o.setSize(d);
 	}

@@ -214,7 +214,7 @@ public class PanelPerfilUsuario extends JPanel {
 	private void crearPanelPerfil() {
 		panelPerfil = new JPanel();
 	//	panelPerfil.setMaximumSize(new Dimension(4398, 200));
-		this.fixedSize(panelPerfil, ventanaPrincipal.frmPrincipal.getWidth(), 160);
+		this.fixedSize(panelPerfil, ventanaPrincipal.frmPrincipal.getWidth(), 150);
 		panelPerfil.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		add(panelPerfil);
 		GridBagLayout gbl_panelPerfil = new GridBagLayout();
