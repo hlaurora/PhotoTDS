@@ -121,7 +121,7 @@ public class PanelPerfilUsuario extends JPanel {
 	private void crearPanelNorte() {
 		panelNorte = new JPanel();
 		panelNorte.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		this.fixedSize(panelNorte, 300, 60);
+		this.fixedSize(panelNorte, ventanaPrincipal.frmPrincipal.getWidth(), 60);
 		add(panelNorte);
 		GridBagLayout gbl_panelNorte = new GridBagLayout();
 		gbl_panelNorte.columnWidths = new int[]{10, 0, 0, 30, 0, 0, 0, 0, 0, 0, 20, 0, 0, 10, 0};
@@ -213,8 +213,8 @@ public class PanelPerfilUsuario extends JPanel {
 	
 	private void crearPanelPerfil() {
 		panelPerfil = new JPanel();
-		panelPerfil.setMaximumSize(new Dimension(4398, 200));
-		this.fixedSize(panelPerfil, 300, 160);
+	//	panelPerfil.setMaximumSize(new Dimension(4398, 200));
+		this.fixedSize(panelPerfil, ventanaPrincipal.frmPrincipal.getWidth(), 160);
 		panelPerfil.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		add(panelPerfil);
 		GridBagLayout gbl_panelPerfil = new GridBagLayout();
@@ -362,18 +362,15 @@ public class PanelPerfilUsuario extends JPanel {
 	
 	public void crearPanelPublicaciones() {
 		panelPublicaciones = new JPanel();
-		this.fixedSize(panelPublicaciones, 600, 400);
+		this.fixedSize(panelPublicaciones, ventanaPrincipal.frmPrincipal.getWidth(), 300);
+		panelPublicaciones.setMaximumSize(new Dimension(10000, 100000));
 		panelPublicaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		add(panelPublicaciones);
 		panelPublicaciones.setLayout(new CardLayout(0, 0));
 		
 		{
-			//scrollPane = new JScrollPane();
-			//scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 			panelFotos = new JPanel();
 			panelPublicaciones.add(panelFotos, "panelFotos");
-			//scrollPane.setViewportView(panelFotos);
-			//panelPublicaciones.add(scrollPane, "panelFotos");
 			{
 				String titulos[] = {"col1", "col2", "col3"};
 				tmFotos = new DefaultTableModel(null, titulos);
@@ -390,10 +387,11 @@ public class PanelPerfilUsuario extends JPanel {
 				}
 				this.mostrarFotos();
 							
-				panelFotos.add(tableFotos);
+				//panelFotos.add(tableFotos);
 				
-				//JScrollPane scrollPane = new JScrollPane(tableFotos);
-				//panelFotos.add(scrollPane);
+				JScrollPane scrollPane = new JScrollPane(tableFotos);
+				this.fixedSize(scrollPane, 500, 300);
+				panelFotos.add(scrollPane);
 				
 			}
 		}
@@ -415,7 +413,12 @@ public class PanelPerfilUsuario extends JPanel {
 					tableAlbumes.getColumnModel().getColumn(i).setPreferredWidth(120);
 				}
 				this.mostrarAlbumes();
-				panelAlbumes.add(tableAlbumes);
+				
+				JScrollPane scrollPane2 = new JScrollPane(tableAlbumes);
+				this.fixedSize(scrollPane2, 520, 300);
+				panelAlbumes.add(scrollPane2);
+				
+				//panelAlbumes.add(tableAlbumes);
 			}
 		}
 	}
@@ -718,7 +721,7 @@ public class PanelPerfilUsuario extends JPanel {
 	public void fixedSize(JComponent o, int x, int y) {
 		Dimension d = new Dimension(x, y);
 		o.setMinimumSize(d);
-		o.setMaximumSize(new Dimension(100000, 100));
+		o.setMaximumSize(d);
 		o.setPreferredSize(d);
 		o.setSize(d);
 	}

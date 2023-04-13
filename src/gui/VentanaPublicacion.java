@@ -6,8 +6,6 @@ import javax.swing.border.EmptyBorder;
 
 import controlador.Controlador;
 import dominio.Album;
-import dominio.Foto;
-
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -37,9 +35,7 @@ public class VentanaPublicacion extends JFrame {
 	
 	private String ruta;
 	private String usuarioActual;
-	private PanelPerfilUsuario panelPerfil;
 	private String comentario = "";
-	private Foto foto;
 	private JPanel ventanaActual;
 	
 
