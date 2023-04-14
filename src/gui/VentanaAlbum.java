@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.EventQueue;
 import java.awt.Image;
 
 import javax.swing.JFrame;
@@ -12,16 +11,10 @@ import javax.swing.table.DefaultTableModel;
 import controlador.Controlador;
 import dominio.Album;
 import dominio.Foto;
-import dominio.Publicacion;
-import dominio.RepoPublicaciones;
-
-import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -30,28 +23,24 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import java.awt.Component;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.Collections;
 import java.util.List;
 
-import javax.swing.Box;
 import java.awt.Dimension;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.FlowLayout;
-import java.awt.Font;
-
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 public class VentanaAlbum extends JFrame {
 
+	private Album album;
+	private int numFotos;
+	private VentanaAlbum ventanaAlbum;
 	private JPanel contentPane;
 	
 	private JPanel panelNorte;
@@ -61,10 +50,6 @@ public class VentanaAlbum extends JFrame {
 	private JTable tablaFotos;
 	private DefaultTableModel tmFotos;
 	
-	private Album album;
-	private String titulo;
-	private int numFotos;
-	//private List<Foto> listaFotos;
 	private JPanel panelSur;
 	private JButton btnCerrar;
 	private JFileChooser fileChooser;
@@ -77,7 +62,6 @@ public class VentanaAlbum extends JFrame {
 	
 	private JMenuItem eliminar;
 	private JPopupMenu popupEliminar;
-	private VentanaAlbum ventanaAlbum;
 
 	/**
 	 * Create the frame.
@@ -92,9 +76,6 @@ public class VentanaAlbum extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
 		this.album = a;
-		this.titulo = album.getTitulo();
-		this.numFotos = album.getFotos().size();
-		//this.listaFotos = album.getFotos();
 		
 		this.crearPanelNorte();
 		this.crearPanelFotos();	
@@ -111,7 +92,7 @@ public class VentanaAlbum extends JFrame {
 		contentPane.add(panelNorte, BorderLayout.NORTH);
 		panelNorte.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		{
-			lblTitulo = new JLabel(titulo);
+			lblTitulo = new JLabel(album.getTitulo());
 			lblTitulo.setForeground(Constantes.LILA);
 			lblTitulo.setFont(Constantes.NEGRITA_15);
 			lblTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -131,19 +112,14 @@ public class VentanaAlbum extends JFrame {
 	}
 	
 	public void crearPanelFotos() {
-		//scrollPanelFotos = new JScrollPane();
-		//scrollPanelFotos.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		//contentPane.add(scrollPanelFotos, BorderLayout.CENTER);
 		JPanel panelFotos = new JPanel();
 		contentPane.add(panelFotos, BorderLayout.CENTER);
 		{
 			tablaFotos = new JTable();
-			//scrollPanelFotos.setViewportView(tablaFotos);
 			{
 				String titulos[] = {"col1", "col2", "col3", "col4"};
 				tmFotos = new DefaultTableModel(null, titulos);
 				{
-					//tablaFotos = new JTable();
 					tablaFotos.setRowHeight(70);
 					tablaFotos.setModel(tmFotos);
 					tablaFotos.setTableHeader(null);
@@ -156,9 +132,8 @@ public class VentanaAlbum extends JFrame {
 				
 				this.mostrarFotos();
 			
-				//panelFotos.add(tablaFotos);
 				scrollPanelFotos = new JScrollPane(tablaFotos);
-				this.fixedSize(scrollPanelFotos, 450, 150);
+				this.fixedSize(scrollPanelFotos, 450, 180);
 				panelFotos.add(scrollPanelFotos);
 			}
 		}
@@ -202,7 +177,6 @@ public class VentanaAlbum extends JFrame {
 	
 	public void mostrarFotos() {
 		
-		//album =(Album)RepoPublicaciones.getUnicaInstancia().getPublicacion(album.getId());
 		List <Foto> listaFotos = album.getFotos();
 		numFotos = album.getFotos().size();
 		

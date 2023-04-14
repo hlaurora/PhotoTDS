@@ -36,7 +36,7 @@ public class VentanaPublicacion extends JFrame {
 	private String ruta;
 	private String usuarioActual;
 	private String comentario = "";
-	private JPanel ventanaActual;
+	//private JPanel ventanaActual;
 	
 
 	/**
@@ -46,8 +46,7 @@ public class VentanaPublicacion extends JFrame {
 		this.ruta = r;
 		this.usuarioActual = u;
 		
-		this.ventanaActual = p;
-		//this.panelPerfil = p;
+		//this.ventanaActual = p;
 		
 		setBounds(100, 100, 551, 283);
 		contentPane = new JPanel();
@@ -127,17 +126,18 @@ public class VentanaPublicacion extends JFrame {
 		});
 	}
 	
-	private void addManejadorBtnCompartir(JButton btn) {
+	private void addManejadorBtnCompartir(JButton btn, JPanel ventanaActual) {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				comentario = textArea.getText();
 				if (Controlador.getUnicaInstancia().registrarFoto(usuarioActual, ruta, comentario)) {
-					if (ventanaActual.getClass() == PanelPerfilUsuario.class)
+					if (ventanaActual.getClass() == PanelPerfilUsuario.class) {
 						((PanelPerfilUsuario)ventanaActual).actualizar();
+					}
 						//((PanelPerfilUsuario)ventanaActual).crearPanelPublicaciones();
 					else if (ventanaActual.getClass() == VentanaPrincipal.class) {
-						((VentanaPrincipal)ventanaActual).crearPanelPublicaciones();
-						//((VentanaPrincipal)ventanaActual).mostrarPublicaciones();
+						//((VentanaPrincipal)ventanaActual).crearPanelPublicaciones();
+						((VentanaPrincipal)ventanaActual).mostrarPublicaciones();
 					}
 				}
 				dispose();
@@ -145,13 +145,13 @@ public class VentanaPublicacion extends JFrame {
 		});
 	}
 		
-	private void addManejadorBtnCrearAlbum(JButton btn, String nombreAlbum) {
+	private void addManejadorBtnCrearAlbum(JButton btn, String nombreAlbum, PanelPerfilUsuario panel) {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				comentario = textArea.getText();
 				Album a = Controlador.getUnicaInstancia().registrarAlbum(nombreAlbum, comentario, usuarioActual);
 				Controlador.getUnicaInstancia().añadirFotoAlbum(a.getId(), ruta, comentario);
-				((PanelPerfilUsuario)ventanaActual).actualizar();
+				panel.actualizar();
 				dispose();
 			}
 		});
@@ -168,21 +168,32 @@ public class VentanaPublicacion extends JFrame {
 		});
 	}
 	
+	private void addManejadorBtnOk(JButton btn) {
+		btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//comentario = textArea.getText();
+				//Controlador.getUnicaInstancia().añadirFotoAlbum(idAlbum, ruta, comentario);
+				dispose();
+			}
+		});
+	}
+	
 	public void verFoto() {
 		btnCancelar.setVisible(false);
 		btnAceptar.setText("OK");
 		lblTitulo.setText("");
+		addManejadorBtnOk(btnAceptar);
 	}
 	
-	public boolean compartirFoto() {
+	public boolean compartirFoto(JPanel panel) {
 		btnAceptar.setText("Compartir");
-		this.addManejadorBtnCompartir(btnAceptar);
+		this.addManejadorBtnCompartir(btnAceptar, panel);
 		return true;
 	}
 	
-	public void crearAlbum(String nombreAlbum) {
+	public void crearAlbum(String nombreAlbum, PanelPerfilUsuario panel) {
 		btnAceptar.setText("Crear Album");
-		this.addManejadorBtnCrearAlbum(btnAceptar, nombreAlbum);
+		this.addManejadorBtnCrearAlbum(btnAceptar, nombreAlbum, panel);
 	}
 	
 	public void añadirFotoAlbum(int idAlbum, String ruta, VentanaAlbum va) {

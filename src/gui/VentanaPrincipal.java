@@ -196,7 +196,7 @@ public class VentanaPrincipal extends JPanel{
 	
 
 	//Crear el panel de las publicaciones
-	public void crearPanelPublicaciones() {
+	private void crearPanelPublicaciones() {
 		panelPublicaciones = new JPanel();
 		panelPublicaciones.setLayout(new BoxLayout(panelPublicaciones, BoxLayout.Y_AXIS));
 
@@ -372,7 +372,7 @@ public class VentanaPrincipal extends JPanel{
 							selectedFile.getPath(), ventanaPrincipal);
 					vap.setVisible(true);
 					vap.setLocationRelativeTo(btnAddFoto);
-					vap.compartirFoto();
+					vap.compartirFoto(ventanaPrincipal);
 					/*
 					if (vap.compartirFoto()) {
 					 Controlador.getUnicaInstancia().registrarFoto(usuarioActual, selectedFile.getPath(), "");

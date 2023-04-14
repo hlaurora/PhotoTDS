@@ -70,12 +70,13 @@ public class RepoPublicaciones {
 		albumesPorId.put(publicacion.getId(), publicacion);
 	}
 	
-	public void removePublicacion(Publicacion publicacion) {
+	public boolean removePublicacion(Publicacion publicacion) {
 		if (publicacion.getClass().equals(Foto.class)) {
 			fotosPorId.remove(publicacion.getId());
 		}
 		else 
 			albumesPorId.remove(publicacion.getId(), publicacion);
+		return true;
 	}
 	
 	/*

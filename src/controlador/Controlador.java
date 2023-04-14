@@ -195,11 +195,12 @@ public class Controlador {
 		else
 			u.removeAlbum((Album)p);
 		
-		repoPublicaciones.removePublicacion(p);
-		adaptadorPublicacion.borrarPublicacion(p);
-		adaptadorUsuario.modificarUsuario(u);
-		
-		return true;
+		if (repoPublicaciones.removePublicacion(p)) {
+			adaptadorPublicacion.borrarPublicacion(p);
+			adaptadorUsuario.modificarUsuario(u);
+			return true;
+		}
+		return false;
 	}
 	
 	public Foto getFoto(int id) {
@@ -355,21 +356,23 @@ public class Controlador {
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
 		List<Foto> listaFotos = new ArrayList<>();		
 		
+		for (Foto f : u.getFotos()) {
+			listaFotos.add(f);
+		}
+		
 		for (Usuario s : u.getSeguidos()) {
 			for (Foto f : s.getFotos()) {
 				listaFotos.add(f);
 			}
 		}
-		for (Foto f : u.getFotos()) {
-			listaFotos.add(f);
-		}
-		
+
 		listaFotos = listaFotos.stream()
 					.sorted(Comparator.comparing(Foto::getFecha).reversed())
 					.limit(20)
 					.collect(Collectors.toList());
 		return listaFotos;
 	}
+	
 	
 	//////////////
 	///Hashtags///

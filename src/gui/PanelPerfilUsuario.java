@@ -28,6 +28,7 @@ import java.awt.Insets;
 import java.io.File;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -79,7 +80,7 @@ public class PanelPerfilUsuario extends JPanel {
 	private String usuarioActual;
 	private String email;
 	private String fotoPerfil;
-	//private List<Foto> fotosUsuario;
+	private List<Foto> fotosUsuario;
 	//private List<Album> albumesUsuario;
 	private JScrollPane scrollPane;
 	private int numFotos;
@@ -102,12 +103,14 @@ public class PanelPerfilUsuario extends JPanel {
 		this.fotoPerfil = Controlador.getUnicaInstancia().getFotoPerfil(usuario);
 		this.usuarioActual = ventanaPrincipal.getUsuario();
 		//Recuperamos la lista de fotos
-		//fotosUsuario = Controlador.getUnicaInstancia().getFotos(usuario);
+		fotosUsuario = new LinkedList<Foto>();
 		//numFotos = fotosUsuario.size();
 		//Recuperamos la lsita de albumes
 		//albumesUsuario = Controlador.getUnicaInstancia().getAlbumes(usuario);
 		
-		setSize(575, 624);
+		//setSize(575, 624);
+		setSize(575, 724);
+
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		this.crearPanelNorte();
@@ -362,7 +365,7 @@ public class PanelPerfilUsuario extends JPanel {
 	
 	public void crearPanelPublicaciones() {
 		panelPublicaciones = new JPanel();
-		this.fixedSize(panelPublicaciones, ventanaPrincipal.frmPrincipal.getWidth(), 300);
+		this.fixedSize(panelPublicaciones, ventanaPrincipal.frmPrincipal.getWidth(), 250);
 		panelPublicaciones.setMaximumSize(new Dimension(10000, 100000));
 		panelPublicaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		add(panelPublicaciones);
@@ -417,8 +420,6 @@ public class PanelPerfilUsuario extends JPanel {
 				JScrollPane scrollPane2 = new JScrollPane(tableAlbumes);
 				this.fixedSize(scrollPane2, 520, 300);
 				panelAlbumes.add(scrollPane2);
-				
-				//panelAlbumes.add(tableAlbumes);
 			}
 		}
 	}
@@ -447,7 +448,7 @@ public class PanelPerfilUsuario extends JPanel {
 							selectedFile.getPath(), panelAct);
 					vap.setVisible(true);	
 					vap.setLocationRelativeTo(btnAddFoto);
-					vap.compartirFoto();
+					vap.compartirFoto(panelAct);
 				}
 			}
 		});
@@ -467,7 +468,7 @@ public class PanelPerfilUsuario extends JPanel {
 								selectedFile.getPath(), panelAct);
 						vap.setVisible(true);	
 						vap.setLocationRelativeTo(btnAddAlbum);
-						vap.crearAlbum(nombreAlbum);
+						vap.crearAlbum(nombreAlbum, panelAct);
 						lblNumPublicaciones.setText(Controlador.getUnicaInstancia().getNumPublicaciones(usuario)+ " Publicaciones");
 					}
 	            }
@@ -536,7 +537,7 @@ public class PanelPerfilUsuario extends JPanel {
 				        	VentanaPublicacion va = new VentanaPublicacion(usuarioActual,
 				        			fotosUsuario.get(pos).getRuta(), panelAct);
 				        	//VentanaAlbum va = new VentanaAlbum(albumesUsuario.get(pos));
-				        	va.setLocationRelativeTo(tabla);
+				        	va.setLocationRelativeTo(panelAct);
 				        	va.verFoto();
 				        	va.setVisible(true);
 				        } 
@@ -598,8 +599,7 @@ public class PanelPerfilUsuario extends JPanel {
 	}
 	
 	private void mostrarFotos() {
-		
-		List<Foto> fotosUsuario = Controlador.getUnicaInstancia().getFotos(usuario);
+		fotosUsuario = Controlador.getUnicaInstancia().getFotos(usuario);
 		
 		//Limpiamos la tabla
 		for (int i = 0; i < tableFotos.getRowCount(); i++) {
@@ -608,8 +608,6 @@ public class PanelPerfilUsuario extends JPanel {
 		}
 		
 		numFotos = fotosUsuario.size();
-		
-		//Collections.reverse(fotosUsuario);
 		String ruta;
 		//Calculamos el número de filas
 		int numFilas = 0;
@@ -650,6 +648,7 @@ public class PanelPerfilUsuario extends JPanel {
 			}
 		}	
 		this.addManejadorTablaFotos(tableFotos);
+
 	}
 	
 	private void mostrarAlbumes() {
