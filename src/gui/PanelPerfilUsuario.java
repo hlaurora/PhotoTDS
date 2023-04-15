@@ -389,9 +389,7 @@ public class PanelPerfilUsuario extends JPanel {
 					tableFotos.getColumnModel().getColumn(i).setPreferredWidth(170);
 				}
 				this.mostrarFotos();
-							
-				//panelFotos.add(tableFotos);
-				
+											
 				JScrollPane scrollPane = new JScrollPane(tableFotos);
 				this.fixedSize(scrollPane, 500, 300);
 				panelFotos.add(scrollPane);

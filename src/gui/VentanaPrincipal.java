@@ -12,6 +12,7 @@ import dominio.Usuario;
 
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
+import java.awt.Color;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListCellRenderer;
@@ -46,10 +47,14 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.EventObject;
 import java.util.LinkedList;
 import java.util.List;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
+import pulsador.IEncendidoListener;
+import pulsador.Luz;
 
 //public class VentanaPrincipal extends JFrame{
 public class VentanaPrincipal extends JPanel{
@@ -81,7 +86,7 @@ public class VentanaPrincipal extends JPanel{
 	
 	private VentanaPrincipal ventanaPrincipal;
 	private Component rigidArea_2;
-	//private Luz luz;
+	private Luz luz;
 	
 
 	/*public void mostrarVentana() {
@@ -178,12 +183,11 @@ public class VentanaPrincipal extends JPanel{
 		
 		rigidArea_2 = Box.createRigidArea(new Dimension(20, 20));
 		panelNorte.add(rigidArea_2);
-		
-		/*luz = new Luz();
-		//luz.setBackground(Color.TRANSLUCENT);
-		luz.setColor(Constantes.LILA);
+	
+		luz = new Luz();
 		panelNorte.add(luz);
-		this.addManejadorPulsador(luz);*/
+		luz.setColor(Constantes.LILA);
+		this.addManejadorPulsador(luz);
 		
 		btnMenu = new JButton("Menú");
 		btnMenu.setForeground(Constantes.LILA);
@@ -415,18 +419,20 @@ public class VentanaPrincipal extends JPanel{
 		
 	}
 	
-	/*private void addManejadorPulsador(Luz l) {
-		l.addEncendidoListener(new IEncendidoListener() {
-			@Override
+	private void addManejadorPulsador(Luz l) {
+		l.addEncendidoListener( new IEncendidoListener() {
 			public void enteradoCambioEncendido(EventObject arg0) {
 				JFileChooser chooseXml = new JFileChooser();
 				int seleccion = chooseXml.showOpenDialog(frmPrincipal);
-				if(seleccion == chooseXml.APPROVE_OPTION) {
-					Controlador.getUnicaInstancia().cargarFotos(chooseXml.getSelectedFile());
+				if(seleccion != JFileChooser.CANCEL_OPTION) {
+					//Controlador.getUnicaInstancia().cargarFotos(chooseXml.getSelectedFile().getPath());
+					//mostrarPublicaciones();
 				}
 			}
 		});
-	}*/
+	}
+	
+	
 	
 	private void addManejadorTopMeGusta(JMenuItem topMeGusta) {
 		topMeGusta.addActionListener(new ActionListener() {

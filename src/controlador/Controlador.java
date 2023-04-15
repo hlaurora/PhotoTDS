@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.EventObject;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,7 +21,6 @@ import dominio.Publicacion;
 import dominio.RepoPublicaciones;
 import dominio.RepoUsuarios;
 import dominio.Usuario;
-//import umu.tds.fotos.CargadorFotos;
 
 public class Controlador {
 	
@@ -30,11 +30,12 @@ public class Controlador {
 	private IAdaptadorPublicacionDAO adaptadorPublicacion;
 	private RepoUsuarios repoUsuarios;
 	private RepoPublicaciones repoPublicaciones;
-	//private CargadorFotos cargador;
+	//private CargadorFotos cargador = new CargadorFotos();
 	
 	private Controlador() {
 		inicializarAdaptadores();
 		inicializarRepositorios();
+		//cargador.addFotosListener(this);
 	}
 	
 	public static Controlador getUnicaInstancia() {
@@ -410,14 +411,7 @@ public class Controlador {
 			    .collect(Collectors.toList());
 
 		return hashtags;
-	}
-	
-	
-	
-	public void cargarFotos(File archivoXml) {
-		
-	}
-	
+	}	
 	
 	private void inicializarAdaptadores() {
 		FactoriaDAO factoria = null;
@@ -436,5 +430,23 @@ public class Controlador {
 		repoUsuarios = RepoUsuarios.getUnicaInstancia();
 		repoPublicaciones = RepoPublicaciones.getUnicaInstancia();
 	}
+
+	/*
+	public void cargarFotos(String fotos) {
+		cargador.setArchivoFotos(fotos);
+	}
+	
+	
+	@Override
+	public void enterarCambioFotos(FotosEvent event) {
+		Fotos fotos = event.getFotos();
+		for (umu.tds.fotos.Foto foto : fotos.getFoto()) {
+			registrarFoto("auro", foto.getPath(), foto.getDescripcion());
+			System.out.println(foto.getPath());
+		}
+	}*/
+	
+
+	
 	
 }
