@@ -37,6 +37,7 @@ import javax.swing.JTable;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
@@ -426,7 +427,6 @@ public class PanelPerfilUsuario extends JPanel {
 		popupEliminar = new JPopupMenu();
 		eliminar = new JMenuItem("Eliminar");
 		popupEliminar.add(eliminar);
-		
 	}
 
 	//////////////////////////////////////
@@ -523,6 +523,13 @@ public class PanelPerfilUsuario extends JPanel {
 	private void addManejadorTablaFotos(JTable tabla) {
 		int numFilas = tabla.getRowCount();
 		List<Foto> fotosUsuario = Controlador.getUnicaInstancia().getFotos(usuario);
+		
+		MouseListener[] listeners = tabla.getMouseListeners();
+        //Eliminar todos los MouseListener de la tabla
+        for(MouseListener listener : listeners){
+        	tabla.removeMouseListener(listener);
+        }
+		
 		tabla.addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mouseClicked(MouseEvent evt) {
@@ -646,7 +653,6 @@ public class PanelPerfilUsuario extends JPanel {
 			}
 		}	
 		this.addManejadorTablaFotos(tableFotos);
-
 	}
 	
 	private void mostrarAlbumes() {
