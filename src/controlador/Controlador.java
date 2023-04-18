@@ -313,6 +313,23 @@ public class Controlador {
 		return fotos;
 	}
 	
+	/////////////////
+	///Comentarios///
+	/////////////////
+	
+	public void añadirComentario(int id, String comentario) {
+	    Publicacion p = repoPublicaciones.getPublicacion(id);
+	   // p.add
+	    adaptadorPublicacion.modificarPublicacion(p);
+
+	    if (p instanceof Album) {
+	        ((Album) p).getFotos()
+	                .stream()
+	                .peek(Foto::addMeGustas)
+	                .forEach(adaptadorPublicacion::modificarPublicacion);
+	    }
+	}	
+	
 	//////////////////
 	////Seguidores////
 	//////////////////

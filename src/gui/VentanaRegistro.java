@@ -268,7 +268,6 @@ public class VentanaRegistro extends JDialog {
 		dateChooser.setDateFormatString("dd/MM/yyyy"); 
 		dateChooser.setPreferredSize(new Dimension(115, 23));
 		panelDate.add(dateChooser);
-	//---------------
 		
 		panelFoto = new JPanel();
 		panelFoto.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));

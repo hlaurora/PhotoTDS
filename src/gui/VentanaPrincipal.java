@@ -230,6 +230,8 @@ public class VentanaPrincipal extends JPanel{
 			this.fixedSize(publi, frmPrincipal.getWidth()-40, 90);
 			panelPublicaciones.add(publi);
 		}
+		panelPublicaciones.revalidate();
+		panelPublicaciones.repaint();
 	}
 	
 	

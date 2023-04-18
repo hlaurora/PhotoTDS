@@ -1,6 +1,8 @@
 package gui;
 
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
 import controlador.Controlador;
@@ -11,6 +13,7 @@ import javax.swing.JLabel;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JButton;
@@ -20,6 +23,8 @@ import javax.swing.JFrame;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -75,6 +80,7 @@ public class PanelPublicacion extends JPanel {
 		add(btnMeGusta, gbc_btnMeGusta);
 		
 		JButton btnComentario = new JButton("\r\n");
+		this.addManejadorBotonComentario(btnComentario);
 		btnComentario.setIcon(new ImageIcon(PanelPublicacion.class.getResource("/imagenes/comentario.png")));
 		GridBagConstraints gbc_btnComentario = new GridBagConstraints();
 		gbc_btnComentario.insets = new Insets(0, 0, 5, 5);
@@ -138,6 +144,60 @@ public class PanelPublicacion extends JPanel {
 			}
 		});
 	}
+	
+	private void addManejadorBotonComentario(JButton btn) {
+		btn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JDialog ventanaTexto = new JDialog();
+				
+				JLabel etiqueta = new JLabel("Escribe tu comentario (máx 120)");
+				etiqueta.setForeground(Constantes.LILA);
+				etiqueta.setFont(Constantes.NORMAL_15);
+				
+				ventanaTexto.setLayout(new FlowLayout());
+				JTextArea texto = new JTextArea(5, 23);
+				
+				texto.addKeyListener(new KeyAdapter() {
+					@Override
+					public void keyTyped(KeyEvent e) {
+						if(texto.getText().length() >= 120)
+					    {
+					        e.consume();
+					    }
+					}
+				});
+				
+				
+				texto.setLineWrap(true);
+				texto.setWrapStyleWord(true);
+				
+				ventanaTexto.add(etiqueta);
+			
+				ventanaTexto.add(texto);
+				
+				JButton aceptar = new JButton("Aceptar");
+				aceptar.setForeground(Constantes.LILA);
+				aceptar.setFont(Constantes.NEGRITA_15);
+				aceptar.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						ventanaTexto.dispose();
+						String comentario = texto.getText();
+						//System.out.println(comentario);
+						//Controlador.getUnicaInstancia().
+					}
+				});
+				
+				ventanaTexto.add(aceptar);
+				
+				ventanaTexto.setSize(230, 180);
+				ventanaTexto.setLocationRelativeTo(null);
+				ventanaTexto.setVisible(true);
+			}			
+		});
+	}	
 	
 	public int getIndex() {
 		return this.pos;
