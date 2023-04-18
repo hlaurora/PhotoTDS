@@ -13,11 +13,14 @@ import java.util.stream.Collectors;
 
 import dao.DAOException;
 import dao.FactoriaDAO;
+import dao.IAdaptadorComentarioDAO;
 import dao.IAdaptadorPublicacionDAO;
 import dao.IAdaptadorUsuarioDAO;
 import dominio.Album;
+import dominio.Comentario;
 import dominio.Foto;
 import dominio.Publicacion;
+import dominio.RepoComentarios;
 import dominio.RepoPublicaciones;
 import dominio.RepoUsuarios;
 import dominio.Usuario;
@@ -28,8 +31,10 @@ public class Controlador {
 	
 	private IAdaptadorUsuarioDAO adaptadorUsuario;
 	private IAdaptadorPublicacionDAO adaptadorPublicacion;
+	private IAdaptadorComentarioDAO adaptadorComentario;
 	private RepoUsuarios repoUsuarios;
 	private RepoPublicaciones repoPublicaciones;
+	private RepoComentarios repoComentarios;
 	//private CargadorFotos cargador = new CargadorFotos();
 	
 	private Controlador() {
@@ -317,17 +322,20 @@ public class Controlador {
 	///Comentarios///
 	/////////////////
 	
-	public void añadirComentario(int id, String comentario) {
-	    Publicacion p = repoPublicaciones.getPublicacion(id);
-	   // p.add
-	    adaptadorPublicacion.modificarPublicacion(p);
-
-	    if (p instanceof Album) {
-	        ((Album) p).getFotos()
-	                .stream()
-	                .peek(Foto::addMeGustas)
-	                .forEach(adaptadorPublicacion::modificarPublicacion);
-	    }
+	public void añadirComentario(int idPublicacion, String texto, String nombreUsuario) {
+		
+		Publicacion p = repoPublicaciones.getPublicacion(idPublicacion);
+		
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);		
+		Comentario comentario = new Comentario(texto, LocalDateTime.now());
+		comentario.setUsuario(u);
+		
+		p.addComentario(comentario);
+		
+		
+		repoComentarios.addComentario(comentario);
+		adaptadorComentario.registrarComentario(comentario);
+		adaptadorPublicacion.modificarPublicacion(p);
 	}	
 	
 	//////////////////
@@ -439,13 +447,16 @@ public class Controlador {
 		}
 		adaptadorUsuario = factoria.getUsuarioDAO();
 		adaptadorPublicacion = factoria.getPublicacionDAO();
+		adaptadorComentario = factoria.getComentarioDAO();
 		//adaptadorPublicacion.borrarTodasPublicaciones();
 		//adaptadorUsuario.borrarTodosUsuario();
+		//adaptadorComentario.borrarTodosComentarios();
 	}
 	
 	private void inicializarRepositorios() {
 		repoUsuarios = RepoUsuarios.getUnicaInstancia();
 		repoPublicaciones = RepoPublicaciones.getUnicaInstancia();
+		repoComentarios = RepoComentarios.getUnicaInstancia();
 	}
 
 	/*

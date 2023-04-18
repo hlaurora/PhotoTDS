@@ -10,6 +10,7 @@ import java.util.StringTokenizer;
 import beans.Entidad;
 import beans.Propiedad;
 import dominio.Album;
+import dominio.Comentario;
 import dominio.Foto;
 import dominio.Publicacion;
 import dominio.Usuario;
@@ -61,13 +62,14 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 		Propiedad descripcion = new Propiedad("descripcion", publicacion.getDescripcion());
 		Propiedad hashtags = new Propiedad("hashtags", this.obtenerCasdenaHashtags(publicacion.getHashtags()));
 		Propiedad meGustas = new Propiedad("meGustas", String.valueOf(publicacion.getMeGustas()));
+		Propiedad comentarios = new Propiedad("comentarios", this.obtenerIdComentarios(publicacion.getComentarios()));
 
 		if (publicacion.getClass().equals(Foto.class)) {
 			Propiedad ruta = new Propiedad("ruta", ((Foto)publicacion).getRuta());
 			ePublicacion.setNombre("foto");
 			
 			ePublicacion.setPropiedades(new ArrayList<Propiedad>(
-					Arrays.asList(titulo, fecha, descripcion, hashtags, usuario, meGustas, ruta)));
+					Arrays.asList(titulo, fecha, descripcion, hashtags, usuario, meGustas, comentarios, ruta)));
 		}
 		
 		//Si es un álbum
@@ -75,7 +77,7 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 			Propiedad fotos = new Propiedad("fotos", obtenerIdFotos(((Album)publicacion).getFotos()));
 			ePublicacion.setNombre("album");
 			ePublicacion.setPropiedades(new ArrayList<Propiedad>(
-					Arrays.asList(titulo, fecha, descripcion, hashtags, usuario, meGustas, fotos)));
+					Arrays.asList(titulo, fecha, descripcion, hashtags, usuario, meGustas, comentarios, fotos)));
 		}
 				
 		//registrar la entidad publicacion
@@ -120,6 +122,8 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 				p.setValor(this.obtenerCasdenaHashtags(publicacion.getHashtags()));
 			} else if(p.getNombre().equals("meGustas")) {
 				p.setValor(String.valueOf(publicacion.getMeGustas()));
+			} else if(p.getNombre().equals("comentarios")) {
+				p.setValor(this.obtenerIdComentarios(publicacion.getComentarios()));
 			} else if (p.getNombre().equals("ruta")) {
 				p.setValor(((Foto)publicacion).getRuta());
 			} else if (p.getNombre().equals("fotos")) {
@@ -179,6 +183,12 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 		//añadirlo al pool
 		PoolDAO.getUnicaInstancia().addObjeto(id, publicacion);
 		
+		//recuperar los comentarios
+		List<Comentario> comentarios = this.obtenerComentariosDesdeId(servPersistencia.recuperarPropiedadEntidad(ePublicacion, "comentarios"));
+		for(Comentario c : comentarios) {
+			publicacion.addComentario(c);
+		}
+		
 		//recuperar usuario llamando al adaptador
 		AdaptadorUsuarioTDS adaptadorUsuario = AdaptadorUsuarioTDS.getUnicaInstancia();
 		int idUsuario = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(ePublicacion, "usuario"));
@@ -228,7 +238,7 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 		return aux.trim();
 	}
 	
-	private List<Foto> obtenerFotosDesdeId(String fotos){
+	private List<Foto> obtenerFotosDesdeId(String fotos) {
 		Publicacion f;
 		List<Foto> listaFotos = new LinkedList<Foto>();
 		StringTokenizer strTok = new StringTokenizer(fotos, " ");
@@ -239,4 +249,26 @@ public class AdaptadorPublicacionTDS implements IAdaptadorPublicacionDAO {
 		}
 		return listaFotos;
 	}
+	
+	private String obtenerIdComentarios(List<Comentario> listaComentarios) {
+		String aux = "";
+		for(Comentario c : listaComentarios) {
+			aux += c.getId() + " ";
+		}
+		return aux.trim();
+	}
+	
+	private List<Comentario> obtenerComentariosDesdeId(String comentarios) {
+		Comentario c;
+		List<Comentario> listaComentarios = new LinkedList<Comentario>();	
+		StringTokenizer strTok = new StringTokenizer(comentarios, " ");
+		AdaptadorComentarioTDS adaptadorComentario = AdaptadorComentarioTDS.getUnicaInstancia();
+		
+		while(strTok.hasMoreTokens()) {
+			c = adaptadorComentario.recuperarComentario(Integer.valueOf((String) strTok.nextElement()));
+			listaComentarios.add(c);
+		}
+		return listaComentarios;
+	}
+	
 }

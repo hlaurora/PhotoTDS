@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 
 import controlador.Controlador;
+import dominio.Comentario;
 import dominio.Foto;
 import dominio.Usuario;
 
@@ -229,6 +230,7 @@ public class VentanaPrincipal extends JPanel{
 			i++;
 			this.fixedSize(publi, frmPrincipal.getWidth()-40, 90);
 			panelPublicaciones.add(publi);
+			
 		}
 		panelPublicaciones.revalidate();
 		panelPublicaciones.repaint();

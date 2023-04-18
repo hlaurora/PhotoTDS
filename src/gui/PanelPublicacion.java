@@ -6,6 +6,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
 import controlador.Controlador;
+import dominio.Comentario;
 import dominio.Foto;
 import dominio.RepoPublicaciones;
 
@@ -43,6 +44,8 @@ public class PanelPublicacion extends JPanel {
 	private Foto foto;
 	private JFrame frame;
 	
+	private JButton btnVerComentarios;
+	
 	/**
 	 * Create the panel.
 	 */
@@ -64,9 +67,9 @@ public class PanelPublicacion extends JPanel {
 		
 		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{200, 49, 90, 0, 0};
+		gridBagLayout.columnWidths = new int[]{200, 49, 90, 0, 0, 0};
 		gridBagLayout.rowHeights = new int[]{5, 14, 0, 0, 0, 0, 5, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
@@ -88,14 +91,6 @@ public class PanelPublicacion extends JPanel {
 		gbc_btnComentario.gridy = 2;
 		add(btnComentario, gbc_btnComentario);
 		
-		//lblNumMg = new JLabel(Controlador.getUnicaInstancia().getMeGustas(idFoto) + " Me gustas");
-		lblNumMg = new JLabel(foto.getMeGustas() + " Me gustas");
-		GridBagConstraints gbc_lblNumMg = new GridBagConstraints();
-		gbc_lblNumMg.insets = new Insets(0, 0, 5, 0);
-		gbc_lblNumMg.gridx = 3;
-		gbc_lblNumMg.gridy = 2;
-		add(lblNumMg, gbc_lblNumMg);
-		
 		lblImagen = new JLabel("");
 		this.fixedSize(lblImagen, 150, 90);
 		lblImagen.setIcon(escalarImagen(lblImagen, ruta));
@@ -106,6 +101,23 @@ public class PanelPublicacion extends JPanel {
 		gbc_lblImagen.gridx = 0;
 		gbc_lblImagen.gridy = 1;
 		add(lblImagen, gbc_lblImagen);
+		
+		btnVerComentarios = new JButton(foto.getComentarios().size() + " Comentarios");
+		btnVerComentarios.setForeground(Constantes.LILA);
+		this.addManejadorBotonVerComentarios(btnVerComentarios);
+		GridBagConstraints gbc_btnVerComentarios = new GridBagConstraints();
+		gbc_btnVerComentarios.insets = new Insets(0, 0, 5, 5);
+		gbc_btnVerComentarios.gridx = 3;
+		gbc_btnVerComentarios.gridy = 2;
+		add(btnVerComentarios, gbc_btnVerComentarios);
+		
+		//lblNumMg = new JLabel(Controlador.getUnicaInstancia().getMeGustas(idFoto) + " Me gustas");
+		lblNumMg = new JLabel(foto.getMeGustas() + " Me gustas");
+		GridBagConstraints gbc_lblNumMg = new GridBagConstraints();
+		gbc_lblNumMg.insets = new Insets(0, 0, 5, 0);
+		gbc_lblNumMg.gridx = 4;
+		gbc_lblNumMg.gridy = 2;
+		add(lblNumMg, gbc_lblNumMg);
 		
 		JLabel lblFotoPerfil = new JLabel("");
 		this.fixedSize(lblFotoPerfil, 50, 50);
@@ -145,6 +157,17 @@ public class PanelPublicacion extends JPanel {
 		});
 	}
 	
+	private void addManejadorBotonVerComentarios(JButton btn) {
+		btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("foto");
+				for(Comentario c : foto.getComentarios()) {
+					System.out.println("coments:" +  c.getTexto());
+				}
+			}
+		});
+	}
+	
 	private void addManejadorBotonComentario(JButton btn) {
 		btn.addActionListener(new ActionListener() {
 			@Override
@@ -155,7 +178,7 @@ public class PanelPublicacion extends JPanel {
 				etiqueta.setForeground(Constantes.LILA);
 				etiqueta.setFont(Constantes.NORMAL_15);
 				
-				ventanaTexto.setLayout(new FlowLayout());
+				ventanaTexto.getContentPane().setLayout(new FlowLayout());
 				JTextArea texto = new JTextArea(5, 23);
 				
 				texto.addKeyListener(new KeyAdapter() {
@@ -172,25 +195,25 @@ public class PanelPublicacion extends JPanel {
 				texto.setLineWrap(true);
 				texto.setWrapStyleWord(true);
 				
-				ventanaTexto.add(etiqueta);
+				ventanaTexto.getContentPane().add(etiqueta);
 			
-				ventanaTexto.add(texto);
+				ventanaTexto.getContentPane().add(texto);
 				
 				JButton aceptar = new JButton("Aceptar");
 				aceptar.setForeground(Constantes.LILA);
 				aceptar.setFont(Constantes.NEGRITA_15);
 				aceptar.addActionListener(new ActionListener() {
-					
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						ventanaTexto.dispose();
 						String comentario = texto.getText();
 						//System.out.println(comentario);
-						//Controlador.getUnicaInstancia().
+						Controlador.getUnicaInstancia().añadirComentario(foto.getId(), comentario, nombreUsuario);
+						btnVerComentarios.setText(foto.getComentarios().size() + " Comentarios");
 					}
 				});
 				
-				ventanaTexto.add(aceptar);
+				ventanaTexto.getContentPane().add(aceptar);
 				
 				ventanaTexto.setSize(230, 180);
 				ventanaTexto.setLocationRelativeTo(null);
@@ -215,7 +238,7 @@ public class PanelPublicacion extends JPanel {
 		//Establecer la imagen en el label
 		//label.setIcon(icon);
 		//Agregar el label a la ventana de diálogo
-		dialog.add(label);
+		dialog.getContentPane().add(label);
 		//Mostrar la ventana de diálogo
 		dialog.setVisible(true);
 	}
