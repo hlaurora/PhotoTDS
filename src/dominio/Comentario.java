@@ -1,13 +1,27 @@
 package dominio;
 
+import java.time.LocalDateTime;
+
 public class Comentario {
 	
+	private int id;
 	private String texto;
 	private Usuario usuario;
+	private LocalDateTime fecha;
 	
-	public Comentario (String texto, Usuario usuario) {
+	public Comentario (String texto, LocalDateTime fecha) {
+		this.id = 0;
 		this.texto = texto;
-		this.usuario = usuario;
+		this.usuario = null;
+		this.fecha = fecha;
+	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	public String getTexto() {
@@ -25,5 +39,10 @@ public class Comentario {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
+	
+	public LocalDateTime getFecha() {
+		return fecha;
+	}
+
 
 }

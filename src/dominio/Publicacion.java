@@ -1,6 +1,7 @@
 package dominio;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 
 public abstract class Publicacion {
@@ -12,6 +13,7 @@ public abstract class Publicacion {
 	private String descripcion;
 	private int meGustas;
 	private List<String> hashtags;
+	private List<Comentario> comentarios;
 	
 	public Publicacion(String titulo, LocalDateTime fecha,
 				String descripcion, List<String> hashtags) {
@@ -22,6 +24,7 @@ public abstract class Publicacion {
 		this.descripcion = descripcion;
 		this.meGustas = 0;
 		this.hashtags = hashtags;
+		this.comentarios = new LinkedList<Comentario>();
 	}
 	
 	public int getId() {
@@ -78,6 +81,14 @@ public abstract class Publicacion {
 
 	public void setHashtags(List<String> hashtags) {
 		this.hashtags = hashtags;
+	}
+	
+	public List<Comentario> getComentarios(){
+		return comentarios;
+	}
+	
+	public void addComentario(Comentario c) {
+		this.comentarios.add(c);
 	}
 
 }
