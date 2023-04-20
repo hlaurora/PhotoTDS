@@ -160,10 +160,13 @@ public class PanelPublicacion extends JPanel {
 	private void addManejadorBotonVerComentarios(JButton btn) {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("foto");
+				VentanaComentarios vc = new VentanaComentarios(foto);
+				vc.setLocationRelativeTo(null);
+				vc.setVisible(true);
+				/*System.out.println("foto");
 				for(Comentario c : foto.getComentarios()) {
 					System.out.println("coments:" +  c.getTexto());
-				}
+				}*/
 			}
 		});
 	}

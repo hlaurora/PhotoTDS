@@ -338,6 +338,8 @@ public class Controlador {
 		adaptadorPublicacion.modificarPublicacion(p);
 	}	
 	
+	
+	
 	//////////////////
 	////Seguidores////
 	//////////////////
