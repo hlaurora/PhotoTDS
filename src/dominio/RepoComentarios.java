@@ -1,4 +1,4 @@
-package dominio;
+/*package dominio;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +34,7 @@ public class RepoComentarios {
 	/*public List<Comentario> getComentarios() {
 		return new LinkedList<Comentario>(comentariosPorId.values());
 	}*/
-	
+	/*
 	// Devuelve un comentario
 	public Comentario getComentario(int id) {
 		return comentariosPorId.get(id);
@@ -57,4 +57,4 @@ public class RepoComentarios {
 		}
 	}
 	
-}
+}*/

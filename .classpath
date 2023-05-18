@@ -37,5 +37,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/javax.persistence-api-2.2.jar"/>
+	<classpathentry kind="lib" path="lib/CargadorFotos.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

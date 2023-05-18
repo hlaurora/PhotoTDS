@@ -429,8 +429,8 @@ public class VentanaPrincipal extends JPanel{
 				JFileChooser chooseXml = new JFileChooser();
 				int seleccion = chooseXml.showOpenDialog(frmPrincipal);
 				if(seleccion != JFileChooser.CANCEL_OPTION) {
-					//Controlador.getUnicaInstancia().cargarFotos(chooseXml.getSelectedFile().getPath());
-					//mostrarPublicaciones();
+					Controlador.getUnicaInstancia().cargarFotos(chooseXml.getSelectedFile().getPath());
+					mostrarPublicaciones();
 				}
 			}
 		});

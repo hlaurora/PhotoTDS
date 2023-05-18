@@ -211,7 +211,7 @@ public class PanelPublicacion extends JPanel {
 						ventanaTexto.dispose();
 						String comentario = texto.getText();
 						//System.out.println(comentario);
-						Controlador.getUnicaInstancia().añadirComentario(foto.getId(), comentario, nombreUsuario);
+						//Controlador.getUnicaInstancia().añadirComentario(foto.getId(), comentario, nombreUsuario);
 						btnVerComentarios.setText(foto.getComentarios().size() + " Comentarios");
 					}
 				});

@@ -20,12 +20,12 @@ import dominio.Album;
 import dominio.Comentario;
 import dominio.Foto;
 import dominio.Publicacion;
-import dominio.RepoComentarios;
 import dominio.RepoPublicaciones;
 import dominio.RepoUsuarios;
 import dominio.Usuario;
+import umu.tds.fotos.*;
 
-public class Controlador {
+public class Controlador implements IFotosListener{
 	
 	private static Controlador unicaInstancia;
 	
@@ -34,13 +34,13 @@ public class Controlador {
 	private IAdaptadorComentarioDAO adaptadorComentario;
 	private RepoUsuarios repoUsuarios;
 	private RepoPublicaciones repoPublicaciones;
-	private RepoComentarios repoComentarios;
-	//private CargadorFotos cargador = new CargadorFotos();
+//	private RepoComentarios repoComentarios;
+	private CargadorFotos cargador = new CargadorFotos();
 	
 	private Controlador() {
 		inicializarAdaptadores();
 		inicializarRepositorios();
-		//cargador.addFotosListener(this);
+		cargador.addFotosListener(this);
 	}
 	
 	public static Controlador getUnicaInstancia() {
@@ -333,7 +333,7 @@ public class Controlador {
 		p.addComentario(comentario);
 		
 		
-		repoComentarios.addComentario(comentario);
+		//repoComentarios.addComentario(comentario);
 		adaptadorComentario.registrarComentario(comentario);
 		adaptadorPublicacion.modificarPublicacion(p);
 	}	
@@ -458,10 +458,10 @@ public class Controlador {
 	private void inicializarRepositorios() {
 		repoUsuarios = RepoUsuarios.getUnicaInstancia();
 		repoPublicaciones = RepoPublicaciones.getUnicaInstancia();
-		repoComentarios = RepoComentarios.getUnicaInstancia();
+//		repoComentarios = RepoComentarios.getUnicaInstancia();
 	}
 
-	/*
+	
 	public void cargarFotos(String fotos) {
 		cargador.setArchivoFotos(fotos);
 	}
@@ -474,7 +474,7 @@ public class Controlador {
 			registrarFoto("auro", foto.getPath(), foto.getDescripcion());
 			System.out.println(foto.getPath());
 		}
-	}*/
+	}
 	
 
 	
