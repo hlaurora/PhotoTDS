@@ -458,7 +458,6 @@ public class Controlador implements IFotosListener{
 	private void inicializarRepositorios() {
 		repoUsuarios = RepoUsuarios.getUnicaInstancia();
 		repoPublicaciones = RepoPublicaciones.getUnicaInstancia();
-//		repoComentarios = RepoComentarios.getUnicaInstancia();
 	}
 
 	

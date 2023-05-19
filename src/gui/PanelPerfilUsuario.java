@@ -27,11 +27,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.io.File;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.swing.ImageIcon;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
@@ -110,7 +107,7 @@ public class PanelPerfilUsuario extends JPanel {
 		//albumesUsuario = Controlador.getUnicaInstancia().getAlbumes(usuario);
 		
 		//setSize(575, 624);
-		setSize(575, 724);
+		setSize(575, 824);
 
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		

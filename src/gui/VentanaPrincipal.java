@@ -109,7 +109,7 @@ public class VentanaPrincipal extends JPanel{
 	 */
 	private void initialize() {		
 				
-		panelPerfilUsuario = new PanelPerfilUsuario(this, usuarioActual);
+		//panelPerfilUsuario = new PanelPerfilUsuario(this, usuarioActual);
 		this.fotoPerfil = Controlador.getUnicaInstancia().getFotoPerfil(usuarioActual);
 		
 		//frmPrincipal = new JFrame();
@@ -361,6 +361,7 @@ public class VentanaPrincipal extends JPanel{
 	
 	//Botón Perfil (abre el perfil del usuario actual)
 	private void addManejadorBotonPerfil(JButton btn) {
+		panelPerfilUsuario = new PanelPerfilUsuario(this, usuarioActual);
 		btnPerfil.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frmPrincipal.setContentPane(panelPerfilUsuario);
