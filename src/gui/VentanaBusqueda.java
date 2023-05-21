@@ -76,7 +76,7 @@ public class VentanaBusqueda extends JFrame {
 				Usuario u;
 				if ((u = listaUsuarios.getSelectedValue()) != null) {
 					perfil = u.getNombreUsuario();
-					ventanaPrincipal.abirPerfil(perfil);
+					ventanaPrincipal.abrirPerfil(perfil);
 					dispose();
 				}
 			}

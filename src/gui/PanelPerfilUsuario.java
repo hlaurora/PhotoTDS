@@ -85,6 +85,7 @@ public class PanelPerfilUsuario extends JPanel {
 	private PanelPerfilUsuario panelAct;
 	
 	private JPopupMenu popupEliminar;
+	private JButton btnVolver;
 
 	/**
 	 * Create the panel.
@@ -121,7 +122,7 @@ public class PanelPerfilUsuario extends JPanel {
 		gbl_panelNorte.rowHeights = new int[]{0, 0, 0};
 		gbl_panelNorte.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gbl_panelNorte.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-		panelNorte.setLayout(gbl_panelNorte);
+		panelNorte.setLayout(gbl_panelNorte);		
 		{
 			lblPhotoTDS = new JLabel("PhotoTDS");
 			lblPhotoTDS.setForeground(Constantes.LILA);
@@ -182,6 +183,17 @@ public class PanelPerfilUsuario extends JPanel {
 			panelNorte.add(btnBuscar, gbc_btnBuscar);
 		}
 		{
+			btnVolver = new JButton("< ");
+			this.addManejadorBotonVolver(btnVolver);
+			btnVolver.setForeground(Constantes.LILA);
+			btnVolver.setFont(Constantes.NEGRITA_20);
+			GridBagConstraints gbc_btnVolver = new GridBagConstraints();
+			gbc_btnVolver.insets = new Insets(0, 0, 5, 5);
+			gbc_btnVolver.gridx = 11;
+			gbc_btnVolver.gridy = 1;
+			panelNorte.add(btnVolver, gbc_btnVolver);
+		}
+		{
 			lblFotoPerfil = new JLabel("");
 			//lblFotoPerfil.setIcon(new ImageIcon(PanelPerfilUsuario.class.getResource("/imagenes/usuario48.png")));
 			//lblFotoPerfil.setIcon(new ImageIcon(fotoPerfil));
@@ -189,7 +201,7 @@ public class PanelPerfilUsuario extends JPanel {
 			this.añadirPerfil(lblFotoPerfil, fotoPerfil);
 			GridBagConstraints gbc_lblFotoPerfil = new GridBagConstraints();
 			gbc_lblFotoPerfil.insets = new Insets(0, 0, 0, 5);
-			gbc_lblFotoPerfil.gridx = 11;
+			gbc_lblFotoPerfil.gridx = 12;
 			gbc_lblFotoPerfil.gridy = 1;
 			//this.añadirImagen(lblFotoPerfil, fotoPerfil);
 			panelNorte.add(lblFotoPerfil, gbc_lblFotoPerfil);
@@ -198,7 +210,7 @@ public class PanelPerfilUsuario extends JPanel {
 			btnMenu = new JButton("MENU");
 			GridBagConstraints gbc_btnMenu = new GridBagConstraints();
 			gbc_btnMenu.insets = new Insets(0, 0, 0, 5);
-			gbc_btnMenu.gridx = 12;
+			gbc_btnMenu.gridx = 13;
 			gbc_btnMenu.gridy = 1;
 			panelNorte.add(btnMenu, gbc_btnMenu);
 		}
@@ -477,6 +489,19 @@ public class PanelPerfilUsuario extends JPanel {
 					vb.setLocationRelativeTo(btnBuscar);
 					vb.setVisible(true);
 				}
+			}
+		});
+	}
+	
+	private void addManejadorBotonVolver(JButton btnVolver) {
+		btnVolver.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				FrmPrincipal f = new FrmPrincipal();
+				VentanaPrincipal vp = new VentanaPrincipal(f);
+				vp.setVisible(true);
+				f.setVisible(true);
+				ventanaPrincipal.frmPrincipal.dispose();
 			}
 		});
 	}

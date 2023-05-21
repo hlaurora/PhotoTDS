@@ -478,6 +478,17 @@ public class Controlador implements IFotosListener{
 		}
 	}
 	
+	////////////////////
+	///Notificaciones///
+	////////////////////
+	
+	public void vaciarNotificaciones(String nombreUsuario) {
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
+		for(Notificacion n : u.getNotificaciones()) {
+			u.removeNotificacion(n);
+		}
+		adaptadorUsuario.modificarUsuario(u);
+	}
 	
 
 	private void inicializarAdaptadores() {
@@ -500,14 +511,7 @@ public class Controlador implements IFotosListener{
 	
 	private void inicializarRepositorios() {
 		repoUsuarios = RepoUsuarios.getUnicaInstancia();
-		repoPublicaciones = RepoPublicaciones.getUnicaInstancia();
-		
-		for (Usuario u: repoUsuarios.getUsuarios()) {
-			System.out.println(u.getNombreUsuario());
-			for(Notificacion n: u.getNotificaciones()) {
-				System.out.println(n.getFecha());
-			}
-		}
+		repoPublicaciones = RepoPublicaciones.getUnicaInstancia();	
 	}
 	
 }

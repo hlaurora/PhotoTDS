@@ -46,6 +46,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -61,7 +63,7 @@ import pulsador.Luz;
 //public class VentanaPrincipal extends JFrame{
 public class VentanaPrincipal extends JPanel{
 
-	public JFrame frmPrincipal;
+	public FrmPrincipal frmPrincipal;
 	
 	private JLabel lblPhotoTDS;
 	private JPanel panelNorte;
@@ -199,6 +201,7 @@ public class VentanaPrincipal extends JPanel{
 		this.fixedSize(btnNoti, 36, 34);
 		panelNoti.add(btnNoti);
 		btnNoti.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/notificacion.png")));
+		this.addManejadorBotonNotificaciones(btnNoti);
 		
 		btnMenu = new JButton("Menú");
 		btnMenu.setForeground(Constantes.LILA);
@@ -412,6 +415,24 @@ public class VentanaPrincipal extends JPanel{
 		});
 	}
 	
+	
+	private void addManejadorBotonNotificaciones(JButton btn) {
+		btn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				VentanaNotificaciones vn = new VentanaNotificaciones(ventanaPrincipal, usuarioActual);
+				vn.setLocationRelativeTo(btn);
+				vn.setVisible(true);
+				vn.addWindowListener(new WindowAdapter() {
+				       @Override
+				       public void windowClosed(WindowEvent e) {
+				    	  // Controlador.getUnicaInstancia().vaciarNotificaciones(usuarioActual);
+				       }
+				});
+			}
+		});
+	}
+	
 	private void addManejadorGenerarPdf(JMenuItem generarPdf) {
 		generarPdf.addActionListener(new ActionListener() {
 			@Override
@@ -443,8 +464,7 @@ public class VentanaPrincipal extends JPanel{
 			}
 		});
 	}
-	
-	
+
 	
 	private void addManejadorTopMeGusta(JMenuItem topMeGusta) {
 		topMeGusta.addActionListener(new ActionListener() {
@@ -456,14 +476,13 @@ public class VentanaPrincipal extends JPanel{
 	}
 	
 	//Abre perfil del usuario indicado al seleccionar en la lista
-	public void abirPerfil(String nombreUsuario) {
+	public void abrirPerfil(String nombreUsuario) {
 		panelPerfilUsuario = new PanelPerfilUsuario(this, nombreUsuario);		
 		frmPrincipal.getContentPane().removeAll();
 		frmPrincipal.setContentPane(panelPerfilUsuario);
 		frmPrincipal.getContentPane().revalidate();;
 		frmPrincipal.getContentPane().repaint();
 	}
-	
 	
 	
 	public void crearPdf(Usuario u) {
