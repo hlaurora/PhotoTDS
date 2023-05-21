@@ -9,6 +9,7 @@ import javax.swing.JList;
 import controlador.Controlador;
 import dominio.Comentario;
 import dominio.Foto;
+import dominio.Notificacion;
 import dominio.Usuario;
 
 import javax.swing.JPanel;
@@ -490,15 +491,10 @@ public class VentanaPrincipal extends JPanel{
 	public void crearExcel(Usuario u) {
 		try   
 		{  
-		//declare file name to be create   
 		String filename = "C:\\\\Users\\\\auror\\\\OneDrive\\\\Escritorio\\Seguidores.xls";  
-		//creating an instance of HSSFWorkbook class  
 		HSSFWorkbook workbook = new HSSFWorkbook();  
-		//invoking creatSheet() method and passing the name of the sheet to be created   
 		HSSFSheet sheet = workbook.createSheet("Seguidores de " +  usuarioActual);   
-		//creating the 0th row using the createRow() method  
 		HSSFRow rowhead = sheet.createRow((short)0);  
-		//creating cell by using the createCell() method and setting the values to the cell by using the setCellValue() method  
 		rowhead.createCell(0).setCellValue("Nombre");  
 		rowhead.createCell(1).setCellValue("Email");  
 		rowhead.createCell(2).setCellValue("Presentacion");  
@@ -506,7 +502,6 @@ public class VentanaPrincipal extends JPanel{
 		for (int i = 1; i < u.getSeguidores().size()+1; i++) {
 			Usuario s = u.getSeguidores().get(i-1);
 			HSSFRow row = sheet.createRow((short)i);  
-			//inserting data in the first row  
 			row.createCell(0).setCellValue(s.getNombre());  
 			row.createCell(1).setCellValue(s.getEmail());  
 			row.createCell(2).setCellValue(s.getTextoPresentacion());  
@@ -514,12 +509,9 @@ public class VentanaPrincipal extends JPanel{
 		
 		FileOutputStream fileOut = new FileOutputStream(filename);  
 		workbook.write(fileOut);  
-		//closing the Stream  
 		fileOut.close();  
-		//closing the workbook  
 		workbook.close();  
-		//prints the message on the console  
-		System.out.println("Excel file has been generated successfully.");  
+		System.out.println("Excel creado.");  
 		}   
 		catch (Exception e)   
 		{  

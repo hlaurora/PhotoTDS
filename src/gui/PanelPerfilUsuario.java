@@ -656,6 +656,10 @@ public class PanelPerfilUsuario extends JPanel {
 		
 		List<Album> albumesUsuario = Controlador.getUnicaInstancia().getAlbumes(usuario);
 		
+		for(Album a : albumesUsuario) {
+			System.out.println(a.getHashtags());
+		}
+		
 		//Limpiamos la tabla
 		for (int i = 0; i < tableAlbumes.getRowCount(); i++) {
 			tmAlbum.removeRow(i);

@@ -14,11 +14,13 @@ import java.util.stream.Collectors;
 import dao.DAOException;
 import dao.FactoriaDAO;
 import dao.IAdaptadorComentarioDAO;
+import dao.IAdaptadorNotificacionDAO;
 import dao.IAdaptadorPublicacionDAO;
 import dao.IAdaptadorUsuarioDAO;
 import dominio.Album;
 import dominio.Comentario;
 import dominio.Foto;
+import dominio.Notificacion;
 import dominio.Publicacion;
 import dominio.RepoPublicaciones;
 import dominio.RepoUsuarios;
@@ -32,9 +34,9 @@ public class Controlador implements IFotosListener{
 	private IAdaptadorUsuarioDAO adaptadorUsuario;
 	private IAdaptadorPublicacionDAO adaptadorPublicacion;
 	private IAdaptadorComentarioDAO adaptadorComentario;
+	private IAdaptadorNotificacionDAO adaptadorNotificacion;
 	private RepoUsuarios repoUsuarios;
 	private RepoPublicaciones repoPublicaciones;
-//	private RepoComentarios repoComentarios;
 	private CargadorFotos cargador = new CargadorFotos();
 	
 	private Controlador() {
@@ -185,10 +187,19 @@ public class Controlador implements IFotosListener{
 		p.setUsuario(u);
 		u.addFoto((Foto)p);
 		repoPublicaciones.addPublicacion(p);
-		//RepoPublicaciones.getUnicaInstancia().addPublicacion((Foto)p);
 		adaptadorPublicacion.registrarPublicacion((Foto)p);
+		
+		//Notificar a sus seguidores 
+		Notificacion n = new Notificacion(LocalDateTime.now());
+		n.setPublicacion(p);
+		adaptadorNotificacion.registrarNotificacion(n);
+		for(Usuario s : u.getSeguidores()) {
+			System.out.println("seguido por "+s.getNombreUsuario());
+			s.addNotificacion(n);
+			adaptadorUsuario.modificarUsuario(s);
+		}
 		adaptadorUsuario.modificarUsuario(u);
-		//System.out.println(p.getDescripcion());
+
 		
 		return true;
 	}
@@ -332,8 +343,6 @@ public class Controlador implements IFotosListener{
 		
 		p.addComentario(comentario);
 		
-		
-		//repoComentarios.addComentario(comentario);
 		adaptadorComentario.registrarComentario(comentario);
 		adaptadorPublicacion.modificarPublicacion(p);
 	}	
@@ -393,7 +402,7 @@ public class Controlador implements IFotosListener{
 				listaFotos.add(f);
 			}
 		}
-
+		
 		listaFotos = listaFotos.stream()
 					.sorted(Comparator.comparing(Foto::getFecha).reversed())
 					.limit(20)
@@ -440,26 +449,10 @@ public class Controlador implements IFotosListener{
 		return hashtags;
 	}	
 	
-	private void inicializarAdaptadores() {
-		FactoriaDAO factoria = null;
-		try {
-			factoria = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS);
-		} catch (DAOException e) {
-			e.printStackTrace();
-		}
-		adaptadorUsuario = factoria.getUsuarioDAO();
-		adaptadorPublicacion = factoria.getPublicacionDAO();
-		adaptadorComentario = factoria.getComentarioDAO();
-		//adaptadorPublicacion.borrarTodasPublicaciones();
-		//adaptadorUsuario.borrarTodosUsuario();
-		//adaptadorComentario.borrarTodosComentarios();
-	}
 	
-	private void inicializarRepositorios() {
-		repoUsuarios = RepoUsuarios.getUnicaInstancia();
-		repoPublicaciones = RepoPublicaciones.getUnicaInstancia();
-	}
-
+	///////////////////
+	///CargadorFotos///
+	///////////////////
 	
 	public void cargarFotos(String fotos) {
 		cargador.setArchivoFotos(fotos);
@@ -475,7 +468,35 @@ public class Controlador implements IFotosListener{
 		}
 	}
 	
-
 	
+	
+	private void inicializarAdaptadores() {
+		FactoriaDAO factoria = null;
+		try {
+			factoria = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS);
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
+		adaptadorUsuario = factoria.getUsuarioDAO();
+		adaptadorPublicacion = factoria.getPublicacionDAO();
+		adaptadorComentario = factoria.getComentarioDAO();
+		adaptadorNotificacion = factoria.getNotificacionDAO();
+		//adaptadorPublicacion.borrarTodasPublicaciones();
+		//adaptadorUsuario.borrarTodosUsuario();
+		//adaptadorComentario.borrarTodosComentarios();
+		//adaptadorNotificacion.borrarTodasNotificaciones();
+	}
+	
+	private void inicializarRepositorios() {
+		repoUsuarios = RepoUsuarios.getUnicaInstancia();
+		repoPublicaciones = RepoPublicaciones.getUnicaInstancia();
+		
+		for (Usuario u: repoUsuarios.getUsuarios()) {
+			System.out.println(u.getNombreUsuario());
+			for(Notificacion n: u.getNotificaciones()) {
+				System.out.println(n.getFecha());
+			}
+		}
+	}
 	
 }

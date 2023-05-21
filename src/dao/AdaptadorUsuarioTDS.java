@@ -12,6 +12,7 @@ import beans.Entidad;
 import beans.Propiedad;
 import dominio.Album;
 import dominio.Foto;
+import dominio.Notificacion;
 import dominio.Publicacion;
 import dominio.Usuario;
 import tds.driver.FactoriaServicioPersistencia;
@@ -61,6 +62,12 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 			this.registrarUsuario(s);
 		}
 		
+		//Registramos las notificaciones
+		AdaptadorNotificacionTDS adaptadorNotificacion = AdaptadorNotificacionTDS.getUnicaInstancia();
+		for (Notificacion n : usuario.getNotificaciones()) {
+			adaptadorNotificacion.registrarNotificacion(n);
+		}
+		
 		//Crear entidad Usuario
 		eUsuario = new Entidad();
 		eUsuario.setNombre("usuario");
@@ -86,10 +93,18 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 			albumesUsuario.add(a);
 		}
 		Propiedad albumes = new Propiedad("albumes", obtenerIdPublicaciones(albumesUsuario));
+		List<Notificacion> notificacionesUsuario = new LinkedList<Notificacion>();
+		for (Notificacion n : usuario.getNotificaciones()) {
+			notificacionesUsuario.add(n);
+		}
+		Propiedad notificaciones = new Propiedad("notificaciones", 
+				obtenerIdNotificaciones(notificacionesUsuario));
+		
 		
 		eUsuario.setPropiedades(new ArrayList<Propiedad>(
 				Arrays.asList(email, nombre, apellidos, nombreUsuario, password, premium, 
-						fechaNaci, fotoPerfil, textoPresentacion, fotos, seguidores, seguidos, albumes)));
+						fechaNaci, fotoPerfil, textoPresentacion, fotos, seguidores, 
+						seguidos, albumes, notificaciones)));
 		
 		//registrar la entidad usuario
 		eUsuario = servPersistencia.registrarEntidad(eUsuario);
@@ -148,6 +163,12 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 					publicaciones.add(a);
 				}
 				p.setValor(obtenerIdPublicaciones(publicaciones));
+			} else if(p.getNombre().equals("notificaciones")) {
+				List<Notificacion> notificaciones = new LinkedList<Notificacion>();
+				for (Notificacion n : usuario.getNotificaciones()) {
+					notificaciones.add(n);
+				}
+				p.setValor(obtenerIdNotificaciones(notificaciones));
 			}
 			servPersistencia.modificarPropiedad(p);
 		}
@@ -170,12 +191,11 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		File fotoPerfil;
 		String textoPresentacion;
 		Boolean premium;
-		//List<Foto> fotos = new LinkedList<Foto>();
 		List<Publicacion> fotos = new LinkedList<Publicacion>();
 		List<Usuario> seguidores = new LinkedList<Usuario>();
 		List<Usuario> seguidos = new LinkedList<Usuario>();
 		List<Publicacion> albumes = new LinkedList<Publicacion>();
-		//List<Album> albumes = new LinkedList<Album>();
+		List<Notificacion> notificaciones = new LinkedList<Notificacion>();
 
 		eUsuario = servPersistencia.recuperarEntidad(id);
 		
@@ -198,7 +218,6 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		//añadirlo al pool
 		PoolDAO.getUnicaInstancia().addObjeto(id, usuario);
 
-		//fotos = obtenerFotosDesdeId(servPersistencia.recuperarPropiedadEntidad(eUsuario, "fotos"));
 		fotos = obtenerPublicacionesDesdeId(servPersistencia.recuperarPropiedadEntidad(eUsuario, "fotos"));
 		for (Publicacion f : fotos) {
 			usuario.addFoto((Foto)f);
@@ -219,6 +238,12 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 			usuario.addSeguido(s);
 		}
 		
+		notificaciones = obtenerNotificacionsDesdeId(servPersistencia.recuperarPropiedadEntidad(
+				eUsuario, "notificaciones"));
+		for (Notificacion n : notificaciones) {
+			usuario.addNotificacion(n);
+		}
+		
 		return usuario;
 	}
 	
@@ -232,45 +257,6 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		return usuarios;
 	}
 	
-	/*private String obtenerIdFotos(List<Foto> listaFotos) {
-		String aux = "";
-		for(Foto f : listaFotos) {
-			aux += f.getId() + " ";
-		}
-		return aux.trim();
-	}
-	
-	private List<Foto> obtenerFotosDesdeId(String fotos){
-		Publicacion f;
-		List<Foto> listaFotos = new LinkedList<Foto>();
-		StringTokenizer strTok = new StringTokenizer(fotos, " ");
-		AdaptadorPublicacionTDS adaptadorPublicacion = AdaptadorPublicacionTDS.getUnicaInstancia();
-		while(strTok.hasMoreTokens()) {
-			f = adaptadorPublicacion.recuperarPublicacion(Integer.valueOf((String) strTok.nextElement()));
-			listaFotos.add((Foto)f);
-		}
-		return listaFotos;
-	}
-	
-	private String obtenerIdAlbumes(List<Album> listaAlbumes) {
-		String aux = "";
-		for(Album a : listaAlbumes) {
-			aux += a.getId() + " ";
-		}
-		return aux.trim();
-	}
-	
-	private List<Album> obtenerAlbumesDesdeId(String albumes){
-		Publicacion a;
-		List<Album> listaAlbumes = new LinkedList<Album>();
-		StringTokenizer strTok = new StringTokenizer(albumes, " ");
-		AdaptadorPublicacionTDS adaptadorPublicacion = AdaptadorPublicacionTDS.getUnicaInstancia();
-		while(strTok.hasMoreTokens()) {
-			a = adaptadorPublicacion.recuperarPublicacion(Integer.valueOf((String) strTok.nextElement()));
-			listaAlbumes.add((Album)a);
-		}
-		return listaAlbumes;
-	}*/
 	
 	//Obtiene el id de la lista de fotos o de albumes pasada como parámetro
 	private String obtenerIdPublicaciones(List<Publicacion> listaPublicaciones) {
@@ -310,5 +296,25 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 			listaSeguidores.add(s);
 		}
 		return listaSeguidores;
+	}
+	
+	private String obtenerIdNotificaciones(List<Notificacion> listaNotificaciones) {
+		String aux = "";
+		for(Notificacion n : listaNotificaciones) {
+			aux += n.getId() + " ";
+		}
+		return aux.trim();
+	}
+	
+	private List<Notificacion> obtenerNotificacionsDesdeId(String notificaciones){
+		Notificacion n;
+		List<Notificacion> listaNotificaciones = new LinkedList<Notificacion>();
+		StringTokenizer strTok = new StringTokenizer(notificaciones, " ");
+		AdaptadorNotificacionTDS adaptadorNotificacion = AdaptadorNotificacionTDS.getUnicaInstancia();
+		while(strTok.hasMoreTokens()) {
+			n = adaptadorNotificacion.recuperarNotificacion(Integer.valueOf((String) strTok.nextElement()));
+			listaNotificaciones.add(n);
+		}
+		return listaNotificaciones;
 	}
 }

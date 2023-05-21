@@ -16,4 +16,8 @@ public class TDSFactoriaDAO extends FactoriaDAO {
 	public IAdaptadorComentarioDAO getComentarioDAO() {
 		return AdaptadorComentarioTDS.getUnicaInstancia();
 	}
+	
+	public IAdaptadorNotificacionDAO getNotificacionDAO() {
+		return AdaptadorNotificacionTDS.getUnicaInstancia();
+	}
 }

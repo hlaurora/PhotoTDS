@@ -21,6 +21,7 @@ public class Usuario {
 	private List<Usuario> seguidores;
 	private List<Usuario> seguidos;
 	private List<Album> albumes;
+	private List<Notificacion> notificaciones;
 	
 	public Usuario(String email, String nombre, String apellidos, String nombreUsuario,
 			String password, LocalDate fechaNacimiento)
@@ -39,6 +40,7 @@ public class Usuario {
 		this.seguidos = new LinkedList<Usuario>();
 		this.albumes = new LinkedList<Album>();
 		this.isPremium = false;
+		this.notificaciones = new LinkedList<Notificacion>();
 	};
 	
 	public int getId() {
@@ -168,5 +170,16 @@ public class Usuario {
 	public void setPremium(Boolean isPremium) {
 		this.isPremium = isPremium;
 	}
-
+	
+	public List<Notificacion> getNotificaciones(){
+		return notificaciones;
+	}
+	
+	public void addNotificacion(Notificacion notificacion) {
+		notificaciones.add(notificacion);
+	}
+	
+	public void removeNotificacion(Notificacion notificacion) {
+		notificaciones.remove(notificacion);
+	}
 }
