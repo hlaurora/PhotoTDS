@@ -89,6 +89,8 @@ public class VentanaPrincipal extends JPanel{
 	private VentanaPrincipal ventanaPrincipal;
 	private Component rigidArea_2;
 	private Luz luz;
+	private JPanel panelNoti;
+	private JButton btnNoti;
 	
 
 	/*public void mostrarVentana() {
@@ -99,9 +101,9 @@ public class VentanaPrincipal extends JPanel{
 	/**
 	 * Create the application.
 	 */
-	public VentanaPrincipal(FrmPrincipal frm, String u) {	
+	public VentanaPrincipal(FrmPrincipal frm) {	
 		this.frmPrincipal = frm;
-		this.usuarioActual = Controlador.getUnicaInstancia().getNombreUsuario(u);
+		this.usuarioActual = Controlador.getUnicaInstancia().getUsuarioActual().getNombreUsuario();
 		initialize();
 	}
 
@@ -128,7 +130,7 @@ public class VentanaPrincipal extends JPanel{
 		frmPrincipal.getContentPane().add(panelNorte, BorderLayout.NORTH);
 		panelNorte.setLayout(new BoxLayout(panelNorte, BoxLayout.X_AXIS));
 		
-		this.fixedSize(panelNorte, 550, 50);
+		this.fixedSize(panelNorte, 590, 50);
 		
 		lblPhotoTDS = new JLabel("PhotoTDS");
 		lblPhotoTDS.setForeground(Constantes.LILA);
@@ -172,7 +174,7 @@ public class VentanaPrincipal extends JPanel{
 		this.fixedSize(btnBuscar, 70, 40);
 		panel.add(btnBuscar);
 		
-		rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
+		rigidArea_1 = Box.createRigidArea(new Dimension(15, 20));
 		panelNorte.add(rigidArea_1);
 		
 		//Botón para abrir el panel del perfil del usuario
@@ -191,10 +193,17 @@ public class VentanaPrincipal extends JPanel{
 		luz.setColor(Constantes.LILA);
 		this.addManejadorPulsador(luz);
 		
+		panelNoti = new JPanel();
+		panelNorte.add(panelNoti);
+		btnNoti = new JButton("");
+		this.fixedSize(btnNoti, 36, 34);
+		panelNoti.add(btnNoti);
+		btnNoti.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/notificacion.png")));
+		
 		btnMenu = new JButton("Menú");
 		btnMenu.setForeground(Constantes.LILA);
 		btnMenu.setFont(Constantes.NEGRITA_15);
-		this.fixedSize(btnMenu, 60, 40);
+		this.fixedSize(btnMenu, 55, 40);
 		panelNorte.add(btnMenu);
 		this.addManejadorBotonMenu(btnMenu);
 		
@@ -209,8 +218,7 @@ public class VentanaPrincipal extends JPanel{
 		scrollPane = new JScrollPane(panelPublicaciones);
 				
 		frmPrincipal.setResizable(true);
-		this.fixedSize(scrollPane, 600, 450);
-		//this.fixedSize(scrollPane, (ventanaPrincipal.getHeight()-panelNorte.getHeight()), );
+		this.fixedSize(scrollPane, 590, 450);
 		
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		frmPrincipal.getContentPane().add(scrollPane, BorderLayout.CENTER);
@@ -229,7 +237,7 @@ public class VentanaPrincipal extends JPanel{
 		for (Foto f : fotos) {
 			publi = new PanelPublicacion(f, i, frmPrincipal);
 			i++;
-			this.fixedSize(publi, frmPrincipal.getWidth()-40, 90);
+			this.fixedSize(publi, frmPrincipal.getWidth()-55, 90);
 			panelPublicaciones.add(publi);
 			
 		}
@@ -278,9 +286,7 @@ public class VentanaPrincipal extends JPanel{
 		
 	}
 	
-	private void addListaDescuentos() {
-		//List<String> listaHashtags = Controlador.getUnicaInstancia().buscarHashtags(hashtag);
-		
+	private void addListaDescuentos() {		
 		List<String> listaDescuentos = new LinkedList<String>();
 		listaDescuentos.add("Descuento por edad");
 		listaDescuentos.add("Descuento por MeGustas");
@@ -311,10 +317,7 @@ public class VentanaPrincipal extends JPanel{
 					if (result == JOptionPane.YES_OPTION) {
 						dialog.setVisible(false);
 						Controlador.getUnicaInstancia().hacerPremium(usuarioActual);
-					   // Handle 'Yes'
-					} else {
-					   // Handle 'No'
-					}
+					} 
 				}
 			}
 		});
@@ -365,7 +368,10 @@ public class VentanaPrincipal extends JPanel{
 		panelPerfilUsuario = new PanelPerfilUsuario(this, usuarioActual);
 		btnPerfil.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				frmPrincipal.getContentPane().removeAll();
 				frmPrincipal.setContentPane(panelPerfilUsuario);
+				frmPrincipal.getContentPane().revalidate();;
+				frmPrincipal.getContentPane().repaint();
 			}
 		});
 	}
@@ -451,7 +457,11 @@ public class VentanaPrincipal extends JPanel{
 	
 	//Abre perfil del usuario indicado al seleccionar en la lista
 	public void abirPerfil(String nombreUsuario) {
-		frmPrincipal.setContentPane(new PanelPerfilUsuario(this, nombreUsuario));
+		panelPerfilUsuario = new PanelPerfilUsuario(this, nombreUsuario);		
+		frmPrincipal.getContentPane().removeAll();
+		frmPrincipal.setContentPane(panelPerfilUsuario);
+		frmPrincipal.getContentPane().revalidate();;
+		frmPrincipal.getContentPane().repaint();
 	}
 	
 	
@@ -558,10 +568,6 @@ public class VentanaPrincipal extends JPanel{
 			}
 		};
 		};
-	}
-	
-	public String getUsuario() {
-		return this.usuarioActual;
 	}
 	
 	private static Icon escalarImagen(String ruta) {

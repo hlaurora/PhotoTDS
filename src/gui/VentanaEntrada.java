@@ -23,6 +23,7 @@ import javax.swing.Box;
 import javax.swing.border.EtchedBorder;
 
 import controlador.Controlador;
+import dominio.Usuario;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -180,7 +181,9 @@ public class VentanaEntrada {
 						new String (passwordField.getPassword()));
 				if (registrado) {
 					FrmPrincipal frm = new FrmPrincipal();
-					VentanaPrincipal vPrincipal = new VentanaPrincipal(frm, textUsuario.getText());
+					Usuario u = Controlador.getUnicaInstancia().getUsuario(textUsuario.getText());
+					Controlador.getUnicaInstancia().setUsuario(u);
+					VentanaPrincipal vPrincipal = new VentanaPrincipal(frm);
 					//VentanaPrincipal window = new VentanaPrincipal(textUsuario.getText());
 					//Prueba p = new Prueba(textUsuario.getText());
 					//p.frmPrincipal.setVisible(true);

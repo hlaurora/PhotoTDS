@@ -37,6 +37,8 @@ public class Controlador implements IFotosListener{
 	private IAdaptadorNotificacionDAO adaptadorNotificacion;
 	private RepoUsuarios repoUsuarios;
 	private RepoPublicaciones repoPublicaciones;
+	
+	private Usuario usuarioActual;
 	private CargadorFotos cargador = new CargadorFotos();
 	
 	private Controlador() {
@@ -49,6 +51,14 @@ public class Controlador implements IFotosListener{
 		if (unicaInstancia == null)
 			unicaInstancia = new Controlador();
 		return unicaInstancia;
+	}
+	
+	public void setUsuario(Usuario u) {
+		usuarioActual = u;
+	}
+	
+	public Usuario getUsuarioActual() {
+		return this.usuarioActual;
 	}
 	
 	
@@ -463,13 +473,13 @@ public class Controlador implements IFotosListener{
 	public void enterarCambioFotos(FotosEvent event) {
 		Fotos fotos = event.getFotos();
 		for (umu.tds.fotos.Foto foto : fotos.getFoto()) {
-			registrarFoto("auro", foto.getPath(), foto.getDescripcion());
+			registrarFoto(usuarioActual.getNombreUsuario(), foto.getPath(), foto.getDescripcion());
 			System.out.println(foto.getPath());
 		}
 	}
 	
 	
-	
+
 	private void inicializarAdaptadores() {
 		FactoriaDAO factoria = null;
 		try {
@@ -481,6 +491,7 @@ public class Controlador implements IFotosListener{
 		adaptadorPublicacion = factoria.getPublicacionDAO();
 		adaptadorComentario = factoria.getComentarioDAO();
 		adaptadorNotificacion = factoria.getNotificacionDAO();
+		// Para vaciar la base de datos
 		//adaptadorPublicacion.borrarTodasPublicaciones();
 		//adaptadorUsuario.borrarTodosUsuario();
 		//adaptadorComentario.borrarTodosComentarios();

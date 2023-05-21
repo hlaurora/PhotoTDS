@@ -31,7 +31,7 @@ public class FrmPrincipal extends JFrame {
 	 */
 	public FrmPrincipal() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 110, 600, 560);
+		setBounds(100, 110, 620, 560);
 		setLocationRelativeTo(null);
 
 		contentPane = new JPanel();

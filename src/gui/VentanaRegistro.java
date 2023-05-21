@@ -19,6 +19,8 @@ import javax.swing.*;
 import com.toedter.calendar.JDateChooser;
 
 import controlador.Controlador;
+import dominio.Usuario;
+
 import javax.swing.border.TitledBorder;
 
 @SuppressWarnings("serial")
@@ -520,6 +522,7 @@ public class VentanaRegistro extends JDialog {
 		addManejadorBotonEditar(btnRegistrar, nombreUsuario, panelAct);
 
 	}
+
 
 
 }
