@@ -344,7 +344,6 @@ public class Controlador implements IFotosListener{
 	/////////////////
 	
 	public void añadirComentario(int idPublicacion, String texto, String nombreUsuario) {
-		
 		Publicacion p = repoPublicaciones.getPublicacion(idPublicacion);
 		
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);		
@@ -352,6 +351,11 @@ public class Controlador implements IFotosListener{
 		comentario.setUsuario(u);
 		
 		p.addComentario(comentario);
+		
+		List<String> hashtags = extraerHashtags(texto);
+		for(String h : hashtags) {
+			((Foto)p).addHashtag(h);
+		}
 		
 		adaptadorComentario.registrarComentario(comentario);
 		adaptadorPublicacion.modificarPublicacion(p);

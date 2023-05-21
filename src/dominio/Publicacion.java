@@ -83,6 +83,10 @@ public abstract class Publicacion {
 		this.hashtags = hashtags;
 	}
 	
+	public void addHashtag(String h) {
+		this.hashtags.add(h);
+	}
+	
 	public List<Comentario> getComentarios(){
 		return comentarios;
 	}
