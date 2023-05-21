@@ -53,7 +53,6 @@ public class PanelPerfilUsuario extends JPanel {
 	private JTextField textBuscar;
 	private JButton btnBuscar;
 	private JLabel lblFotoPerfil;
-	private JButton btnMenu;
 	private JLabel lblFotoPerfilGrande;
 	private JLabel lblNumPublicaciones;
 	private JLabel lblNumSeguidores;
@@ -79,7 +78,6 @@ public class PanelPerfilUsuario extends JPanel {
 	private String email;
 	private String fotoPerfil;
 	private List<Foto> fotosUsuario;
-	private JScrollPane scrollPane;
 	private int numFotos;
 	private int numAlbumes;
 	private PanelPerfilUsuario panelAct;
@@ -195,24 +193,13 @@ public class PanelPerfilUsuario extends JPanel {
 		}
 		{
 			lblFotoPerfil = new JLabel("");
-			//lblFotoPerfil.setIcon(new ImageIcon(PanelPerfilUsuario.class.getResource("/imagenes/usuario48.png")));
-			//lblFotoPerfil.setIcon(new ImageIcon(fotoPerfil));
 			this.fixedSize(lblFotoPerfil, 60, 60);
 			this.añadirPerfil(lblFotoPerfil, fotoPerfil);
 			GridBagConstraints gbc_lblFotoPerfil = new GridBagConstraints();
 			gbc_lblFotoPerfil.insets = new Insets(0, 0, 0, 5);
 			gbc_lblFotoPerfil.gridx = 12;
 			gbc_lblFotoPerfil.gridy = 1;
-			//this.añadirImagen(lblFotoPerfil, fotoPerfil);
 			panelNorte.add(lblFotoPerfil, gbc_lblFotoPerfil);
-		}
-		{
-			btnMenu = new JButton("MENU");
-			GridBagConstraints gbc_btnMenu = new GridBagConstraints();
-			gbc_btnMenu.insets = new Insets(0, 0, 0, 5);
-			gbc_btnMenu.gridx = 13;
-			gbc_btnMenu.gridy = 1;
-			panelNorte.add(btnMenu, gbc_btnMenu);
 		}
 	}
 	
@@ -555,9 +542,8 @@ public class PanelPerfilUsuario extends JPanel {
 				        if (SwingUtilities.isLeftMouseButton(evt)) {
 				        	VentanaPublicacion va = new VentanaPublicacion(usuarioActual,
 				        			fotosUsuario.get(pos).getRuta(), panelAct);
-				        	//VentanaAlbum va = new VentanaAlbum(albumesUsuario.get(pos));
 				        	va.setLocationRelativeTo(panelAct);
-				        	va.verFoto();
+				        	va.verFoto(fotosUsuario.get(pos));
 				        	va.setVisible(true);
 				        } 
 				        else if (SwingUtilities.isRightMouseButton(evt)&&(usuarioActual.endsWith(usuarioPerfil))) {

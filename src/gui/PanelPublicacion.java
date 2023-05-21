@@ -49,14 +49,7 @@ public class PanelPublicacion extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	//public PanelPublicacion(int id, String r, String fp, String nu) {
 	public PanelPublicacion(Foto foto, int p, JFrame f) {
-		/*this.ruta = r;
-		this.fotoPerfil = fp;
-		this.nombreUsuario = nu;
-		this.idFoto = id;*/
-		//this.idFoto = id;
-		//this.foto = Controlador.getUnicaInstancia().getFoto(id);
 		this.frame = f;
 		this.foto = foto;
 		this.ruta = foto.getRuta();
@@ -111,7 +104,6 @@ public class PanelPublicacion extends JPanel {
 		gbc_btnVerComentarios.gridy = 2;
 		add(btnVerComentarios, gbc_btnVerComentarios);
 		
-		//lblNumMg = new JLabel(Controlador.getUnicaInstancia().getMeGustas(idFoto) + " Me gustas");
 		lblNumMg = new JLabel(foto.getMeGustas() + " Me gustas");
 		GridBagConstraints gbc_lblNumMg = new GridBagConstraints();
 		gbc_lblNumMg.insets = new Insets(0, 0, 5, 0);
@@ -151,7 +143,6 @@ public class PanelPublicacion extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				Controlador.getUnicaInstancia().darMeGusta(idFoto);
 				lblNumMg.setText(Controlador.getUnicaInstancia().getMeGustas(idFoto) + " Me gustas");
-				//btn.setEnabled(false);
 				btn.setIcon(new ImageIcon(PanelPublicacion.class.getResource("/imagenes/relleno.png")));
 			}
 		});
@@ -163,10 +154,6 @@ public class PanelPublicacion extends JPanel {
 				VentanaComentarios vc = new VentanaComentarios(foto);
 				vc.setLocationRelativeTo(null);
 				vc.setVisible(true);
-				/*System.out.println("foto");
-				for(Comentario c : foto.getComentarios()) {
-					System.out.println("coments:" +  c.getTexto());
-				}*/
 			}
 		});
 	}
@@ -210,8 +197,8 @@ public class PanelPublicacion extends JPanel {
 					public void actionPerformed(ActionEvent e) {
 						ventanaTexto.dispose();
 						String comentario = texto.getText();
-						//System.out.println(comentario);
-						Controlador.getUnicaInstancia().añadirComentario(foto.getId(), comentario, nombreUsuario);
+						Controlador.getUnicaInstancia().añadirComentarioSinHashtag(
+								foto.getId(), comentario, nombreUsuario);
 						btnVerComentarios.setText(foto.getComentarios().size() + " Comentarios");
 					}
 				});

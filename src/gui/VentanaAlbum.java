@@ -240,9 +240,8 @@ public class VentanaAlbum extends JFrame {
 			        if (SwingUtilities.isLeftMouseButton(evt)) {
 			        	VentanaPublicacion va = new VentanaPublicacion(album.getUsuario().getNombreUsuario(),
 			        			album.getFotos().get(pos).getRuta(), panelAct);
-			        	//VentanaAlbum va = new VentanaAlbum(albumesUsuario.get(pos));
 			        	va.setLocationRelativeTo(tabla);
-			        	va.verFoto();
+			        	va.verFoto(album.getFotos().get(pos));
 			        	va.setVisible(true);
 			        }
 			        else if (SwingUtilities.isRightMouseButton(evt)&&(pos != 0)) {

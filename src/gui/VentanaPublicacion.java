@@ -6,6 +6,9 @@ import javax.swing.border.EmptyBorder;
 
 import controlador.Controlador;
 import dominio.Album;
+import dominio.Foto;
+import dominio.Publicacion;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -36,18 +39,16 @@ public class VentanaPublicacion extends JFrame {
 	private String ruta;
 	private String usuarioActual;
 	private String comentario = "";
-	//private JPanel ventanaActual;
+	private Publicacion publicacion;
 	
 
 	/**
 	 * Create the frame.
 	 */
-	public VentanaPublicacion(String u, String r, JPanel p) {		
+	public VentanaPublicacion(String u, String r, JPanel p) {	
 		this.ruta = r;
 		this.usuarioActual = u;
-		
-		//this.ventanaActual = p;
-		
+				
 		setBounds(100, 100, 551, 283);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -60,7 +61,7 @@ public class VentanaPublicacion extends JFrame {
 		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
-		lblTitulo = new JLabel("Escribe un comentario (Maximo 200 caracteres)");
+		lblTitulo = new JLabel("Escribe un comentario (Maximo 120 caracteres)");
 		lblTitulo.setFont(new Font("HP Simplified Hans", Font.PLAIN, 14));
 		GridBagConstraints gbc_lblTitulo = new GridBagConstraints();
 		gbc_lblTitulo.insets = new Insets(0, 0, 5, 0);
@@ -83,7 +84,7 @@ public class VentanaPublicacion extends JFrame {
 		textArea.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				if(textArea.getText().length() >= 200)
+				if(textArea.getText().length() >= 120)
 			    {
 			        e.consume();
 			    }
@@ -106,7 +107,6 @@ public class VentanaPublicacion extends JFrame {
 		contentPane.add(panelBotones, gbc_panelBotones);
 		
 		btnAceptar = new JButton("Aceptar");
-		//this.addManejadorBtnCompartir(btnCompartir);
 		btnAceptar.setForeground(Constantes.LILA);
 		btnAceptar.setFont(Constantes.NEGRITA_15);
 		panelBotones.add(btnAceptar);
@@ -116,7 +116,7 @@ public class VentanaPublicacion extends JFrame {
 		btnCancelar.setForeground(Constantes.LILA);
 		btnCancelar.setFont(Constantes.NEGRITA_15);
 		panelBotones.add(btnCancelar);
-	}
+	}	
 	
 	private void addManejadorBtnCancelar(JButton btn) {
 		btn.addActionListener(new ActionListener() {
@@ -134,9 +134,7 @@ public class VentanaPublicacion extends JFrame {
 					if (ventanaActual.getClass() == PanelPerfilUsuario.class) {
 						((PanelPerfilUsuario)ventanaActual).actualizar();
 					}
-						//((PanelPerfilUsuario)ventanaActual).crearPanelPublicaciones();
 					else if (ventanaActual.getClass() == VentanaPrincipal.class) {
-						//((VentanaPrincipal)ventanaActual).crearPanelPublicaciones();
 						((VentanaPrincipal)ventanaActual).mostrarPublicaciones();
 					}
 				}
@@ -168,21 +166,21 @@ public class VentanaPublicacion extends JFrame {
 		});
 	}
 	
-	private void addManejadorBtnOk(JButton btn) {
+	private void addManejadorBtnOk(JButton btn, Foto f) {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//comentario = textArea.getText();
-				//Controlador.getUnicaInstancia().añadirFotoAlbum(idAlbum, ruta, comentario);
+				comentario = textArea.getText();
+				if (! comentario.isEmpty())
+					Controlador.getUnicaInstancia().añadirComentario(f.getId(), comentario, usuarioActual);
 				dispose();
 			}
 		});
 	}
 	
-	public void verFoto() {
+	public void verFoto(Foto f) {
 		btnCancelar.setVisible(false);
 		btnAceptar.setText("OK");
-		lblTitulo.setText("");
-		addManejadorBtnOk(btnAceptar);
+		addManejadorBtnOk(btnAceptar, f);
 	}
 	
 	public boolean compartirFoto(JPanel panel) {

@@ -361,7 +361,18 @@ public class Controlador implements IFotosListener{
 		adaptadorPublicacion.modificarPublicacion(p);
 	}	
 	
-	
+	public void añadirComentarioSinHashtag(int idPublicacion, String texto, String nombreUsuario) {
+		Publicacion p = repoPublicaciones.getPublicacion(idPublicacion);
+		
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);		
+		Comentario comentario = new Comentario(texto, LocalDateTime.now());
+		comentario.setUsuario(u);
+		
+		p.addComentario(comentario);
+		
+		adaptadorComentario.registrarComentario(comentario);
+		adaptadorPublicacion.modificarPublicacion(p);
+	}
 	
 	//////////////////
 	////Seguidores////
