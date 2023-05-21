@@ -185,6 +185,12 @@ public class Controlador implements IFotosListener{
 		adaptadorUsuario.modificarUsuario(u);
 	}
 	
+	public void anularPremium(String nombreUsuario) {
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
+		u.setPremium(false);
+		adaptadorUsuario.modificarUsuario(u);
+	}
+	
 	
 	///////////////////	
 	///Publicaciones///
@@ -489,7 +495,6 @@ public class Controlador implements IFotosListener{
 		Fotos fotos = event.getFotos();
 		for (umu.tds.fotos.Foto foto : fotos.getFoto()) {
 			registrarFoto(usuarioActual.getNombreUsuario(), foto.getPath(), foto.getDescripcion());
-			System.out.println(foto.getPath());
 		}
 	}
 	
@@ -518,10 +523,10 @@ public class Controlador implements IFotosListener{
 		adaptadorComentario = factoria.getComentarioDAO();
 		adaptadorNotificacion = factoria.getNotificacionDAO();
 		// Para vaciar la base de datos
-		//adaptadorPublicacion.borrarTodasPublicaciones();
-		//adaptadorUsuario.borrarTodosUsuario();
-		//adaptadorComentario.borrarTodosComentarios();
-		//adaptadorNotificacion.borrarTodasNotificaciones();
+		/*adaptadorPublicacion.borrarTodasPublicaciones();
+		adaptadorUsuario.borrarTodosUsuario();
+		adaptadorComentario.borrarTodosComentarios();
+		adaptadorNotificacion.borrarTodasNotificaciones();*/
 	}
 	
 	private void inicializarRepositorios() {

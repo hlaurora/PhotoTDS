@@ -46,6 +46,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -287,35 +288,45 @@ public class VentanaPrincipal extends JPanel{
 		popupMenu.add(topMeGusta);
 		this.addManejadorTopMeGusta(topMeGusta);
 		
+		JMenuItem anularPremium = new JMenuItem("Anular Premium");
+		popupMenu.add(anularPremium);
+		this.addManejadorAnularPremium(anularPremium);
+		
 	}
 	
 	private void addListaDescuentos() {		
 		List<String> listaDescuentos = new LinkedList<String>();
-		listaDescuentos.add("Descuento por edad");
+		listaDescuentos.add("Descuento por edad: jóvenes(18-35)");
+		listaDescuentos.add("Descuento por edad: mayores de 65");
 		listaDescuentos.add("Descuento por MeGustas");
 		
 		jListaDescuentos = new JList<String>(listaDescuentos.toArray
 								(new String[listaDescuentos.size()]));
 		jListaDescuentos.setCellRenderer(createListRenderer());
-		jListaDescuentos.setPreferredSize(new Dimension(200, ABORT));
+		jListaDescuentos.setPreferredSize(new Dimension(220, ABORT));
 		jListaDescuentos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-		JScrollPane scrollListaFotos = new JScrollPane(jListaDescuentos);
 
 		JDialog dialog = new JDialog();
 		dialog.setLocationRelativeTo(btnMenu);
 		dialog.setTitle("Descuentos premium");
-		dialog.setSize(200, 200);
-		dialog.getContentPane().add(scrollListaFotos);
+		dialog.setSize(230, 100);
+		dialog.getContentPane().add(jListaDescuentos);
 		dialog.setVisible(true);
-		
 		
 		jListaDescuentos.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				String d;
-				if ((d = jListaDescuentos.getSelectedValue()) != null) {
-					int result = JOptionPane.showConfirmDialog(frmPrincipal, "Va a pagar " + d,
+				int indice = jListaDescuentos.getSelectedIndex();
+				if (indice != -1) {
+					String mensaje = null;
+					if (indice == 0) {
+						mensaje = "Tras aplicar descuento de jóvenes vas a pagar 15€";
+					} else if(indice == 1) {
+						mensaje = "Tras aplicar descuento para mayores de 65 vas a pagar 12€";
+					} else if(indice == 2) {
+						mensaje = "Tras aplicar descuento por me gustas vas a pagar 10 €";
+					}
+					int result = JOptionPane.showConfirmDialog(frmPrincipal, mensaje,
 							"Confirm Dialog", JOptionPane.CANCEL_OPTION);	
 					if (result == JOptionPane.YES_OPTION) {
 						dialog.setVisible(false);
@@ -392,10 +403,6 @@ public class VentanaPrincipal extends JPanel{
 					vap.setVisible(true);
 					vap.setLocationRelativeTo(btnAddFoto);
 					vap.compartirFoto(ventanaPrincipal);
-					/*
-					if (vap.compartirFoto()) {
-					 Controlador.getUnicaInstancia().registrarFoto(usuarioActual, selectedFile.getPath(), "");
-					}*/
 				}				
 			}
 		});
@@ -452,6 +459,20 @@ public class VentanaPrincipal extends JPanel{
 		
 	}
 	
+	private void addManejadorAnularPremium(JMenuItem anularPremium) {
+		anularPremium.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int result = JOptionPane.showConfirmDialog(frmPrincipal, "¿Estás seguro de anular tu suscripción?",
+						"Confirm Dialog", JOptionPane.CANCEL_OPTION);	
+				if (result == JOptionPane.YES_OPTION) {
+					Controlador.getUnicaInstancia().anularPremium(usuarioActual);
+				} 				
+			}
+		});
+		
+	}
+	
 	private void addManejadorPulsador(Luz l) {
 		l.addEncendidoListener( new IEncendidoListener() {
 			public void enteradoCambioEncendido(EventObject arg0) {
@@ -488,7 +509,13 @@ public class VentanaPrincipal extends JPanel{
 	public void crearPdf(Usuario u) {
 		FileOutputStream archivo;
 		try {
-			archivo = new FileOutputStream("C:\\Users\\auror\\OneDrive\\Escritorio\\Seguidores.pdf");
+			String rutaBase = System.getProperty("user.dir");
+
+		    // Construir la ruta completa hacia el archivo
+		    String rutaCompleta = rutaBase + File.separator + "src" + 
+		    			File.separator + "premium" + File.separator + "Seguidores.pdf";
+	        archivo = new FileOutputStream(rutaCompleta);
+
 			Document document = new Document();
 	        PdfWriter.getInstance(document, archivo);
             document.open();
@@ -520,7 +547,12 @@ public class VentanaPrincipal extends JPanel{
 	public void crearExcel(Usuario u) {
 		try   
 		{  
-		String filename = "C:\\\\Users\\\\auror\\\\OneDrive\\\\Escritorio\\Seguidores.xls";  
+		//String rutaCompleta = "C:\\\\Users\\\\auror\\\\OneDrive\\\\Escritorio\\Seguidores.xls";  
+		String rutaBase = System.getProperty("user.dir");
+	    String rutaCompleta = rutaBase + File.separator + "src" + 
+	    			File.separator + "premium" + File.separator + "Seguidores.xls";
+		
+		
 		HSSFWorkbook workbook = new HSSFWorkbook();  
 		HSSFSheet sheet = workbook.createSheet("Seguidores de " +  usuarioActual);   
 		HSSFRow rowhead = sheet.createRow((short)0);  
@@ -536,7 +568,7 @@ public class VentanaPrincipal extends JPanel{
 			row.createCell(2).setCellValue(s.getTextoPresentacion());  
 		}
 		
-		FileOutputStream fileOut = new FileOutputStream(filename);  
+		FileOutputStream fileOut = new FileOutputStream(rutaCompleta);  
 		workbook.write(fileOut);  
 		fileOut.close();  
 		workbook.close();  

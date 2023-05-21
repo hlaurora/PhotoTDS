@@ -181,25 +181,24 @@ public class PanelPerfilUsuario extends JPanel {
 			panelNorte.add(btnBuscar, gbc_btnBuscar);
 		}
 		{
-			btnVolver = new JButton("< ");
-			this.addManejadorBotonVolver(btnVolver);
-			btnVolver.setForeground(Constantes.LILA);
-			btnVolver.setFont(Constantes.NEGRITA_20);
-			GridBagConstraints gbc_btnVolver = new GridBagConstraints();
-			gbc_btnVolver.insets = new Insets(0, 0, 5, 5);
-			gbc_btnVolver.gridx = 11;
-			gbc_btnVolver.gridy = 1;
-			panelNorte.add(btnVolver, gbc_btnVolver);
-		}
-		{
 			lblFotoPerfil = new JLabel("");
 			this.fixedSize(lblFotoPerfil, 60, 60);
 			this.añadirPerfil(lblFotoPerfil, fotoPerfil);
 			GridBagConstraints gbc_lblFotoPerfil = new GridBagConstraints();
 			gbc_lblFotoPerfil.insets = new Insets(0, 0, 0, 5);
-			gbc_lblFotoPerfil.gridx = 12;
+			gbc_lblFotoPerfil.gridx = 11;
 			gbc_lblFotoPerfil.gridy = 1;
 			panelNorte.add(lblFotoPerfil, gbc_lblFotoPerfil);
+		}
+		{
+			btnVolver = new JButton("");
+			this.addManejadorBotonVolver(btnVolver);
+			btnVolver.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/flecha-izquierda.png")));
+			GridBagConstraints gbc_btnVolver = new GridBagConstraints();
+			gbc_btnVolver.insets = new Insets(0, 0, 5, 5);
+			gbc_btnVolver.gridx = 12;
+			gbc_btnVolver.gridy = 1;
+			panelNorte.add(btnVolver, gbc_btnVolver);
 		}
 	}
 	

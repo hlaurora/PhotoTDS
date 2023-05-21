@@ -197,8 +197,7 @@ public class PanelPublicacion extends JPanel {
 					public void actionPerformed(ActionEvent e) {
 						ventanaTexto.dispose();
 						String comentario = texto.getText();
-						Controlador.getUnicaInstancia().añadirComentarioSinHashtag(
-								foto.getId(), comentario, nombreUsuario);
+						Controlador.getUnicaInstancia().añadirComentarioSinHashtag(foto.getId(), comentario, nombreUsuario);
 						btnVerComentarios.setText(foto.getComentarios().size() + " Comentarios");
 					}
 				});
@@ -217,19 +216,16 @@ public class PanelPublicacion extends JPanel {
 	}
 	
 	private void verFoto(String ruta) {
-		System.out.println(ruta);
 		JDialog dialog = new JDialog(frame, false);
-		
-		dialog.setTitle("  ");
+		dialog.setSize(460, 400);
 		JLabel label = new JLabel();
-		this.fixedSize(label, 80, 80);
+		this.fixedSize(label, 450, 390);
 		//Cargar la imagen
 		label.setIcon(escalarImagen(label, ruta));
-		//Establecer la imagen en el label
-		//label.setIcon(icon);
 		//Agregar el label a la ventana de diálogo
 		dialog.getContentPane().add(label);
 		//Mostrar la ventana de diálogo
+		dialog.setLocationRelativeTo(null);
 		dialog.setVisible(true);
 	}
 	
