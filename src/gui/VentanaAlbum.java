@@ -35,6 +35,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.FlowLayout;
 import javax.swing.SwingUtilities;
+import javax.swing.Box;
 
 public class VentanaAlbum extends JFrame {
 
@@ -62,6 +63,7 @@ public class VentanaAlbum extends JFrame {
 	
 	private JMenuItem eliminar;
 	private JPopupMenu popupEliminar;
+	private Component rigidArea;
 
 	/**
 	 * Create the frame.
@@ -92,6 +94,13 @@ public class VentanaAlbum extends JFrame {
 		contentPane.add(panelNorte, BorderLayout.NORTH);
 		panelNorte.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		{
+			lblFotoPerfil = new JLabel("");
+			this.fixedSize(lblFotoPerfil, 60, 60);
+			lblFotoPerfil.setIcon(escalarImagen(lblFotoPerfil, 
+					album.getUsuario().getFotoPerfil().getPath()));
+			panelNorte.add(lblFotoPerfil);
+		}
+		{
 			lblTitulo = new JLabel(album.getTitulo());
 			lblTitulo.setForeground(Constantes.LILA);
 			lblTitulo.setFont(Constantes.NEGRITA_15);
@@ -99,15 +108,12 @@ public class VentanaAlbum extends JFrame {
 			panelNorte.add(lblTitulo);
 		}
 		{
-			lblNumMg = new JLabel(album.getMeGustas() + " Me gustas");
-			panelNorte.add(lblNumMg);
+			rigidArea = Box.createRigidArea(new Dimension(30, 20));
+			panelNorte.add(rigidArea);
 		}
 		{
-			lblFotoPerfil = new JLabel("");
-			this.fixedSize(lblFotoPerfil, 60, 60);
-			lblFotoPerfil.setIcon(escalarImagen(lblFotoPerfil, 
-					album.getUsuario().getFotoPerfil().getPath()));
-			panelNorte.add(lblFotoPerfil);
+			lblNumMg = new JLabel(album.getMeGustas() + " Me gustas");
+			panelNorte.add(lblNumMg);
 		}
 	}
 	
@@ -241,7 +247,7 @@ public class VentanaAlbum extends JFrame {
 			        	VentanaPublicacion va = new VentanaPublicacion(album.getUsuario().getNombreUsuario(),
 			        			album.getFotos().get(pos).getRuta(), panelAct);
 			        	va.setLocationRelativeTo(tabla);
-			        	va.verFoto(album.getFotos().get(pos));
+			        	va.verFotoAlbum(album.getFotos().get(pos), album.getTitulo());
 			        	va.setVisible(true);
 			        }
 			        else if (SwingUtilities.isRightMouseButton(evt)&&(pos != 0)) {
@@ -266,11 +272,6 @@ public class VentanaAlbum extends JFrame {
 				if (Controlador.getUnicaInstancia().eliminarFotoAlbum(album.getId(), f)) {
 					mostrarFotos();
 				}
-			//	if(Controlador.getUnicaInstancia().eliminarPublicacion(p)) {
-					//mostrarFotos();
-					//mostrarAlbumes();
-					//lblNumPublicaciones.setText(Controlador.getUnicaInstancia().getNumPublicaciones(usuario)+ " Publicaciones");
-			//	}
 			}
 		 });
 	}
@@ -304,7 +305,6 @@ public class VentanaAlbum extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Controlador.getUnicaInstancia().darMeGusta(album.getId());
 				lblNumMg.setText(album.getMeGustas() + " Me gustas");
-				//lblNumMg.setText(Controlador.getUnicaInstancia().getMeGustas(album.getId()) + " Me gustas");
 			}
 		});
 	}
@@ -329,7 +329,6 @@ public class VentanaAlbum extends JFrame {
 	public void fixedSize(JComponent o, int x, int y) {
 		Dimension d = new Dimension(x, y);
 		o.setMinimumSize(d);
-		//o.setMaximumSize(new Dimension(100000, 100));
 		o.setMaximumSize(d);
 		o.setPreferredSize(d);
 		o.setSize(d);

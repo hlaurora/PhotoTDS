@@ -113,7 +113,7 @@ public class PanelPerfilUsuario extends JPanel {
 	private void crearPanelNorte() {
 		panelNorte = new JPanel();
 		panelNorte.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		this.fixedSize(panelNorte, ventanaPrincipal.frmPrincipal.getWidth(), 60);
+		this.fixedSize(panelNorte, ventanaPrincipal.getFrm().getWidth(), 60);
 		add(panelNorte);
 		GridBagLayout gbl_panelNorte = new GridBagLayout();
 		gbl_panelNorte.columnWidths = new int[]{10, 0, 0, 30, 0, 0, 0, 0, 0, 0, 20, 0, 0, 10, 0};
@@ -204,7 +204,7 @@ public class PanelPerfilUsuario extends JPanel {
 	
 	private void crearPanelPerfil() {
 		panelPerfil = new JPanel();
-		this.fixedSize(panelPerfil, ventanaPrincipal.frmPrincipal.getWidth(), 150);
+		this.fixedSize(panelPerfil, ventanaPrincipal.getFrm().getWidth(), 150);
 		panelPerfil.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		add(panelPerfil);
 		GridBagLayout gbl_panelPerfil = new GridBagLayout();
@@ -352,7 +352,7 @@ public class PanelPerfilUsuario extends JPanel {
 	
 	public void crearPanelPublicaciones() {
 		panelPublicaciones = new JPanel();
-		this.fixedSize(panelPublicaciones, ventanaPrincipal.frmPrincipal.getWidth(), 250);
+		this.fixedSize(panelPublicaciones, ventanaPrincipal.getFrm().getWidth(), 250);
 		panelPublicaciones.setMaximumSize(new Dimension(10000, 100000));
 		panelPublicaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		add(panelPublicaciones);
@@ -487,7 +487,7 @@ public class PanelPerfilUsuario extends JPanel {
 				VentanaPrincipal vp = new VentanaPrincipal(f);
 				vp.setVisible(true);
 				f.setVisible(true);
-				ventanaPrincipal.frmPrincipal.dispose();
+				ventanaPrincipal.cerrar();
 			}
 		});
 	}
@@ -496,7 +496,7 @@ public class PanelPerfilUsuario extends JPanel {
 	private void addManejadorBotonEditarPerfil() {
 		btnEditarPerfil.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				VentanaRegistro ventanaRegistro = new VentanaRegistro(ventanaPrincipal.frmPrincipal);
+				VentanaRegistro ventanaRegistro = new VentanaRegistro(ventanaPrincipal.getFrm());
 				ventanaRegistro.editarPerfil(usuarioPerfil, panelAct);
 				ventanaRegistro.mostrarVentana();
 			}
@@ -578,6 +578,13 @@ public class PanelPerfilUsuario extends JPanel {
 	private void addManejadorTablaAlbum(JTable tabla) {
 		int numFilas = tabla.getRowCount();
 		List<Album> albumesUsuario = Controlador.getUnicaInstancia().getAlbumes(usuarioPerfil);
+		
+		MouseListener[] listeners = tabla.getMouseListeners();
+        //Eliminar todos los MouseListener de la tabla
+        for(MouseListener listener : listeners){
+        	tabla.removeMouseListener(listener);
+        }
+		
 		tabla.addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mouseClicked(MouseEvent evt) {
@@ -656,10 +663,6 @@ public class PanelPerfilUsuario extends JPanel {
 	private void mostrarAlbumes() {
 		
 		List<Album> albumesUsuario = Controlador.getUnicaInstancia().getAlbumes(usuarioPerfil);
-		
-		for(Album a : albumesUsuario) {
-			System.out.println(a.getHashtags());
-		}
 		
 		//Limpiamos la tabla
 		for (int i = 0; i < tableAlbumes.getRowCount(); i++) {

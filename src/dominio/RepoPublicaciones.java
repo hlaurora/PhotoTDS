@@ -44,7 +44,6 @@ public class RepoPublicaciones {
 			publicaciones.add(a);
 		}
 		return publicaciones;
-		//return new LinkedList<Publicacion>(fotosPorId.values());
 	}
 	
 	// Devuelve una foto	
@@ -78,14 +77,6 @@ public class RepoPublicaciones {
 			albumesPorId.remove(publicacion.getId(), publicacion);
 		return true;
 	}
-	
-	/*
-	public void removeTodosUsuarios() {
-		//usuarios.remove(usuario.getId());
-		for (Usuario u : usuariosPorNombreUs.values()) {
-			usuariosPorNombreUs.remove(u);
-		}
-	}*/
 	
 	private void cargarRepositorio() throws DAOException{
 		List<Publicacion> publicacionesBD = adaptadorPublicacion.recuperarTodasPublicaciones();

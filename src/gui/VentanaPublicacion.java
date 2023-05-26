@@ -40,6 +40,7 @@ public class VentanaPublicacion extends JFrame {
 	private String usuarioActual;
 	private String comentario = "";
 	private Publicacion publicacion;
+	private JLabel lblNombreAlbum;
 	
 
 	/**
@@ -55,18 +56,29 @@ public class VentanaPublicacion extends JFrame {
 
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0};
-		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
-		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
+		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
+		
+		lblNombreAlbum = new JLabel("");
+		lblNombreAlbum.setForeground(Constantes.LILA);
+		lblNombreAlbum.setFont(Constantes.NEGRITA_15);
+		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.gridwidth = 11;
+		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel.gridx = 0;
+		gbc_lblNewLabel.gridy = 0;
+		contentPane.add(lblNombreAlbum, gbc_lblNewLabel);
+		lblNombreAlbum.setVisible(false);
 		
 		lblTitulo = new JLabel("Escribe un comentario (Maximo 120 caracteres)");
 		lblTitulo.setFont(new Font("HP Simplified Hans", Font.PLAIN, 14));
 		GridBagConstraints gbc_lblTitulo = new GridBagConstraints();
 		gbc_lblTitulo.insets = new Insets(0, 0, 5, 0);
-		gbc_lblTitulo.gridx = 9;
-		gbc_lblTitulo.gridy = 0;
+		gbc_lblTitulo.gridx = 10;
+		gbc_lblTitulo.gridy = 1;
 		contentPane.add(lblTitulo, gbc_lblTitulo);
 		
 		lblFoto = new JLabel();
@@ -76,7 +88,7 @@ public class VentanaPublicacion extends JFrame {
 		gbc_lblFoto.gridwidth = 8;
 		gbc_lblFoto.insets = new Insets(0, 0, 5, 5);
 		gbc_lblFoto.gridx = 0;
-		gbc_lblFoto.gridy = 0;
+		gbc_lblFoto.gridy = 1;
 		contentPane.add(lblFoto, gbc_lblFoto);
 		
 		textArea = new JTextArea();
@@ -94,16 +106,16 @@ public class VentanaPublicacion extends JFrame {
 		gbc_textArea.gridheight = 2;
 		gbc_textArea.insets = new Insets(0, 0, 5, 0);
 		gbc_textArea.fill = GridBagConstraints.BOTH;
-		gbc_textArea.gridx = 9;
-		gbc_textArea.gridy = 1;
+		gbc_textArea.gridx = 10;
+		gbc_textArea.gridy = 2;
 		contentPane.add(textArea, gbc_textArea);
 		
 		panelBotones = new JPanel();
 		GridBagConstraints gbc_panelBotones = new GridBagConstraints();
 		gbc_panelBotones.anchor = GridBagConstraints.EAST;
 		gbc_panelBotones.fill = GridBagConstraints.VERTICAL;
-		gbc_panelBotones.gridx = 9;
-		gbc_panelBotones.gridy = 3;
+		gbc_panelBotones.gridx = 10;
+		gbc_panelBotones.gridy = 4;
 		contentPane.add(panelBotones, gbc_panelBotones);
 		
 		btnAceptar = new JButton("Aceptar");
@@ -178,6 +190,14 @@ public class VentanaPublicacion extends JFrame {
 	}
 	
 	public void verFoto(Foto f) {
+		btnCancelar.setVisible(false);
+		btnAceptar.setText("OK");
+		addManejadorBtnOk(btnAceptar, f);
+	}
+	
+	public void verFotoAlbum(Foto f, String titulo) {
+		lblNombreAlbum.setText(titulo);
+		lblNombreAlbum.setVisible(true);
 		btnCancelar.setVisible(false);
 		btnAceptar.setText("OK");
 		addManejadorBtnOk(btnAceptar, f);

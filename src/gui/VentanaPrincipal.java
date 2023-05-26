@@ -2,20 +2,15 @@ package gui;
 
 import java.awt.Font;
 import java.awt.Image;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
 import controlador.Controlador;
-import dominio.Comentario;
 import dominio.Foto;
-import dominio.Notificacion;
 import dominio.Usuario;
 
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import java.awt.Color;
-
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
@@ -46,7 +41,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -64,7 +58,7 @@ import pulsador.Luz;
 //public class VentanaPrincipal extends JFrame{
 public class VentanaPrincipal extends JPanel{
 
-	public FrmPrincipal frmPrincipal;
+	private FrmPrincipal frmPrincipal;
 	
 	private JLabel lblPhotoTDS;
 	private JPanel panelNorte;
@@ -94,12 +88,6 @@ public class VentanaPrincipal extends JPanel{
 	private Luz luz;
 	private JPanel panelNoti;
 	private JButton btnNoti;
-	
-
-	/*public void mostrarVentana() {
-		setLocationRelativeTo(null);
-		setVisible(true);
-	}*/
 
 	/**
 	 * Create the application.
@@ -115,13 +103,7 @@ public class VentanaPrincipal extends JPanel{
 	 */
 	private void initialize() {		
 				
-		//panelPerfilUsuario = new PanelPerfilUsuario(this, usuarioActual);
 		this.fotoPerfil = Controlador.getUnicaInstancia().getFotoPerfil(usuarioActual);
-		
-		//frmPrincipal = new JFrame();
-		//frmPrincipal.setBounds(100, 100, 548, 570);
-		//frmPrincipal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		crearPanelNorte();
 		crearPanelPublicaciones();
 		ventanaPrincipal = this;
@@ -444,7 +426,7 @@ public class VentanaPrincipal extends JPanel{
 		generarPdf.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				 crearPdf(Controlador.getUnicaInstancia().getUsuario(usuarioActual));
+				 Controlador.getUnicaInstancia().generarPdf(usuarioActual);
 			}
 		});
 	}
@@ -453,7 +435,7 @@ public class VentanaPrincipal extends JPanel{
 		generarExcel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				crearExcel(Controlador.getUnicaInstancia().getUsuario(usuarioActual));
+				 Controlador.getUnicaInstancia().generarExcel(usuarioActual);
 			}
 		});
 		
@@ -506,79 +488,9 @@ public class VentanaPrincipal extends JPanel{
 	}
 	
 	
-	public void crearPdf(Usuario u) {
-		FileOutputStream archivo;
-		try {
-			String rutaBase = System.getProperty("user.dir");
-
-		    // Construir la ruta completa hacia el archivo
-		    String rutaCompleta = rutaBase + File.separator + "src" + 
-		    			File.separator + "premium" + File.separator + "Seguidores.pdf";
-	        archivo = new FileOutputStream(rutaCompleta);
-
-			Document document = new Document();
-	        PdfWriter.getInstance(document, archivo);
-            document.open();
-             
-            PdfPTable table = new PdfPTable(3);          
-            table.addCell("Nombre");
-            table.addCell("Email");
-            table.addCell("Presentacion");
-            
-            for (Usuario w : u.getSeguidores()) {
-            	table.addCell(w.getNombre());
-            	table.addCell(w.getEmail());
-            	table.addCell(w.getTextoPresentacion());
-            }
-                          
-            // Agregamos la tabla al documento            
-            document.add(table);
-            document.close();
-	     	
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (DocumentException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-	}
 	
-	public void crearExcel(Usuario u) {
-		try   
-		{  
-		//String rutaCompleta = "C:\\\\Users\\\\auror\\\\OneDrive\\\\Escritorio\\Seguidores.xls";  
-		String rutaBase = System.getProperty("user.dir");
-	    String rutaCompleta = rutaBase + File.separator + "src" + 
-	    			File.separator + "premium" + File.separator + "Seguidores.xls";
-		
-		
-		HSSFWorkbook workbook = new HSSFWorkbook();  
-		HSSFSheet sheet = workbook.createSheet("Seguidores de " +  usuarioActual);   
-		HSSFRow rowhead = sheet.createRow((short)0);  
-		rowhead.createCell(0).setCellValue("Nombre");  
-		rowhead.createCell(1).setCellValue("Email");  
-		rowhead.createCell(2).setCellValue("Presentacion");  
-		
-		for (int i = 1; i < u.getSeguidores().size()+1; i++) {
-			Usuario s = u.getSeguidores().get(i-1);
-			HSSFRow row = sheet.createRow((short)i);  
-			row.createCell(0).setCellValue(s.getNombre());  
-			row.createCell(1).setCellValue(s.getEmail());  
-			row.createCell(2).setCellValue(s.getTextoPresentacion());  
-		}
-		
-		FileOutputStream fileOut = new FileOutputStream(rutaCompleta);  
-		workbook.write(fileOut);  
-		fileOut.close();  
-		workbook.close();  
-		System.out.println("Excel creado.");  
-		}   
-		catch (Exception e)   
-		{  
-		e.printStackTrace();  
-		}  
-	}
+	
+	
 	
 	public void crearListaTopMg() {
 		List<Foto> listaTopMg = Controlador.getUnicaInstancia().getTopMeGusta(usuarioActual);
@@ -586,8 +498,6 @@ public class VentanaPrincipal extends JPanel{
 		JList<Foto> jlistaTopMg = new JList<Foto>(listaTopMg.toArray
 								(new Foto[listaTopMg.size()]));
 		jlistaTopMg.setCellRenderer(createListRendererFotos());
-		//jlistaTopMg.setPreferredSize(new Dimension(400, 500));
-		//jlistaTopMg.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		JScrollPane scrollListaFotos = new JScrollPane(jlistaTopMg);
 		scrollListaFotos.setPreferredSize(frmPrincipal.getSize());
@@ -595,7 +505,7 @@ public class VentanaPrincipal extends JPanel{
 		JDialog dialog = new JDialog();
 		dialog.setLocationRelativeTo(panelNorte);
 		dialog.setTitle("Fotos con más Me Gustas");
-		dialog.setSize(400, 500);
+		dialog.setSize(350, 500);
 		dialog.getContentPane().add(scrollListaFotos);
 		dialog.setVisible(true);
 	}
@@ -611,6 +521,7 @@ public class VentanaPrincipal extends JPanel{
 							list, value, index, isSelected, cellHasFocus);
 				if (c instanceof JLabel) {
 					JLabel label = (JLabel) c;
+					label.setSize(80, 50);
 					Foto foto = (Foto) value;
 					label.setIcon(escalarImagen(foto.getRuta()));
 					label.setText(String.format("%s ", foto.getMeGustas() + " Me gustas"));
@@ -619,6 +530,14 @@ public class VentanaPrincipal extends JPanel{
 			}
 		};
 		};
+	}
+	
+	public void cerrar() {
+		this.frmPrincipal.dispose();
+	}
+	
+	public FrmPrincipal getFrm() {
+		return this.frmPrincipal;
 	}
 	
 	private static Icon escalarImagen(String ruta) {

@@ -25,6 +25,7 @@ import dominio.Publicacion;
 import dominio.RepoPublicaciones;
 import dominio.RepoUsuarios;
 import dominio.Usuario;
+import premium.Servicios;
 import umu.tds.fotos.*;
 
 public class Controlador implements IFotosListener{
@@ -53,10 +54,12 @@ public class Controlador implements IFotosListener{
 		return unicaInstancia;
 	}
 	
+	//Establece el usuario que ha iniciado sesión en la aplicación
 	public void setUsuario(Usuario u) {
 		usuarioActual = u;
 	}
 	
+	//
 	public Usuario getUsuarioActual() {
 		return this.usuarioActual;
 	}
@@ -225,8 +228,13 @@ public class Controlador implements IFotosListener{
 		
 		if (p.getClass().equals(Foto.class))
 			u.removeFoto((Foto)p);
-		else
+		else {
+			for(Foto f: ((Album)p).getFotos() ) {
+				repoPublicaciones.removePublicacion(f);
+				adaptadorPublicacion.borrarPublicacion(f);
+			}
 			u.removeAlbum((Album)p);
+		}
 		
 		if (repoPublicaciones.removePublicacion(p)) {
 			adaptadorPublicacion.borrarPublicacion(p);
@@ -267,7 +275,7 @@ public class Controlador implements IFotosListener{
 	
 	public Album registrarAlbum(String titulo, String comentario, String nombreUsuario) {
 		Usuario u = repoUsuarios.getUsuario(nombreUsuario);
-		List<String> hashtags = new LinkedList<String>();
+		List<String> hashtags = this.extraerHashtags(comentario);
 		Album album = new Album(titulo, LocalDateTime.now(), comentario, hashtags);
 		album.setUsuario(u);
 		u.addAlbum(album);
@@ -285,14 +293,9 @@ public class Controlador implements IFotosListener{
 			List<String> hashtags = new LinkedList<String>();
 			Publicacion p = new Foto("titulo", LocalDateTime.now(), comentario, hashtags, ruta);
 			p.setUsuario(u);
-			//u.addFoto((Foto)p);
 			RepoPublicaciones.getUnicaInstancia().addPublicacion((Foto)p);
 			adaptadorPublicacion.registrarPublicacion((Foto)p);
-
-			a.addFoto((Foto)p);
-			
-			//falta modificar el usuario en repo???
-			
+			a.addFoto((Foto)p);			
 			
 			adaptadorPublicacion.modificarPublicacion(a);
 			adaptadorUsuario.modificarUsuario(u);
@@ -510,7 +513,23 @@ public class Controlador implements IFotosListener{
 		adaptadorUsuario.modificarUsuario(u);
 	}
 	
+	///////////////
+	///Servicios///
+	///////////////
+	
+	public void generarPdf(String nombreUsuario) {
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
+		Servicios.crearPdf(u);
+	}
 
+	public void generarExcel(String nombreUsuario) {
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
+		Servicios.crearExcel(u);
+	}
+	
+	
+	
+	
 	private void inicializarAdaptadores() {
 		FactoriaDAO factoria = null;
 		try {
