@@ -245,7 +245,7 @@ public class VentanaAlbum extends JFrame {
 		        	int pos = (col+((row%numFilas)*4));
 			        if (SwingUtilities.isLeftMouseButton(evt)) {
 			        	VentanaPublicacion va = new VentanaPublicacion(album.getUsuario().getNombreUsuario(),
-			        			album.getFotos().get(pos).getRuta(), panelAct);
+			        			album.getFotos().get(pos).getRuta());
 			        	va.setLocationRelativeTo(tabla);
 			        	va.verFotoAlbum(album.getFotos().get(pos), album.getTitulo());
 			        	va.setVisible(true);
@@ -290,7 +290,7 @@ public class VentanaAlbum extends JFrame {
 					if (seleccion != JFileChooser.CANCEL_OPTION) {
 						selectedFile = fileChooser.getSelectedFile();
 						VentanaPublicacion vap = new VentanaPublicacion(album.getUsuario().getNombreUsuario(),
-								selectedFile.getPath(), contentPane);
+								selectedFile.getPath());
 						vap.setVisible(true);	
 						vap.setLocationRelativeTo(btnAddFoto);
 						vap.añadirFotoAlbum(album.getId(), selectedFile.getPath(), ventanaAlbum);

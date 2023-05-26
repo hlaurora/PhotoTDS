@@ -5,6 +5,7 @@ import java.awt.CardLayout;
 import java.awt.Dimension;
 
 import javax.swing.JComponent;
+import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JButton;
 import java.awt.Font;
@@ -25,6 +26,10 @@ import java.awt.Image;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDropEvent;
 import java.io.File;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -424,16 +429,9 @@ public class PanelPerfilUsuario extends JPanel {
 	private void addManejadorBotonAddFoto(JButton btn) {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				fileChooser = new JFileChooser();
-				int seleccion = fileChooser.showOpenDialog(btn);
-				if (seleccion != JFileChooser.CANCEL_OPTION) {
-					selectedFile = fileChooser.getSelectedFile();
-					VentanaPublicacion vap = new VentanaPublicacion(usuarioActual,
-							selectedFile.getPath(), panelAct);
-					vap.setVisible(true);	
-					vap.setLocationRelativeTo(btnAddFoto);
-					vap.compartirFoto(panelAct);
-				}
+				VentanaAddPublicacion v = new VentanaAddPublicacion(usuarioActual, panelAct);
+				v.setLocationRelativeTo(btn);
+				v.setVisible(true);
 			}
 		});
 	}
@@ -449,7 +447,7 @@ public class PanelPerfilUsuario extends JPanel {
 					if (seleccion != JFileChooser.CANCEL_OPTION) {
 						selectedFile = fileChooser.getSelectedFile();
 						VentanaPublicacion vap = new VentanaPublicacion(usuarioActual,
-								selectedFile.getPath(), panelAct);
+								selectedFile.getPath());
 						vap.setVisible(true);	
 						vap.setLocationRelativeTo(btnAddAlbum);
 						vap.crearAlbum(nombreAlbum, panelAct);
@@ -540,7 +538,7 @@ public class PanelPerfilUsuario extends JPanel {
 		        	if (pos <= fotosUsuario.size()-1) {
 				        if (SwingUtilities.isLeftMouseButton(evt)) {
 				        	VentanaPublicacion va = new VentanaPublicacion(usuarioActual,
-				        			fotosUsuario.get(pos).getRuta(), panelAct);
+				        			fotosUsuario.get(pos).getRuta());
 				        	va.setLocationRelativeTo(panelAct);
 				        	va.verFoto(fotosUsuario.get(pos));
 				        	va.setVisible(true);

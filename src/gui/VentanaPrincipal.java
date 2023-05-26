@@ -376,19 +376,13 @@ public class VentanaPrincipal extends JPanel{
 	private void addManejadorBotonAddFoto(JButton btn) {
 		btnAddFoto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				fileChooser = new JFileChooser();
-				int seleccion = fileChooser.showOpenDialog(btnAddFoto);
-				if (seleccion != JFileChooser.CANCEL_OPTION) {
-					selectedFile = fileChooser.getSelectedFile();
-					VentanaPublicacion vap = new VentanaPublicacion(usuarioActual,
-							selectedFile.getPath(), ventanaPrincipal);
-					vap.setVisible(true);
-					vap.setLocationRelativeTo(btnAddFoto);
-					vap.compartirFoto(ventanaPrincipal);
-				}				
+				VentanaAddPublicacion v = new VentanaAddPublicacion(usuarioActual, ventanaPrincipal);
+				v.setLocationRelativeTo(btn);
+				v.setVisible(true);				
 			}
 		});
 	}
+	
 	
 	//Botón buscar (usuarios cuyo nombre/nombreUsuario/email coincide con el buscado)
 	private void addManejadorBotonBuscar() {

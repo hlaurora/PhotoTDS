@@ -21,6 +21,8 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JTextArea;
 import javax.swing.JButton;
+
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -46,11 +48,11 @@ public class VentanaPublicacion extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public VentanaPublicacion(String u, String r, JPanel p) {	
+	public VentanaPublicacion(String u, String r) {	
 		this.ruta = r;
 		this.usuarioActual = u;
 				
-		setBounds(100, 100, 551, 283);
+		setBounds(100, 100, 600, 283);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -74,7 +76,8 @@ public class VentanaPublicacion extends JFrame {
 		lblNombreAlbum.setVisible(false);
 		
 		lblTitulo = new JLabel("Escribe un comentario (Maximo 120 caracteres)");
-		lblTitulo.setFont(new Font("HP Simplified Hans", Font.PLAIN, 14));
+		lblTitulo.setFont(Constantes.NORMAL_15);
+		lblTitulo.setForeground(Constantes.LILA);
 		GridBagConstraints gbc_lblTitulo = new GridBagConstraints();
 		gbc_lblTitulo.insets = new Insets(0, 0, 5, 0);
 		gbc_lblTitulo.gridx = 10;
