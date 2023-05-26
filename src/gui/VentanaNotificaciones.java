@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -71,6 +72,7 @@ public class VentanaNotificaciones extends JFrame {
 		}
 		
 		else {
+			setSize(new Dimension(300, 80));
 			lblNorte.setText("No hay nuevas notificaciones");
 			panelNorte.add(lblNorte);
 		}
@@ -81,7 +83,7 @@ public class VentanaNotificaciones extends JFrame {
 		panelNotis = new JPanel();
 		contentPane.add(panelNotis);
 		
-		notificaciones = usuario.getNotificaciones();
+		notificaciones = new ArrayList<>(usuario.getNotificaciones());
 		listaNotificaciones = new JList<Notificacion>(notificaciones.toArray
 										(new Notificacion[notificaciones.size()]));
 		listaNotificaciones.setCellRenderer(createListRenderer());
@@ -142,8 +144,9 @@ public class VentanaNotificaciones extends JFrame {
 		btnAceptar.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				//contentPane.removeAll();
 				dispose();
-	//			Controlador.getUnicaInstancia().vaciarNotificaciones(usuario.getNombreUsuario());
+				Controlador.getUnicaInstancia().vaciarNotificaciones(usuario.getNombreUsuario());
 			}
 		});
 	}

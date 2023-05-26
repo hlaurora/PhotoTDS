@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.EventObject;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -213,7 +214,6 @@ public class Controlador implements IFotosListener{
 		n.setPublicacion(p);
 		adaptadorNotificacion.registrarNotificacion(n);
 		for(Usuario s : u.getSeguidores()) {
-			System.out.println("seguido por "+s.getNombreUsuario());
 			s.addNotificacion(n);
 			adaptadorUsuario.modificarUsuario(s);
 		}
@@ -450,19 +450,12 @@ public class Controlador implements IFotosListener{
 	//////////////
 	
 	public List<String> buscarHashtags(String hashtag) {
-		//HashMap<String, Foto> lista = new HashMap<String, Foto>();
 		hashtag = hashtag.substring(1);
 		List <String> lista = new LinkedList<String>();	
 		for(Publicacion p : repoPublicaciones.getPublicaciones()) {
 			for(String h : p.getHashtags()) {
-				//System.out.println(h);
 				if(h.contains(hashtag)) {
 					lista.add(h.substring(1) + " -> " + p.getUsuario().getSeguidores().size());
-					/*if(p.getClass().equals(Album.class)) {
-						lista.put(hashtag, ((Album)p).getFotos().get(0));
-					}
-					else
-						lista.put(h, (Foto)p);*/
 				}
 			}
 		}
@@ -507,11 +500,10 @@ public class Controlador implements IFotosListener{
 	
 	public void vaciarNotificaciones(String nombreUsuario) {
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
-		for(Notificacion n : u.getNotificaciones()) {
-			u.removeNotificacion(n);
-		}
+		u.getNotificaciones().clear();
 		adaptadorUsuario.modificarUsuario(u);
 	}
+	
 	
 	///////////////
 	///Servicios///
