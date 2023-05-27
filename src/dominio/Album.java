@@ -26,4 +26,10 @@ public class Album extends Publicacion {
 		this.fotos.remove(f);
 	}
 
+	public void addMeGustas() {
+		super.addMeGustas();
+		for(Foto f : fotos) {
+			f.addMeGustas();
+		}
+	}
 }

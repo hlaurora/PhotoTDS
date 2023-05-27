@@ -3,6 +3,7 @@ package dominio;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class Publicacion {
 	
@@ -17,7 +18,6 @@ public abstract class Publicacion {
 	
 	public Publicacion(String titulo, LocalDateTime fecha,
 				String descripcion, List<String> hashtags) {
-		this.id = 0;
 		this.titulo = titulo;
 		this.usuario = null;
 		this.fecha = fecha;
@@ -93,6 +93,25 @@ public abstract class Publicacion {
 	
 	public void addComentario(Comentario c) {
 		this.comentarios.add(c);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+	    if (this == obj) {
+	        return true;
+	    }
+	    if (obj == null || getClass() != obj.getClass()) {
+	        return false;
+	    }
+	    Publicacion other = (Publicacion) obj;
+	    return id == other.id &&
+	            Objects.equals(titulo, other.titulo) &&
+	            Objects.equals(usuario, other.usuario) &&
+	            Objects.equals(fecha, other.fecha) &&
+	            Objects.equals(descripcion, other.descripcion) &&
+	            meGustas == other.meGustas &&
+	            Objects.equals(hashtags, other.hashtags) &&
+	            Objects.equals(comentarios, other.comentarios);
 	}
 
 }

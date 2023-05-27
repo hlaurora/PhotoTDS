@@ -4,6 +4,7 @@ import java.io.File;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public class Usuario {
 
@@ -26,7 +27,6 @@ public class Usuario {
 	public Usuario(String email, String nombre, String apellidos, String nombreUsuario,
 			String password, LocalDate fechaNacimiento)
 	{
-		this.id = 0;
 		this.email = email;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
@@ -163,7 +163,7 @@ public class Usuario {
 		albumes.remove(album);
 	}
 	
-	public Boolean getPremium() {
+	public Boolean isPremium() {
 		return isPremium;
 	}
 	
@@ -181,5 +181,19 @@ public class Usuario {
 	
 	public void removeNotificacion(Notificacion notificacion) {
 		notificaciones.remove(notificacion);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+	    if (this == obj) {
+	        return true;
+	    }
+	    if (obj == null || getClass() != obj.getClass()) {
+	        return false;
+	    }
+	    Usuario other = (Usuario) obj;
+	    return id == other.id && Objects.equals(nombre, other.nombre) && 
+	    		Objects.equals(nombreUsuario, other.nombreUsuario) &&
+	    		Objects.equals(fechaNacimiento, other.fechaNacimiento);
 	}
 }

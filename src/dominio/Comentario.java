@@ -10,7 +10,6 @@ public class Comentario {
 	private LocalDateTime fecha;
 	
 	public Comentario (String texto, LocalDateTime fecha) {
-		this.id = 0;
 		this.texto = texto;
 		this.usuario = null;
 		this.fecha = fecha;

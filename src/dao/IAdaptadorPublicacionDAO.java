@@ -12,6 +12,4 @@ public interface IAdaptadorPublicacionDAO {
 	public void modificarPublicacion(Publicacion publicacion);
 	public Publicacion recuperarPublicacion(int id);
 	public List<Publicacion> recuperarTodasPublicaciones();
-	//public void cambiarFotoPerfil(Usuario usuario, File fotoPerfil);
-
 }

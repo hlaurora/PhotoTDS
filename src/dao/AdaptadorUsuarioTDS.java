@@ -22,56 +22,59 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 
 	private static ServicioPersistencia servPersistencia;
 	private static AdaptadorUsuarioTDS unicaInstancia = null;
-	
+
 	public static AdaptadorUsuarioTDS getUnicaInstancia() {
 		if (unicaInstancia == null)
 			return new AdaptadorUsuarioTDS();
 		else
 			return unicaInstancia;
 	}
-	
+
 	private AdaptadorUsuarioTDS() {
 		servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
 	}
-	
+
+	/**
+	 * Registra un usuario
+	 */
 	public void registrarUsuario(Usuario usuario) {
 		Entidad eUsuario = null;
-		
+
 		//Si ya está registrado no lo registramos
 		eUsuario = servPersistencia.recuperarEntidad(usuario.getId());
 		if (eUsuario != null) return;
-		
+
 		//Registramos primero las fotos
 		AdaptadorPublicacionTDS adaptadorPublicacion = AdaptadorPublicacionTDS.getUnicaInstancia();
 		for (Foto foto : usuario.getFotos()) {
 			adaptadorPublicacion.registrarPublicacion(foto);
 		}
-		
+
 		//Registramos los albumes
 		for (Album album : usuario.getAlbumes()) {
 			adaptadorPublicacion.registrarPublicacion(album);
 		}
-		
+
 		//Registramos los seguidores
 		for (Usuario s : usuario.getSeguidores()) {
 			this.registrarUsuario(s);
 		}
-		
+
 		//Registramos los seguidos
 		for (Usuario s : usuario.getSeguidos()) {
 			this.registrarUsuario(s);
 		}
-		
+
 		//Registramos las notificaciones
 		AdaptadorNotificacionTDS adaptadorNotificacion = AdaptadorNotificacionTDS.getUnicaInstancia();
 		for (Notificacion n : usuario.getNotificaciones()) {
 			adaptadorNotificacion.registrarNotificacion(n);
 		}
-		
+
 		//Crear entidad Usuario
 		eUsuario = new Entidad();
 		eUsuario.setNombre("usuario");
-		
+
 		Propiedad email = new Propiedad("email", usuario.getEmail());
 		Propiedad nombre = new Propiedad("nombre", usuario.getNombre());
 		Propiedad apellidos = new Propiedad("apellidos", usuario.getApellidos());		
@@ -80,7 +83,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		Propiedad fechaNaci = new Propiedad("fechaNacimiento", usuario.getFechaNacimiento().toString());
 		Propiedad fotoPerfil = new Propiedad("fotoPerfil", usuario.getFotoPerfil().toString());
 		Propiedad textoPresentacion = new Propiedad("textoPresentacion", usuario.getTextoPresentacion());
-		Propiedad premium = new Propiedad("premium", usuario.getPremium().toString());
+		Propiedad premium = new Propiedad("premium", usuario.isPremium().toString());
 		List<Publicacion> fotosUsuario = new LinkedList<Publicacion>();
 		for (Foto f : usuario.getFotos()) {
 			fotosUsuario.add(f);
@@ -99,33 +102,42 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		}
 		Propiedad notificaciones = new Propiedad("notificaciones", 
 				obtenerIdNotificaciones(notificacionesUsuario));
-		
-		
+
+
 		eUsuario.setPropiedades(new ArrayList<Propiedad>(
 				Arrays.asList(email, nombre, apellidos, nombreUsuario, password, premium, 
 						fechaNaci, fotoPerfil, textoPresentacion, fotos, seguidores, 
 						seguidos, albumes, notificaciones)));
-		
+
 		//registrar la entidad usuario
 		eUsuario = servPersistencia.registrarEntidad(eUsuario);
 		//asignar identificador único(el que genera el servicio de persistencia)
 		usuario.setId(eUsuario.getId());		
 	}
-	
+
+	/**
+	 * Borra un usuario
+	 */
 	public void borrarUsuario(Usuario usuario) {
 		Entidad eUsuario = servPersistencia.recuperarEntidad(usuario.getId());	
 		servPersistencia.borrarEntidad(eUsuario);
 	}
-	
+
+	/**
+	 * Borra todos los usuarios
+	 */
 	public void borrarTodosUsuario() {
 		ArrayList<Entidad> eUsuarios = servPersistencia.recuperarEntidades("usuario");
 		for (Entidad eu : eUsuarios) 
 			servPersistencia.borrarEntidad(eu);
 	}
-	
+
+	/**
+	 * Modifica un usuario
+	 */
 	public void modificarUsuario(Usuario usuario) {
 		Entidad eUsuario = servPersistencia.recuperarEntidad(usuario.getId());
-		
+
 		for (Propiedad p: eUsuario.getPropiedades()) {
 			if (p.getNombre().equals("id")) {
 				p.setValor(String.valueOf(usuario.getId()));
@@ -146,7 +158,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 			} else if(p.getNombre().equals("textoPresentacion")) {
 				p.setValor(usuario.getTextoPresentacion());
 			} else if(p.getNombre().equals("premium")) {
-				p.setValor(usuario.getPremium().toString());
+				p.setValor(usuario.isPremium().toString());
 			} else if(p.getNombre().equals("fotos")) {
 				List<Publicacion> publicaciones = new LinkedList<Publicacion>();
 				for (Foto f : usuario.getFotos()) {
@@ -173,13 +185,16 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 			servPersistencia.modificarPropiedad(p);
 		}
 	}
-	
+
+	/**
+	 * Recupera un usuario
+	 */
 	public Usuario recuperarUsuario(int id) {
-		
+
 		//Si la entidad está en el pool la devuelve directamente
 		if(PoolDAO.getUnicaInstancia().contiene(id))
 			return (Usuario) PoolDAO.getUnicaInstancia().getObjeto(id);
-		
+
 		//Si no, la recupera de la bd
 		Entidad eUsuario;
 		String email;
@@ -198,7 +213,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		List<Notificacion> notificaciones = new LinkedList<Notificacion>();
 
 		eUsuario = servPersistencia.recuperarEntidad(id);
-		
+
 		//Recuperar propiedades
 		email = servPersistencia.recuperarPropiedadEntidad(eUsuario, "email");
 		nombre = servPersistencia.recuperarPropiedadEntidad(eUsuario, "nombre");
@@ -214,7 +229,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		usuario.setFotoPerfil(fotoPerfil);
 		usuario.setTextoPresentacion(textoPresentacion);
 		usuario.setId(id);
-		
+
 		//añadirlo al pool
 		PoolDAO.getUnicaInstancia().addObjeto(id, usuario);
 
@@ -222,43 +237,48 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		for (Publicacion f : fotos) {
 			usuario.addFoto((Foto)f);
 		}
-		
+
 		albumes = obtenerPublicacionesDesdeId(servPersistencia.recuperarPropiedadEntidad(eUsuario, "albumes"));
 		for (Publicacion a : albumes) {
 			usuario.addAlbum((Album)a);
 		}
-		
+
 		seguidores = obtenerSeguidoresDesdeId(servPersistencia.recuperarPropiedadEntidad(eUsuario, "seguidores"));
 		for (Usuario s : seguidores) {
 			usuario.addSeguidor(s);
 		}
-		
+
 		seguidos = obtenerSeguidoresDesdeId(servPersistencia.recuperarPropiedadEntidad(eUsuario, "seguidos"));
 		for (Usuario s : seguidos) {
 			usuario.addSeguido(s);
 		}
-		
+
 		notificaciones = obtenerNotificacionsDesdeId(servPersistencia.recuperarPropiedadEntidad(
 				eUsuario, "notificaciones"));
 		for (Notificacion n : notificaciones) {
 			usuario.addNotificacion(n);
 		}
-		
+
 		return usuario;
 	}
-	
+
+	/**
+	 * Recupera todos los usuarios
+	 */
 	public List<Usuario> recuperarTodosUsuarios(){
 		List<Entidad> eUsuarios = servPersistencia.recuperarEntidades("usuario");
 		List<Usuario> usuarios = new LinkedList<Usuario>();
-		
+
 		for (Entidad eUsuario : eUsuarios) {
 			usuarios.add(recuperarUsuario(eUsuario.getId()));
 		}
 		return usuarios;
 	}
-	
-	
-	//Obtiene el id de la lista de fotos o de albumes pasada como parámetro
+
+
+	/**
+	 * Obtiene el id de la lista de fotos o de albumes pasada como parámetro
+	 */
 	private String obtenerIdPublicaciones(List<Publicacion> listaPublicaciones) {
 		String aux = "";
 		for(Publicacion p : listaPublicaciones) {
@@ -266,7 +286,10 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		}
 		return aux.trim();
 	}
-	
+
+	/**
+	 * Obtiene una lista de publicaciones desde los id
+	 */
 	private List<Publicacion> obtenerPublicacionesDesdeId(String ids){
 		Publicacion p;
 		List<Publicacion> listaPublicaciones = new LinkedList<Publicacion>();
@@ -278,7 +301,10 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		}
 		return listaPublicaciones;
 	}
-	
+
+	/**
+	 * Obtiene una cadena con la lista de seguidores del usuario
+	 */
 	private String obtenerIdSeguidores(List<Usuario> listaSeguidores) {
 		String aux = "";
 		for(Usuario s : listaSeguidores) {
@@ -286,7 +312,10 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		}
 		return aux.trim();
 	}
-	
+
+	/**
+	 * Obtiene la lista de Usuarios seguidores desde la cadena seguidores
+	 */
 	private List<Usuario> obtenerSeguidoresDesdeId(String seguidores){
 		Usuario s;
 		List<Usuario> listaSeguidores = new LinkedList<Usuario>();
@@ -297,7 +326,10 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		}
 		return listaSeguidores;
 	}
-	
+
+	/**
+	 * Obtiene una cadena con los id de las notificaciones de la lista
+	 */
 	private String obtenerIdNotificaciones(List<Notificacion> listaNotificaciones) {
 		String aux = "";
 		for(Notificacion n : listaNotificaciones) {
@@ -305,7 +337,10 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO{
 		}
 		return aux.trim();
 	}
-	
+
+	/**
+	 * Obtiene una lista de notificaciones desde la cadena
+	 */
 	private List<Notificacion> obtenerNotificacionsDesdeId(String notificaciones){
 		Notificacion n;
 		List<Notificacion> listaNotificaciones = new LinkedList<Notificacion>();

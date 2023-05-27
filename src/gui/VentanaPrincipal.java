@@ -7,8 +7,6 @@ import javax.swing.JList;
 
 import controlador.Controlador;
 import dominio.Foto;
-import dominio.Usuario;
-
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import javax.swing.BoxLayout;
@@ -26,15 +24,6 @@ import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
-
 import javax.swing.JScrollPane;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -44,8 +33,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.util.EventObject;
 import java.util.LinkedList;
 import java.util.List;
@@ -73,8 +60,6 @@ public class VentanaPrincipal extends JPanel{
 	private Component rigidArea_1;
 	private JPopupMenu popupMenu;
 	private JButton btnMenu;
-	private JFileChooser fileChooser;
-	private File selectedFile;
 	private JList<String> jListaDescuentos;
 	
 	private String usuarioActual;

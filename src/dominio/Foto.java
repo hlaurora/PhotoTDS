@@ -2,6 +2,7 @@ package dominio;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 public class Foto extends Publicacion {
 	
@@ -21,5 +22,19 @@ public class Foto extends Publicacion {
 		this.ruta = ruta;
 	}
 	
-
+	@Override
+	public boolean equals(Object obj) {
+	    if (this == obj) {
+	        return true;
+	    }
+	    if (obj == null || getClass() != obj.getClass()) {
+	        return false;
+	    }
+	    if (!super.equals(obj)) {
+	        return false;
+	    }
+	    Foto other = (Foto) obj;
+	    // Comparar atributos específicos de Foto
+	    return Objects.equals(ruta, other.ruta);
+	}
 }

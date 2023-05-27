@@ -11,5 +11,4 @@ public interface IAdaptadorUsuarioDAO {
 	public void modificarUsuario(Usuario usuario);
 	public Usuario recuperarUsuario(int id);
 	public List<Usuario> recuperarTodosUsuarios();
-	//public void cambiarFotoPerfil(Usuario usuario, File fotoPerfil);
 }

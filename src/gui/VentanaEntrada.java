@@ -55,7 +55,6 @@ public class VentanaEntrada {
 			UIManager.setLookAndFeel("com.jtattoo.plaf.mint.MintLookAndFeel");
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		frmEntrada = new JFrame();
@@ -184,16 +183,9 @@ public class VentanaEntrada {
 					Usuario u = Controlador.getUnicaInstancia().getUsuario(textUsuario.getText());
 					Controlador.getUnicaInstancia().setUsuario(u);
 					VentanaPrincipal vPrincipal = new VentanaPrincipal(frm);
-					//VentanaPrincipal window = new VentanaPrincipal(textUsuario.getText());
-					//Prueba p = new Prueba(textUsuario.getText());
-					//p.frmPrincipal.setVisible(true);
-					//window.frmPrincipal.setVisible(true);
 					vPrincipal.setVisible(true);
-					//frm.setContentPane(window);
 					
 					frm.setVisible(true);
-					
-					//VENTANA PRINCIPAL
 					frmEntrada.dispose();
 				} else 
 					JOptionPane.showMessageDialog(frmEntrada, "Nombre de usuario o contraseña no válido",
