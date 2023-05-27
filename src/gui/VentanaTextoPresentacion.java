@@ -5,8 +5,6 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import java.awt.Color;
-
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import java.awt.GridBagLayout;
@@ -37,7 +35,7 @@ public class VentanaTextoPresentacion extends JDialog {
 	private String textoPresentacion = "";
 
 	/**
-	 * Create the application.
+	 * Crear la ventana
 	 */
 	public VentanaTextoPresentacion(JFrame owner) {
 		super(owner, "Texto Presentación", true);
@@ -46,9 +44,6 @@ public class VentanaTextoPresentacion extends JDialog {
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
 		try {
 			UIManager.setLookAndFeel("com.jtattoo.plaf.mint.MintLookAndFeel");
@@ -58,7 +53,6 @@ public class VentanaTextoPresentacion extends JDialog {
 		}
 		frmPresentacion = new JFrame();
 		frmPresentacion.setBounds(100, 100, 530, 315);
-		//frmPresentacion.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		panel = new JPanel();
 		frmPresentacion.getContentPane().add(panel, BorderLayout.CENTER);
@@ -136,7 +130,6 @@ public class VentanaTextoPresentacion extends JDialog {
 	}
 	
 	public String getTexto() {
-		//System.out.println(textoPresentacion);
 		return textoPresentacion;
 	}
 

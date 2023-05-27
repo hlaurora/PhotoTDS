@@ -43,14 +43,14 @@ public class VentanaAlbum extends JFrame {
 	private int numFotos;
 	private VentanaAlbum ventanaAlbum;
 	private JPanel contentPane;
-	
+
 	private JPanel panelNorte;
 	private JButton btnAddFoto;
 	private JLabel lblTitulo;
 	private JScrollPane scrollPanelFotos;
 	private JTable tablaFotos;
 	private DefaultTableModel tmFotos;
-	
+
 	private JPanel panelSur;
 	private JButton btnCerrar;
 	private JFileChooser fileChooser;
@@ -60,25 +60,22 @@ public class VentanaAlbum extends JFrame {
 	private JLabel lblNumMg;
 	private JLabel lblFotoPerfil;
 	private JButton btnMeGusta;
-	
+
 	private JMenuItem eliminar;
 	private JPopupMenu popupEliminar;
 	private Component rigidArea;
 
-	/**
-	 * Create the frame.
-	 */
 	public VentanaAlbum(Album a) {
-		
+
 		setBounds(100, 100, 504, 349);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
-		
+
 		this.album = a;
-		
+
 		this.crearPanelNorte();
 		this.crearPanelFotos();	
 		this.crearPanelSur();
@@ -88,7 +85,7 @@ public class VentanaAlbum extends JFrame {
 		ventanaAlbum = this;
 	}
 
-	
+
 	public void crearPanelNorte() {
 		panelNorte = new JPanel();
 		contentPane.add(panelNorte, BorderLayout.NORTH);
@@ -116,7 +113,7 @@ public class VentanaAlbum extends JFrame {
 			panelNorte.add(lblNumMg);
 		}
 	}
-	
+
 	public void crearPanelFotos() {
 		JPanel panelFotos = new JPanel();
 		contentPane.add(panelFotos, BorderLayout.CENTER);
@@ -135,25 +132,25 @@ public class VentanaAlbum extends JFrame {
 				for (int i = 0; i < 4; i++) {
 					tablaFotos.getColumnModel().getColumn(i).setPreferredWidth(120);
 				}
-				
+
 				this.mostrarFotos();
-			
+
 				scrollPanelFotos = new JScrollPane(tablaFotos);
 				this.fixedSize(scrollPanelFotos, 450, 180);
 				panelFotos.add(scrollPanelFotos);
 			}
 		}
-		
-		
+
+
 	}
-	
+
 	private void crearPanelSur() {
 		panelSur = new JPanel();
 		contentPane.add(panelSur, BorderLayout.SOUTH);
 		{
 			btnMeGusta = new JButton("");
 			this.addManejadorBotonMeGusta(btnMeGusta);
-			btnMeGusta.setIcon(new ImageIcon(PanelPublicacion.class.getResource("/imagenes/icons8-me-gusta-16.png")));
+			btnMeGusta.setIcon(new ImageIcon(PanelPublicacion.class.getResource("/imagenes/corazon.png")));
 			panelSur.add(btnMeGusta);
 		}
 		{
@@ -173,25 +170,26 @@ public class VentanaAlbum extends JFrame {
 			panelSur.add(btnCerrar);
 		}
 	}
-	
+
+	//PopupMenu para eliminar una foto
 	public void crearMenuEliminar() {
 		popupEliminar = new JPopupMenu();
 		eliminar = new JMenuItem("Eliminar");
 		popupEliminar.add(eliminar);
-		
+
 	}
-	
+
 	public void mostrarFotos() {
-		
+
 		List <Foto> listaFotos = album.getFotos();
 		numFotos = album.getFotos().size();
-		
+
 		//Limpiamos la tabla
 		for (int i = 0; i < tablaFotos.getRowCount(); i++) {
 			tmFotos.removeRow(i);
 			i-=1;
 		}
-				
+
 		String ruta;
 		//Calculamos el número de filas
 		int numFilas = 0;
@@ -199,11 +197,11 @@ public class VentanaAlbum extends JFrame {
 			numFilas = 1;
 		}
 		else if (numFotos > 3) numFilas = (numFotos/4) + 1;
-		
+
 		//Rellenamos la tabla
 		int j;
 		int f = 0;
-		
+
 		if (numFilas == 1) {
 			tmFotos.addRow(new Object[] {null, null, null, null});
 			for (j = 0; j < numFotos; j++) {
@@ -211,7 +209,7 @@ public class VentanaAlbum extends JFrame {
 				tmFotos.setValueAt(new JLabel(imagenCelda(ruta)), 0, j);
 			}
 		}
-		
+
 		else {
 			int i = 0;
 			while (i < numFilas-1) {
@@ -233,49 +231,50 @@ public class VentanaAlbum extends JFrame {
 		}	
 		this.addManejadorTablaFotos(tablaFotos);
 	}
-	
+
 	private void addManejadorTablaFotos(JTable tabla) {
 		int numFilas = tabla.getRowCount();
 		tabla.addMouseListener(new MouseAdapter() {
-		    @Override
-		    public void mouseClicked(MouseEvent evt) {
-		        int row = tabla.rowAtPoint(evt.getPoint());
-		        int col = tabla.columnAtPoint(evt.getPoint());
-		        if (row >= 0 && col >= 0) {
-		        	int pos = (col+((row%numFilas)*4));
-			        if (SwingUtilities.isLeftMouseButton(evt)) {
-			        	VentanaPublicacion va = new VentanaPublicacion(album.getUsuario().getNombreUsuario(),
-			        			album.getFotos().get(pos).getRuta());
-			        	va.setLocationRelativeTo(tabla);
-			        	va.verFotoAlbum(album.getFotos().get(pos), album.getTitulo());
-			        	va.setVisible(true);
-			        }
-			        else if (SwingUtilities.isRightMouseButton(evt)&&(pos != 0)) {
-			        	popupEliminar.show(tabla, evt.getX(), evt.getY());
-			    	    addManejadorEliminar(eliminar, album.getFotos().get(pos)); 
-			    	}
-		       }
-		    }
+			@Override
+			public void mouseClicked(MouseEvent evt) {
+				int row = tabla.rowAtPoint(evt.getPoint());
+				int col = tabla.columnAtPoint(evt.getPoint());
+				if (row >= 0 && col >= 0) {
+					int pos = (col+((row%numFilas)*4));
+					if (SwingUtilities.isLeftMouseButton(evt)) {
+						VentanaPublicacion va = new VentanaPublicacion(album.getUsuario().getNombreUsuario(),
+								album.getFotos().get(pos).getRuta());
+						va.setLocationRelativeTo(tabla);
+						va.verFotoAlbum(album.getFotos().get(pos), album.getTitulo());
+						va.setVisible(true);
+					}
+					else if (SwingUtilities.isRightMouseButton(evt)&&(pos != 0)) {
+						popupEliminar.show(tabla, evt.getX(), evt.getY());
+						addManejadorEliminar(eliminar, album.getFotos().get(pos)); 
+					}
+				}
+			}
 		});
 	}
-	
+
 	private void addManejadorEliminar(JMenuItem item, Foto f) {
 		ActionListener[] listeners = eliminar.getActionListeners();
-        //Eliminar todos los ActionListeners del botón
-        for(ActionListener listener : listeners){
-        	eliminar.removeActionListener(listener);
-        }
-        
-    	eliminar.addActionListener(new ActionListener() {
+		//Eliminar todos los ActionListeners del botón
+		for(ActionListener listener : listeners){
+			eliminar.removeActionListener(listener);
+		}
+
+		eliminar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (Controlador.getUnicaInstancia().eliminarFotoAlbum(album.getId(), f)) {
 					mostrarFotos();
 				}
 			}
-		 });
+		});
 	}
-	
+
+	//Manejador del botón para añadir una foto
 	private void addManejadorBtnAddFoto(JButton btn) {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {	
@@ -283,7 +282,7 @@ public class VentanaAlbum extends JFrame {
 					JOptionPane.showMessageDialog(panelAct, "Un album no puede contener mas de 16 fotos.\n",
 							"VentanaAlbum", JOptionPane.ERROR_MESSAGE);
 				}
-				
+
 				else {
 					fileChooser = new JFileChooser();
 					int seleccion = fileChooser.showOpenDialog(btn);
@@ -299,7 +298,8 @@ public class VentanaAlbum extends JFrame {
 			}
 		});
 	}
-	
+
+	//Añadir un me gusta
 	private void addManejadorBotonMeGusta(JButton btn) {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -308,7 +308,8 @@ public class VentanaAlbum extends JFrame {
 			}
 		});
 	}
-	
+
+	//Cerrar la ventana
 	private void addManejadorBtnCerrar(JButton btn) {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -316,7 +317,8 @@ public class VentanaAlbum extends JFrame {
 			}
 		});
 	}
-	
+
+	//Ajusta una imagen al tamaño de las celdas de la tabla
 	private Icon imagenCelda(String ruta) {
 		ImageIcon image = new ImageIcon(ruta);
 		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
@@ -325,7 +327,8 @@ public class VentanaAlbum extends JFrame {
 				Image.SCALE_DEFAULT));
 		return icono;
 	}
-	
+
+	//Fija el tamaño de un componente
 	public void fixedSize(JComponent o, int x, int y) {
 		Dimension d = new Dimension(x, y);
 		o.setMinimumSize(d);
@@ -333,7 +336,8 @@ public class VentanaAlbum extends JFrame {
 		o.setPreferredSize(d);
 		o.setSize(d);
 	}
-	
+
+	//Escala una imagen al tamaño de una etiqueta
 	private Icon escalarImagen(JLabel lbl, String ruta) {
 		ImageIcon image = new ImageIcon(ruta);
 		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
@@ -342,5 +346,5 @@ public class VentanaAlbum extends JFrame {
 				Image.SCALE_DEFAULT));
 		return icono;
 	}
-	
+
 }

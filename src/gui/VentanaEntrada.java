@@ -34,7 +34,7 @@ public class VentanaEntrada {
 	private JPasswordField passwordField;
 	private JTextField textUsuario;
 	private JButton btnIniciarSesion;
-	
+
 	/**
 	 * Create the application.
 	 */
@@ -62,17 +62,17 @@ public class VentanaEntrada {
 		frmEntrada.setLocationRelativeTo(null);
 		frmEntrada.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmEntrada.getContentPane().setLayout(new BoxLayout(frmEntrada.getContentPane(), BoxLayout.Y_AXIS));
-	
+
 		crearPanelTitulo();
 		crearPanelInicioSesion();
 		crearPanelSur();
-		
+
 	}
-	
+
 	private void crearPanelTitulo() {
 		JPanel panelTitulo = new JPanel();
 		frmEntrada.getContentPane().add(panelTitulo);
-		
+
 		JLabel lblPhotoTDS = new JLabel("PhotoTDS");
 		lblPhotoTDS.setForeground(new Color(134, 46, 150));
 		lblPhotoTDS.setIcon(new ImageIcon(VentanaEntrada.class.getResource("/imagenes/logo.png")));
@@ -90,7 +90,7 @@ public class VentanaEntrada {
 		gbl_panelInicioSesion.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, Double.MIN_VALUE};
 		gbl_panelInicioSesion.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panelInicioSesion.setLayout(gbl_panelInicioSesion);
-		
+
 		JLabel lblUsuario = new JLabel("Nombre de usuario o email");
 		lblUsuario.setFont(Constantes.NORMAL_15);
 		GridBagConstraints gbc_lblUsuario = new GridBagConstraints();
@@ -99,7 +99,7 @@ public class VentanaEntrada {
 		gbc_lblUsuario.gridx = 1;
 		gbc_lblUsuario.gridy = 1;
 		panelInicioSesion.add(lblUsuario, gbc_lblUsuario);
-		
+
 		textUsuario = new JTextField();
 		GridBagConstraints gbc_textUsuario = new GridBagConstraints();
 		gbc_textUsuario.gridwidth = 4;
@@ -109,7 +109,7 @@ public class VentanaEntrada {
 		gbc_textUsuario.gridy = 1;
 		panelInicioSesion.add(textUsuario, gbc_textUsuario);
 		textUsuario.setColumns(10);
-		
+
 		JLabel lblContraseña = new JLabel("Contraseña");
 		lblContraseña.setFont(Constantes.NORMAL_15);
 		GridBagConstraints gbc_lblContraseña = new GridBagConstraints();
@@ -118,7 +118,7 @@ public class VentanaEntrada {
 		gbc_lblContraseña.gridx = 1;
 		gbc_lblContraseña.gridy = 3;
 		panelInicioSesion.add(lblContraseña, gbc_lblContraseña);
-		
+
 		passwordField = new JPasswordField();
 		GridBagConstraints gbc_passwordField = new GridBagConstraints();
 		gbc_passwordField.gridwidth = 4;
@@ -127,7 +127,7 @@ public class VentanaEntrada {
 		gbc_passwordField.gridx = 2;
 		gbc_passwordField.gridy = 3;
 		panelInicioSesion.add(passwordField, gbc_passwordField);
-		
+
 		btnIniciarSesion = new JButton("Iniciar Sesión");
 		btnIniciarSesion.setForeground(Constantes.LILA);
 		btnIniciarSesion.setFont(Constantes.NEGRITA_15);
@@ -140,23 +140,23 @@ public class VentanaEntrada {
 		panelInicioSesion.add(btnIniciarSesion, gbc_btnIniciarSesion);
 		addManejadorBotonIniciarSesion(btnIniciarSesion);
 	}
-	
+
 	private void crearPanelSur() {
 		JPanel panelSur = new JPanel();
 		frmEntrada.getContentPane().add(panelSur);
 		panelSur.setLayout(new BoxLayout(panelSur, BoxLayout.Y_AXIS));
-		
+
 		Component rigidArea = Box.createRigidArea(new Dimension(20, 20));
 		panelSur.add(rigidArea);
-		
+
 		JLabel lblCrearCuenta = new JLabel("¿No tienes una cuenta?");
 		lblCrearCuenta.setFont(Constantes.NORMAL_15);
 		lblCrearCuenta.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panelSur.add(lblCrearCuenta);
-		
+
 		Component rigidArea_2 = Box.createRigidArea(new Dimension(20, 20));
 		panelSur.add(rigidArea_2);
-		
+
 		JButton btnCrearCuenta = new JButton("Crear una cuenta");				
 		btnCrearCuenta.setMaximumSize(new Dimension(350, 40));
 		btnCrearCuenta.setPreferredSize(new Dimension(200, 23));
@@ -165,13 +165,13 @@ public class VentanaEntrada {
 		btnCrearCuenta.setFont(Constantes.NEGRITA_15);
 		btnCrearCuenta.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panelSur.add(btnCrearCuenta);
-		
+
 		addManejadorBotonCrearCuenta(btnCrearCuenta);
-		
+
 		Component rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
 		panelSur.add(rigidArea_1);	
 	}
-	
+
 	private void addManejadorBotonIniciarSesion(JButton btnIniciarSesion) {
 		btnIniciarSesion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -184,7 +184,7 @@ public class VentanaEntrada {
 					Controlador.getUnicaInstancia().setUsuario(u);
 					VentanaPrincipal vPrincipal = new VentanaPrincipal(frm);
 					vPrincipal.setVisible(true);
-					
+
 					frm.setVisible(true);
 					frmEntrada.dispose();
 				} else 
@@ -193,7 +193,7 @@ public class VentanaEntrada {
 			}
 		});
 	}
-	
+
 	private void addManejadorBotonCrearCuenta(JButton btnCrearCuenta) {
 		btnCrearCuenta.addActionListener(new ActionListener() {
 			@Override
@@ -204,7 +204,7 @@ public class VentanaEntrada {
 			}
 		});
 	}
-	
-	
-	
+
+
+
 }

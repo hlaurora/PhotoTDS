@@ -25,7 +25,6 @@ import dominio.Usuario;
 public class VentanaBusqueda extends JFrame {
 
 	private JPanel contentPane;
-	//private JPanel panelUsuarios;
 	private JPanel panelLista;
 	private List<Usuario> usuarios;
 	private JList<Usuario> listaUsuarios;
@@ -34,9 +33,6 @@ public class VentanaBusqueda extends JFrame {
 	private String perfil="";
 	private VentanaPrincipal ventanaPrincipal;
 
-	/**
-	 * Create the frame.
-	 */
 	public VentanaBusqueda(VentanaPrincipal vp, String cadena) {
 		this.ventanaPrincipal = vp;
 		setBounds(100, 100, 210, 240);
@@ -44,32 +40,35 @@ public class VentanaBusqueda extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
-		
+
 		panelLista = new JPanel();
 		contentPane.add(panelLista);
-		
+
 		if (cadena.startsWith("#")) {
 			this.addListaHashtags(cadena);
 		}
-		
+
 		else
 			this.addListaUsuarios(cadena);
-		
+
 	}
 
+	/**
+	 * Crea una JList con los usuarios que coinciden con la búsqueda 
+	 */
 	private void addListaUsuarios(String nombre) {
-		
+
 		usuarios = Controlador.getUnicaInstancia().buscarUsuarios(nombre);
-		
+
 		listaUsuarios = new JList<Usuario>(usuarios.toArray
-								(new Usuario[usuarios.size()]));
+				(new Usuario[usuarios.size()]));
 		listaUsuarios.setCellRenderer(createListRenderer());
 		listaUsuarios.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		scrollPane = new JScrollPane(listaUsuarios);
 		this.fixedSize(scrollPane, 180, 180);
 		panelLista.add(scrollPane);
-		
+
 		listaUsuarios.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -82,76 +81,73 @@ public class VentanaBusqueda extends JFrame {
 			}
 		});
 	}
-	
+
+	/**
+	 * Crea un JList con los hashtags que coinciden con la búsqueda
+	 */
 	private void addListaHashtags(String hashtag) {
 		List<String> listaHashtags = Controlador.getUnicaInstancia().buscarHashtags(hashtag);
-				
+
 		listaFotos = new JList<String>(listaHashtags.toArray
-								(new String[listaHashtags.size()]));
+				(new String[listaHashtags.size()]));
 		listaFotos.setCellRenderer(createListRenderer2());
 		listaFotos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		scrollPane = new JScrollPane(listaFotos);
 		this.fixedSize(scrollPane, 180, 180);
-		panelLista.add(scrollPane);
-				
-		/*listaFotos.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				Usuario u;
-				if ((u = listaFotos.getSelectedValue()) != null) {
-					perfil = u.getNombreUsuario();
-					ventanaPrincipal.abirPerfil(perfil);
-					dispose();
-				}
-			}
-		});*/
-
-		
+		panelLista.add(scrollPane);		
 	}
 
+	/**
+	 * CellRenderer para la lista de usuarios
+	 */
 	private static ListCellRenderer<? super Usuario> createListRenderer() {
 		return new DefaultListCellRenderer() {
 			@Override
 			public Component getListCellRendererComponent(JList<?> list, Object value,
 					int index, boolean isSelected,
 					boolean cellHasFocus) {
-			{
-				Component c = super.getListCellRendererComponent(
+				{
+					Component c = super.getListCellRendererComponent(
 							list, value, index, isSelected, cellHasFocus);
-				if (c instanceof JLabel) {
-					JLabel label = (JLabel) c;
-					Usuario contacto = (Usuario) value;
-					label.setIcon(escalarImagen(contacto.getFotoPerfil().getPath()));
-					label.setText(String.format("%s ", contacto.getNombre()));
+					if (c instanceof JLabel) {
+						JLabel label = (JLabel) c;
+						Usuario contacto = (Usuario) value;
+						label.setIcon(escalarImagen(contacto.getFotoPerfil().getPath()));
+						label.setText(String.format("%s ", contacto.getNombre()));
 					}
-				return c;
-			}
-		};
+					return c;
+				}
+			};
 		};
 	}
-	
+
+	/**
+	 * CellRenderer para la lista de hashtags
+	 */
 	private static ListCellRenderer<? super String> createListRenderer2() {
 		return new DefaultListCellRenderer() {
 			@Override
 			public Component getListCellRendererComponent(JList<?> list, Object value,
 					int index, boolean isSelected,
 					boolean cellHasFocus) {
-			{
-				Component c = super.getListCellRendererComponent(
+				{
+					Component c = super.getListCellRendererComponent(
 							list, value, index, isSelected, cellHasFocus);
-				if (c instanceof JLabel) {
-					JLabel label = (JLabel) c;
-					String hashtag = (String) value;
-					//label.setIcon(escalarImagen(foto.getRuta()));
-					label.setText(hashtag);
+					if (c instanceof JLabel) {
+						JLabel label = (JLabel) c;
+						String hashtag = (String) value;
+						label.setText(hashtag);
 					}
-				return c;
-			}
-		};
+					return c;
+				}
+			};
 		};
 	}
-	
+
+	/**
+	 * Escala una imagen para añadir a la JList de usuarios
+	 */
 	private static Icon escalarImagen(String ruta) {
 		ImageIcon image = new ImageIcon(ruta);
 		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
@@ -160,7 +156,7 @@ public class VentanaBusqueda extends JFrame {
 				Image.SCALE_DEFAULT));
 		return icono;
 	}
-	
+
 	/**
 	 * Fija el tamaño de un componente
 	 */

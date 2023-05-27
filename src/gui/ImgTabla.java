@@ -8,7 +8,11 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 public class ImgTabla extends DefaultTableCellRenderer{
-	
+
+	/**
+	 * CellRenderer para las tablas de Fotos del PanelPerfilUsuario
+	 * y la VentanaAlbum
+	 */
 	public 	Component getTableCellRendererComponent(JTable table, Object o,
 			boolean bln, boolean bln1, int i, int i1) {
 		if (o instanceof JLabel) {
@@ -25,5 +29,4 @@ public class ImgTabla extends DefaultTableCellRenderer{
 		}
 		return super.getTableCellRendererComponent(table, o, bln, bln1, i, i1);
 	}
-
 }

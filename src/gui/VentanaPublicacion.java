@@ -22,8 +22,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -37,21 +35,20 @@ public class VentanaPublicacion extends JFrame {
 	private JPanel panelBotones;
 	private JButton btnAceptar;
 	private JButton btnCancelar;
-	
+
 	private String ruta;
 	private String usuarioActual;
 	private String comentario = "";
-	private Publicacion publicacion;
 	private JLabel lblNombreAlbum;
-	
+
 
 	/**
-	 * Create the frame.
+	 * Crea la ventana
 	 */
 	public VentanaPublicacion(String u, String r) {	
 		this.ruta = r;
 		this.usuarioActual = u;
-				
+
 		setBounds(100, 100, 600, 283);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -63,7 +60,7 @@ public class VentanaPublicacion extends JFrame {
 		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
-		
+
 		lblNombreAlbum = new JLabel("");
 		lblNombreAlbum.setForeground(Constantes.LILA);
 		lblNombreAlbum.setFont(Constantes.NEGRITA_15);
@@ -74,7 +71,7 @@ public class VentanaPublicacion extends JFrame {
 		gbc_lblNewLabel.gridy = 0;
 		contentPane.add(lblNombreAlbum, gbc_lblNewLabel);
 		lblNombreAlbum.setVisible(false);
-		
+
 		lblTitulo = new JLabel("Escribe un comentario (Maximo 120 caracteres)");
 		lblTitulo.setFont(Constantes.NORMAL_15);
 		lblTitulo.setForeground(Constantes.LILA);
@@ -83,7 +80,7 @@ public class VentanaPublicacion extends JFrame {
 		gbc_lblTitulo.gridx = 10;
 		gbc_lblTitulo.gridy = 1;
 		contentPane.add(lblTitulo, gbc_lblTitulo);
-		
+
 		lblFoto = new JLabel();
 		lblFoto.setIcon(this.mostrarFoto(ruta));
 		GridBagConstraints gbc_lblFoto = new GridBagConstraints();
@@ -93,16 +90,16 @@ public class VentanaPublicacion extends JFrame {
 		gbc_lblFoto.gridx = 0;
 		gbc_lblFoto.gridy = 1;
 		contentPane.add(lblFoto, gbc_lblFoto);
-		
+
 		textArea = new JTextArea();
 		textArea.setLineWrap(true);
 		textArea.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				if(textArea.getText().length() >= 120)
-			    {
-			        e.consume();
-			    }
+				{
+					e.consume();
+				}
 			}
 		});
 		GridBagConstraints gbc_textArea = new GridBagConstraints();
@@ -112,7 +109,7 @@ public class VentanaPublicacion extends JFrame {
 		gbc_textArea.gridx = 10;
 		gbc_textArea.gridy = 2;
 		contentPane.add(textArea, gbc_textArea);
-		
+
 		panelBotones = new JPanel();
 		GridBagConstraints gbc_panelBotones = new GridBagConstraints();
 		gbc_panelBotones.anchor = GridBagConstraints.EAST;
@@ -120,19 +117,20 @@ public class VentanaPublicacion extends JFrame {
 		gbc_panelBotones.gridx = 10;
 		gbc_panelBotones.gridy = 4;
 		contentPane.add(panelBotones, gbc_panelBotones);
-		
+
 		btnAceptar = new JButton("Aceptar");
 		btnAceptar.setForeground(Constantes.LILA);
 		btnAceptar.setFont(Constantes.NEGRITA_15);
 		panelBotones.add(btnAceptar);
-		
+
 		btnCancelar = new JButton("Cancelar");
 		this.addManejadorBtnCancelar(btnCancelar);
 		btnCancelar.setForeground(Constantes.LILA);
 		btnCancelar.setFont(Constantes.NEGRITA_15);
 		panelBotones.add(btnCancelar);
 	}	
-	
+
+	// Manejador para el botón de cancelar -> cierra la ventana
 	private void addManejadorBtnCancelar(JButton btn) {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -140,7 +138,8 @@ public class VentanaPublicacion extends JFrame {
 			}
 		});
 	}
-	
+
+	// Manejador para el botón de compartir la publicacion
 	private void addManejadorBtnCompartir(JButton btn, JPanel ventanaActual) {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -157,7 +156,8 @@ public class VentanaPublicacion extends JFrame {
 			}
 		});
 	}
-		
+
+	// Manejador para el botón de crear un álbum
 	private void addManejadorBtnCrearAlbum(JButton btn, String nombreAlbum, PanelPerfilUsuario panel) {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -169,7 +169,8 @@ public class VentanaPublicacion extends JFrame {
 			}
 		});
 	}
-	
+
+	// Manejador para el botón de añadir una foto a un álbum
 	private void addManejadorBtnAñadirFotoAlbum(JButton btn, int idAlbum, String ruta, VentanaAlbum va) {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -180,7 +181,7 @@ public class VentanaPublicacion extends JFrame {
 			}
 		});
 	}
-	
+
 	private void addManejadorBtnOk(JButton btn, Foto f) {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -191,13 +192,15 @@ public class VentanaPublicacion extends JFrame {
 			}
 		});
 	}
-	
+
+	// Para ver una foto
 	public void verFoto(Foto f) {
 		btnCancelar.setVisible(false);
 		btnAceptar.setText("OK");
 		addManejadorBtnOk(btnAceptar, f);
 	}
-	
+
+	// Para ver una foto de un álbum -> también se añade el título del álbum
 	public void verFotoAlbum(Foto f, String titulo) {
 		lblNombreAlbum.setText(titulo);
 		lblNombreAlbum.setVisible(true);
@@ -205,23 +208,26 @@ public class VentanaPublicacion extends JFrame {
 		btnAceptar.setText("OK");
 		addManejadorBtnOk(btnAceptar, f);
 	}
-	
+
+	// Para compartir una foto -> el botón de aceptar se llama 'compartir'
 	public boolean compartirFoto(JPanel panel) {
 		btnAceptar.setText("Compartir");
 		this.addManejadorBtnCompartir(btnAceptar, panel);
 		return true;
 	}
-	
+
+	// Para crear el álbum
 	public void crearAlbum(String nombreAlbum, PanelPerfilUsuario panel) {
 		btnAceptar.setText("Crear Album");
 		this.addManejadorBtnCrearAlbum(btnAceptar, nombreAlbum, panel);
 	}
-	
+
+	// Para agregar una foto al álbum
 	public void añadirFotoAlbum(int idAlbum, String ruta, VentanaAlbum va) {
 		btnAceptar.setText("Agregar al Album");
 		this.addManejadorBtnAñadirFotoAlbum(btnAceptar, idAlbum, ruta, va);
 	}
-	
+
 	private Icon mostrarFoto(String ruta) {
 		ImageIcon image = new ImageIcon(ruta);
 		Icon icono = new ImageIcon(image.getImage().getScaledInstance(

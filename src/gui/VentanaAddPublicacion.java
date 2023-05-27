@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.EventQueue;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
@@ -29,7 +28,8 @@ public class VentanaAddPublicacion extends JFrame {
 	private JPanel ventanaAct;
 
 	/**
-	 * Create the frame.
+	 * Crea el frame para añadir una foto usando drag and drop o seleccionando del ordenador
+	 * con un JFileChooser
 	 */
 	public VentanaAddPublicacion(String usuario, JPanel ventanaAct) {
 		setBounds(100, 100, 500, 300);
@@ -38,10 +38,11 @@ public class VentanaAddPublicacion extends JFrame {
 
 		this.usuario = usuario;
 		this.ventanaAct = ventanaAct;
-		
+
 		setContentPane(contentPane);
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 
+		//Panel para el drag and drop
 		JEditorPane editorPane = new JEditorPane(); 
 		contentPane.add(editorPane); 
 		editorPane.setText("Puedes arrastrar el fichero aquí:");
@@ -63,7 +64,8 @@ public class VentanaAddPublicacion extends JFrame {
 				} 
 			} 
 		});
-		
+
+		//Botón para seleccionar de tu ordenador
 		JButton button = new JButton("Seleccionar de tu ordenador");
 		button.setMaximumSize(new Dimension(400, 23));
 		button.setForeground(Constantes.LILA);
@@ -71,7 +73,8 @@ public class VentanaAddPublicacion extends JFrame {
 		this.addManejadorButton(button);
 		contentPane.add(button);
 	}
-	
+
+	//Manejador para el botón -> se abre un JFileChooser
 	public void addManejadorButton(JButton btn) {
 		btn.addActionListener(new ActionListener() {
 			@Override
@@ -86,7 +89,9 @@ public class VentanaAddPublicacion extends JFrame {
 			}
 		});
 	}
-		
+
+	//Se abre VentanaPublicacion con la foto seleccionada para añadir un comentario
+	// y darle a compartir
 	public void compartirFoto(File file) {
 		VentanaPublicacion vap = new VentanaPublicacion(usuario, file.getPath());
 		vap.setVisible(true);	

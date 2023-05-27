@@ -46,7 +46,7 @@ public class VentanaNotificaciones extends JFrame {
 	private VentanaPrincipal ventanaPrincipal;
 
 	/**
-	 * Create the frame.
+	 * Crea una ventana para mostrar las notificaciones que tiene un usuario
 	 */
 	public VentanaNotificaciones(VentanaPrincipal v, String nombreUsuario) {
 		this.usuario = Controlador.getUnicaInstancia().getUsuario(nombreUsuario);
@@ -57,42 +57,43 @@ public class VentanaNotificaciones extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
-		
+
 		panelNorte = new JPanel();
 		contentPane.add(panelNorte);
-		
+
 		lblNorte = new JLabel("");
 		lblNorte.setForeground(Constantes.LILA);
 		lblNorte.setFont(Constantes.NEGRITA_15);
-		
+
 		if (usuario.getNotificaciones().size() > 0) {
 			lblNorte.setText("Hay " + usuario.getNotificaciones().size() + " nuevas notificaciones");
 			panelNorte.add(lblNorte);
 			crearPanelNotificaciones();
 		}
-		
+
 		else {
 			setSize(new Dimension(300, 80));
 			lblNorte.setText("No hay nuevas notificaciones");
 			panelNorte.add(lblNorte);
 		}
-		
+
 	}
-	
+
 	public void crearPanelNotificaciones() {
 		panelNotis = new JPanel();
 		contentPane.add(panelNotis);
-		
+
+		// Copia de la lista de notificaciones para mostrar
 		notificaciones = new ArrayList<>(usuario.getNotificaciones());
 		listaNotificaciones = new JList<Notificacion>(notificaciones.toArray
-										(new Notificacion[notificaciones.size()]));
+				(new Notificacion[notificaciones.size()]));
 		listaNotificaciones.setCellRenderer(createListRenderer());
 		listaNotificaciones.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
+
 		scrollPane = new JScrollPane(listaNotificaciones);
 		fixedSize(scrollPane, 250, 200);
 		panelNotis.add(scrollPane);
-		
+
 		listaNotificaciones.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				Notificacion n;
@@ -103,54 +104,60 @@ public class VentanaNotificaciones extends JFrame {
 				}
 			}
 		});
-		
+
 		btnAceptar = new JButton("Aceptar");
 		btnAceptar.setFont(Constantes.NEGRITA_15);
 		btnAceptar.setForeground(Constantes.LILA);
 		panelNotis.add(btnAceptar);
 		this.addManejadorBotonAceptar();
 	}
-	
-	
+
+	/**
+	 * CellRenderer para la lista de notificaciones 
+	 */
 	private static ListCellRenderer<? super Notificacion> createListRenderer() {
 		return new DefaultListCellRenderer() {
 			@Override
 			public Component getListCellRendererComponent(JList<?> list, Object value,
 					int index, boolean isSelected,
 					boolean cellHasFocus) {
-			{
-				Component c = super.getListCellRendererComponent(
+				{
+					Component c = super.getListCellRendererComponent(
 							list, value, index, isSelected, cellHasFocus);
-				if (c instanceof JLabel) {
-					JLabel label = (JLabel) c;
-					Notificacion noti = (Notificacion) value;
-					String ruta = ((Foto) noti.getPublicacion()).getRuta();
-					label.setIcon(escalarImagen(ruta));
-					
-			        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			        String fecha = noti.getFecha().format(formatter);
-					
-					label.setText(String.format("%s - %s", noti.getPublicacion().getUsuario().getNombreUsuario(), 
+					if (c instanceof JLabel) {
+						JLabel label = (JLabel) c;
+						Notificacion noti = (Notificacion) value;
+						String ruta = ((Foto) noti.getPublicacion()).getRuta();
+						label.setIcon(escalarImagen(ruta));
+
+						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+						String fecha = noti.getFecha().format(formatter);
+
+						label.setText(String.format("%s - %s", noti.getPublicacion().getUsuario().getNombreUsuario(), 
 								fecha));
 					}
-				return c;
-			}
-		};
+					return c;
+				}
+			};
 		};
 	}
-	
-	
+
+	/**
+	 * Manejador del botón aceptar -> vacía las notificaciones del usuario
+	 */
 	public void addManejadorBotonAceptar() {
 		btnAceptar.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//contentPane.removeAll();
 				dispose();
 				Controlador.getUnicaInstancia().vaciarNotificaciones(usuario.getNombreUsuario());
 			}
 		});
 	}
-	
+
+	/**
+	 * Escala una imagen para la lista de notificaciones
+	 */
 	private static Icon escalarImagen(String ruta) {
 		ImageIcon image = new ImageIcon(ruta);
 		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
@@ -159,7 +166,7 @@ public class VentanaNotificaciones extends JFrame {
 				Image.SCALE_DEFAULT));
 		return icono;
 	}
-	
+
 	/**
 	 * Fija el tamaño de un componente
 	 */
@@ -170,6 +177,6 @@ public class VentanaNotificaciones extends JFrame {
 		o.setPreferredSize(d);
 		o.setSize(d);
 	}
-	
-	
+
+
 }

@@ -32,7 +32,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
 import java.util.EventObject;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,11 +41,10 @@ import java.awt.event.ActionEvent;
 import pulsador.IEncendidoListener;
 import pulsador.Luz;
 
-//public class VentanaPrincipal extends JFrame{
 public class VentanaPrincipal extends JPanel{
 
 	private FrmPrincipal frmPrincipal;
-	
+
 	private JLabel lblPhotoTDS;
 	private JPanel panelNorte;
 	private Component rigidArea;
@@ -61,57 +59,49 @@ public class VentanaPrincipal extends JPanel{
 	private JPopupMenu popupMenu;
 	private JButton btnMenu;
 	private JList<String> jListaDescuentos;
-	
+
 	private String usuarioActual;
 	private String fotoPerfil;
-		
+
 	private PanelPerfilUsuario panelPerfilUsuario;
 	private JPanel panelPublicaciones;
-	
+
 	private VentanaPrincipal ventanaPrincipal;
 	private Component rigidArea_2;
 	private Luz luz;
 	private JPanel panelNoti;
 	private JButton btnNoti;
 
-	/**
-	 * Create the application.
-	 */
 	public VentanaPrincipal(FrmPrincipal frm) {	
 		this.frmPrincipal = frm;
 		this.usuarioActual = Controlador.getUnicaInstancia().getUsuarioActual().getNombreUsuario();
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {		
-				
 		this.fotoPerfil = Controlador.getUnicaInstancia().getFotoPerfil(usuarioActual);
 		crearPanelNorte();
 		crearPanelPublicaciones();
 		ventanaPrincipal = this;
 	}
-	
-	
+
 	private void crearPanelNorte() {
 		panelNorte = new JPanel();
 		frmPrincipal.getContentPane().add(panelNorte, BorderLayout.NORTH);
 		panelNorte.setLayout(new BoxLayout(panelNorte, BoxLayout.X_AXIS));
-		
+
 		this.fixedSize(panelNorte, 590, 50);
-		
+
 		lblPhotoTDS = new JLabel("PhotoTDS");
 		lblPhotoTDS.setForeground(Constantes.LILA);
 		lblPhotoTDS.setFont(new Font("HP Simplified Hans", Font.PLAIN, 30));
 		lblPhotoTDS.setPreferredSize(new Dimension(170, 0));
 		panelNorte.add(lblPhotoTDS);
-		
+
 		rigidArea = Box.createRigidArea(new Dimension(20, 20));
 		rigidArea.setPreferredSize(new Dimension(10, 10));
 		panelNorte.add(rigidArea);
-		
+
 		//Botón para añadir fotos
 		btnAddFoto = new JButton("+");
 		this.addManejadorBotonAddFoto(btnAddFoto);
@@ -119,22 +109,22 @@ public class VentanaPrincipal extends JPanel{
 		btnAddFoto.setFont(Constantes.NEGRITA_20);
 		this.fixedSize(btnAddFoto, 40, 40);
 		panelNorte.add(btnAddFoto);
-		
+
 		horizontalStrut = Box.createHorizontalStrut(20);
 		horizontalStrut.setMaximumSize(new Dimension(20, 20));
 		panelNorte.add(horizontalStrut);
-		
+
 		//Crea panel norte
 		panel = new JPanel();
 		panelNorte.add(panel);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-		
+
 		//TextField para buscar usuarios y publicaciones
 		textField = new JTextField();
 		this.fixedSize(textField, 90, 27);
 		panel.add(textField);
 		textField.setColumns(10);
-		
+
 		//Botón para buscar
 		btnBuscar = new JButton("Buscar");
 		this.addManejadorBotonBuscar();
@@ -143,10 +133,10 @@ public class VentanaPrincipal extends JPanel{
 		btnBuscar.setAlignmentX(Component.CENTER_ALIGNMENT);
 		this.fixedSize(btnBuscar, 70, 40);
 		panel.add(btnBuscar);
-		
+
 		rigidArea_1 = Box.createRigidArea(new Dimension(15, 20));
 		panelNorte.add(rigidArea_1);
-		
+
 		//Botón para abrir el panel del perfil del usuario
 		btnPerfil = new JButton("");
 		addManejadorBotonPerfil(btnPerfil);
@@ -154,15 +144,15 @@ public class VentanaPrincipal extends JPanel{
 		this.fixedSize(btnPerfil, 50, 50);
 		this.añadirPerfil(btnPerfil, fotoPerfil);
 		panelNorte.add(btnPerfil);
-		
+
 		rigidArea_2 = Box.createRigidArea(new Dimension(20, 20));
 		panelNorte.add(rigidArea_2);
-	
+
 		luz = new Luz();
 		panelNorte.add(luz);
 		luz.setColor(Constantes.LILA);
 		this.addManejadorPulsador(luz);
-		
+
 		panelNoti = new JPanel();
 		panelNorte.add(panelNoti);
 		btnNoti = new JButton("");
@@ -170,16 +160,15 @@ public class VentanaPrincipal extends JPanel{
 		panelNoti.add(btnNoti);
 		btnNoti.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/notificacion.png")));
 		this.addManejadorBotonNotificaciones(btnNoti);
-		
+
 		btnMenu = new JButton("Menú");
 		btnMenu.setForeground(Constantes.LILA);
 		btnMenu.setFont(Constantes.NEGRITA_15);
 		this.fixedSize(btnMenu, 55, 40);
 		panelNorte.add(btnMenu);
-		this.addManejadorBotonMenu(btnMenu);
-		
+		this.addManejadorBotonMenu(btnMenu);	
 	}
-	
+
 
 	//Crear el panel de las publicaciones
 	private void crearPanelPublicaciones() {
@@ -187,18 +176,17 @@ public class VentanaPrincipal extends JPanel{
 		panelPublicaciones.setLayout(new BoxLayout(panelPublicaciones, BoxLayout.Y_AXIS));
 
 		scrollPane = new JScrollPane(panelPublicaciones);
-				
+
 		frmPrincipal.setResizable(true);
 		this.fixedSize(scrollPane, 590, 450);
-		
+
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		frmPrincipal.getContentPane().add(scrollPane, BorderLayout.CENTER);
 
-		
 		this.mostrarPublicaciones();
 	}
 
-	
+
 	//Añade las publicaciones al panel
 	public void mostrarPublicaciones() {
 		panelPublicaciones.removeAll();
@@ -210,13 +198,13 @@ public class VentanaPrincipal extends JPanel{
 			i++;
 			this.fixedSize(publi, frmPrincipal.getWidth()-55, 90);
 			panelPublicaciones.add(publi);
-			
+
 		}
 		panelPublicaciones.revalidate();
 		panelPublicaciones.repaint();
 	}
-	
-	
+
+	// Escala la foto de perfil al tamaño del botón
 	private void añadirPerfil(JButton btn, String ruta) {
 		ImageIcon image = new ImageIcon(ruta);
 		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
@@ -225,7 +213,8 @@ public class VentanaPrincipal extends JPanel{
 				Image.SCALE_DEFAULT));
 		btn.setIcon(icono);
 	}
-	
+
+	// Crea el popUpMenu Premium
 	private void crearPopupMenu() {
 		popupMenu = new JPopupMenu();
 		JMenuItem premium = new JMenuItem("Premium");
@@ -237,38 +226,41 @@ public class VentanaPrincipal extends JPanel{
 			}
 		});
 	}
-	
+
+	// Crea las opciones premium
 	private void crearMenuOpcionesPremium() {
 		popupMenu = new JPopupMenu();
-		
+
 		//Para Generar el pdf con los seguidores
 		JMenuItem generarPdf = new JMenuItem("Generar PDF");
 		popupMenu.add(generarPdf);
 		this.addManejadorGenerarPdf(generarPdf);
-		
+
 		//Para Generar el excel con los seguidores
 		JMenuItem generarExcel = new JMenuItem("Generar Excel");
 		popupMenu.add(generarExcel);
 		this.addManejadorGenerarExcel(generarExcel);
-		
+
+		//Para ver una lista de las 10 fotos con más me gustas  
 		JMenuItem topMeGusta = new JMenuItem("Top me Gusta");
 		popupMenu.add(topMeGusta);
 		this.addManejadorTopMeGusta(topMeGusta);
-		
+
+		//Para anular la suscripción premium
 		JMenuItem anularPremium = new JMenuItem("Anular Premium");
 		popupMenu.add(anularPremium);
 		this.addManejadorAnularPremium(anularPremium);
-		
 	}
-	
+
+	// Crea la lista con los distintos descuentos
 	private void addListaDescuentos() {		
 		List<String> listaDescuentos = new LinkedList<String>();
 		listaDescuentos.add("Descuento por edad: jóvenes(18-35)");
 		listaDescuentos.add("Descuento por edad: mayores de 65");
 		listaDescuentos.add("Descuento por MeGustas");
-		
+
 		jListaDescuentos = new JList<String>(listaDescuentos.toArray
-								(new String[listaDescuentos.size()]));
+				(new String[listaDescuentos.size()]));
 		jListaDescuentos.setCellRenderer(createListRenderer());
 		jListaDescuentos.setPreferredSize(new Dimension(220, ABORT));
 		jListaDescuentos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -279,7 +271,7 @@ public class VentanaPrincipal extends JPanel{
 		dialog.setSize(230, 100);
 		dialog.getContentPane().add(jListaDescuentos);
 		dialog.setVisible(true);
-		
+
 		jListaDescuentos.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -302,32 +294,31 @@ public class VentanaPrincipal extends JPanel{
 				}
 			}
 		});
-
-		
 	}
-	
+
+	// CellRenderer para la lista de descuentos
 	private static ListCellRenderer<? super String> createListRenderer() {
 		return new DefaultListCellRenderer() {
 			@Override
 			public Component getListCellRendererComponent(JList<?> list, Object value,
 					int index, boolean isSelected,
 					boolean cellHasFocus) {
-			{
-				Component c = super.getListCellRendererComponent(
+				{
+					Component c = super.getListCellRendererComponent(
 							list, value, index, isSelected, cellHasFocus);
-				if (c instanceof JLabel) {
-					JLabel label = (JLabel) c;
-					String descuento = (String) value;
-					label.setText(descuento);
+					if (c instanceof JLabel) {
+						JLabel label = (JLabel) c;
+						String descuento = (String) value;
+						label.setText(descuento);
 					}
-				return c;
-			}
-		};
+					return c;
+				}
+			};
 		};
 	}
-	
+
 	//MANEJADORES DE LOS BOTONES
-	
+
 	// Botón menú
 	private void addManejadorBotonMenu(JButton btn) {
 		btn.addMouseListener(new MouseAdapter() {
@@ -343,7 +334,7 @@ public class VentanaPrincipal extends JPanel{
 			}
 		});
 	}
-	
+
 	//Botón Perfil (abre el perfil del usuario actual)
 	private void addManejadorBotonPerfil(JButton btn) {
 		panelPerfilUsuario = new PanelPerfilUsuario(this, usuarioActual);
@@ -356,7 +347,7 @@ public class VentanaPrincipal extends JPanel{
 			}
 		});
 	}
-	
+
 	//Botón addFoto (abre el fileChooser y añade foto)
 	private void addManejadorBotonAddFoto(JButton btn) {
 		btnAddFoto.addActionListener(new ActionListener() {
@@ -367,8 +358,8 @@ public class VentanaPrincipal extends JPanel{
 			}
 		});
 	}
-	
-	
+
+
 	//Botón buscar (usuarios cuyo nombre/nombreUsuario/email coincide con el buscado)
 	private void addManejadorBotonBuscar() {
 		btnBuscar.addActionListener(new ActionListener() {
@@ -382,8 +373,8 @@ public class VentanaPrincipal extends JPanel{
 			}
 		});
 	}
-	
-	
+
+	//Botón para ver las notificaciones
 	private void addManejadorBotonNotificaciones(JButton btn) {
 		btn.addActionListener(new ActionListener() {
 			@Override
@@ -391,35 +382,31 @@ public class VentanaPrincipal extends JPanel{
 				VentanaNotificaciones vn = new VentanaNotificaciones(ventanaPrincipal, usuarioActual);
 				vn.setLocationRelativeTo(btn);
 				vn.setVisible(true);
-				vn.addWindowListener(new WindowAdapter() {
-				       @Override
-				       public void windowClosed(WindowEvent e) {
-				    	  // Controlador.getUnicaInstancia().vaciarNotificaciones(usuarioActual);
-				       }
-				});
 			}
 		});
 	}
-	
+
+	//Manejador para generar el pdf
 	private void addManejadorGenerarPdf(JMenuItem generarPdf) {
 		generarPdf.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				 Controlador.getUnicaInstancia().generarPdf(usuarioActual);
+				Controlador.getUnicaInstancia().generarPdf(usuarioActual);
 			}
 		});
 	}
-	
+
+	//Manejador para generar el excel
 	private void addManejadorGenerarExcel(JMenuItem generarExcel) {
 		generarExcel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				 Controlador.getUnicaInstancia().generarExcel(usuarioActual);
+				Controlador.getUnicaInstancia().generarExcel(usuarioActual);
 			}
 		});
-		
 	}
-	
+
+	//Manejador para anular la suscripción premium
 	private void addManejadorAnularPremium(JMenuItem anularPremium) {
 		anularPremium.addActionListener(new ActionListener() {
 			@Override
@@ -431,9 +418,9 @@ public class VentanaPrincipal extends JPanel{
 				} 				
 			}
 		});
-		
 	}
-	
+
+	//Manejador para activar el pulsador Luz
 	private void addManejadorPulsador(Luz l) {
 		l.addEncendidoListener( new IEncendidoListener() {
 			public void enteradoCambioEncendido(EventObject arg0) {
@@ -447,7 +434,7 @@ public class VentanaPrincipal extends JPanel{
 		});
 	}
 
-	
+	//Manejador para ver la lista de topMeGusta
 	private void addManejadorTopMeGusta(JMenuItem topMeGusta) {
 		topMeGusta.addActionListener(new ActionListener() {
 			@Override
@@ -456,7 +443,7 @@ public class VentanaPrincipal extends JPanel{
 			}
 		});
 	}
-	
+
 	//Abre perfil del usuario indicado al seleccionar en la lista
 	public void abrirPerfil(String nombreUsuario) {
 		panelPerfilUsuario = new PanelPerfilUsuario(this, nombreUsuario);		
@@ -465,17 +452,13 @@ public class VentanaPrincipal extends JPanel{
 		frmPrincipal.getContentPane().revalidate();;
 		frmPrincipal.getContentPane().repaint();
 	}
-	
-	
-	
-	
-	
-	
+
+	//Crea la lista de las 10 fotos con más me gustas del usuario
 	public void crearListaTopMg() {
 		List<Foto> listaTopMg = Controlador.getUnicaInstancia().getTopMeGusta(usuarioActual);
-				
+
 		JList<Foto> jlistaTopMg = new JList<Foto>(listaTopMg.toArray
-								(new Foto[listaTopMg.size()]));
+				(new Foto[listaTopMg.size()]));
 		jlistaTopMg.setCellRenderer(createListRendererFotos());
 
 		JScrollPane scrollListaFotos = new JScrollPane(jlistaTopMg);
@@ -488,37 +471,41 @@ public class VentanaPrincipal extends JPanel{
 		dialog.getContentPane().add(scrollListaFotos);
 		dialog.setVisible(true);
 	}
-	
+
+	//CellRenderer para la lista topMeGusta
 	private static ListCellRenderer<? super Foto> createListRendererFotos() {
 		return new DefaultListCellRenderer() {
 			@Override
 			public Component getListCellRendererComponent(JList<?> list, Object value,
 					int index, boolean isSelected,
 					boolean cellHasFocus) {
-			{
-				Component c = super.getListCellRendererComponent(
+				{
+					Component c = super.getListCellRendererComponent(
 							list, value, index, isSelected, cellHasFocus);
-				if (c instanceof JLabel) {
-					JLabel label = (JLabel) c;
-					label.setSize(80, 50);
-					Foto foto = (Foto) value;
-					label.setIcon(escalarImagen(foto.getRuta()));
-					label.setText(String.format("%s ", foto.getMeGustas() + " Me gustas"));
+					if (c instanceof JLabel) {
+						JLabel label = (JLabel) c;
+						label.setSize(80, 50);
+						Foto foto = (Foto) value;
+						label.setIcon(escalarImagen(foto.getRuta()));
+						label.setText(String.format("%s ", foto.getMeGustas() + " Me gustas"));
 					}
-				return c;
-			}
-		};
+					return c;
+				}
+			};
 		};
 	}
-	
+
+	//Cierra la ventana
 	public void cerrar() {
 		this.frmPrincipal.dispose();
 	}
-	
+
+	//Devuelve el frame de la ventana
 	public FrmPrincipal getFrm() {
 		return this.frmPrincipal;
 	}
-	
+
+	//Escalar una imagen
 	private static Icon escalarImagen(String ruta) {
 		ImageIcon image = new ImageIcon(ruta);
 		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
@@ -527,7 +514,7 @@ public class VentanaPrincipal extends JPanel{
 				Image.SCALE_DEFAULT));
 		return icono;
 	}
-	
+
 	/**
 	 * Fija el tamaño de un componente
 	 */
@@ -538,5 +525,5 @@ public class VentanaPrincipal extends JPanel{
 		o.setPreferredSize(d);
 		o.setSize(d);
 	}
-	
+
 }

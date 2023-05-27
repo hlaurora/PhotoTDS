@@ -10,7 +10,7 @@ import dao.FactoriaDAO;
 import dao.IAdaptadorPublicacionDAO;
 
 public class RepoPublicaciones {
-	
+
 	private Map<Integer, Publicacion> fotosPorId;
 	private Map<Integer, Publicacion> albumesPorId;
 	private static RepoPublicaciones unicainstancia = new RepoPublicaciones();
@@ -28,12 +28,12 @@ public class RepoPublicaciones {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static RepoPublicaciones getUnicaInstancia() {
 		return unicainstancia;
 	}
-	
-	
+
+
 	// Devuelve todas las publicaciones
 	public List<Publicacion> getPublicaciones(){
 		List<Publicacion> publicaciones = new LinkedList<Publicacion>();
@@ -45,7 +45,7 @@ public class RepoPublicaciones {
 		}
 		return publicaciones;
 	}
-	
+
 	// Devuelve una foto	
 	public Publicacion getPublicacion(int id) {
 		if (fotosPorId.containsKey(id))
@@ -60,15 +60,16 @@ public class RepoPublicaciones {
 		if (publicacion.getClass().equals(Foto.class)) {
 			fotosPorId.put(publicacion.getId(), publicacion);
 		}
-		
+
 		else 
 			albumesPorId.put(publicacion.getId(), publicacion);
 	}
-	
+
 	public void addAlbum(Publicacion publicacion) {
 		albumesPorId.put(publicacion.getId(), publicacion);
 	}
-	
+
+	// Borra una publicación
 	public boolean removePublicacion(Publicacion publicacion) {
 		if (publicacion.getClass().equals(Foto.class)) {
 			fotosPorId.remove(publicacion.getId());
@@ -77,7 +78,7 @@ public class RepoPublicaciones {
 			albumesPorId.remove(publicacion.getId(), publicacion);
 		return true;
 	}
-	
+
 	private void cargarRepositorio() throws DAOException{
 		List<Publicacion> publicacionesBD = adaptadorPublicacion.recuperarTodasPublicaciones();
 		for (Publicacion p: publicacionesBD) {

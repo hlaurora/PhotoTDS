@@ -2,14 +2,10 @@ package gui;
 
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
 import controlador.Controlador;
-import dominio.Comentario;
 import dominio.Foto;
-import dominio.RepoPublicaciones;
-
 import javax.swing.JLabel;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -28,11 +24,10 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.ActionEvent;
 
 public class PanelPublicacion extends JPanel {
-	
+
 	private String ruta;
 	private String fotoPerfil;
 	private String nombreUsuario;
@@ -43,11 +38,11 @@ public class PanelPublicacion extends JPanel {
 	private JLabel lblImagen;
 	private Foto foto;
 	private JFrame frame;
-	
+
 	private JButton btnVerComentarios;
-	
+
 	/**
-	 * Create the panel.
+	 * Crea el panel.
 	 */
 	public PanelPublicacion(Foto foto, int p, JFrame f) {
 		this.frame = f;
@@ -57,7 +52,7 @@ public class PanelPublicacion extends JPanel {
 		this.nombreUsuario = foto.getUsuario().getNombreUsuario();		
 		this.idFoto = foto.getId();
 		this.pos = p;
-		
+
 		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{200, 49, 90, 0, 0, 0};
@@ -65,16 +60,16 @@ public class PanelPublicacion extends JPanel {
 		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
-		
+
 		JButton btnMeGusta = new JButton("");
 		this.addManejadorBotonMeGusta(btnMeGusta);
-		btnMeGusta.setIcon(new ImageIcon(PanelPublicacion.class.getResource("/imagenes/icons8-me-gusta-16.png")));
+		btnMeGusta.setIcon(new ImageIcon(PanelPublicacion.class.getResource("/imagenes/corazon.png")));
 		GridBagConstraints gbc_btnMeGusta = new GridBagConstraints();
 		gbc_btnMeGusta.insets = new Insets(0, 0, 5, 5);
 		gbc_btnMeGusta.gridx = 1;
 		gbc_btnMeGusta.gridy = 2;
 		add(btnMeGusta, gbc_btnMeGusta);
-		
+
 		JButton btnComentario = new JButton("\r\n");
 		this.addManejadorBotonComentario(btnComentario);
 		btnComentario.setIcon(new ImageIcon(PanelPublicacion.class.getResource("/imagenes/comentario.png")));
@@ -83,7 +78,7 @@ public class PanelPublicacion extends JPanel {
 		gbc_btnComentario.gridx = 2;
 		gbc_btnComentario.gridy = 2;
 		add(btnComentario, gbc_btnComentario);
-		
+
 		lblImagen = new JLabel("");
 		this.fixedSize(lblImagen, 150, 90);
 		lblImagen.setIcon(escalarImagen(lblImagen, ruta));
@@ -94,7 +89,7 @@ public class PanelPublicacion extends JPanel {
 		gbc_lblImagen.gridx = 0;
 		gbc_lblImagen.gridy = 1;
 		add(lblImagen, gbc_lblImagen);
-		
+
 		btnVerComentarios = new JButton(foto.getComentarios().size() + " Comentarios");
 		btnVerComentarios.setForeground(Constantes.LILA);
 		this.addManejadorBotonVerComentarios(btnVerComentarios);
@@ -103,14 +98,14 @@ public class PanelPublicacion extends JPanel {
 		gbc_btnVerComentarios.gridx = 3;
 		gbc_btnVerComentarios.gridy = 2;
 		add(btnVerComentarios, gbc_btnVerComentarios);
-		
+
 		lblNumMg = new JLabel(foto.getMeGustas() + " Me gustas");
 		GridBagConstraints gbc_lblNumMg = new GridBagConstraints();
 		gbc_lblNumMg.insets = new Insets(0, 0, 5, 0);
 		gbc_lblNumMg.gridx = 4;
 		gbc_lblNumMg.gridy = 2;
 		add(lblNumMg, gbc_lblNumMg);
-		
+
 		JLabel lblFotoPerfil = new JLabel("");
 		this.fixedSize(lblFotoPerfil, 50, 50);
 		lblFotoPerfil.setIcon(escalarImagen(lblFotoPerfil, fotoPerfil));
@@ -119,7 +114,7 @@ public class PanelPublicacion extends JPanel {
 		gbc_lblFotoPerfil.gridx = 1;
 		gbc_lblFotoPerfil.gridy = 4;
 		add(lblFotoPerfil, gbc_lblFotoPerfil);
-		
+
 		JLabel lblNombreUsuario = new JLabel(nombreUsuario);
 		GridBagConstraints gbc_lblNombreUsuario = new GridBagConstraints();
 		gbc_lblNombreUsuario.insets = new Insets(0, 0, 5, 5);
@@ -128,16 +123,25 @@ public class PanelPublicacion extends JPanel {
 		add(lblNombreUsuario, gbc_lblNombreUsuario);
 
 	}
-	
+
+	/////////////////
+	///Manejadores///
+	/////////////////
+
+	/**
+	 * Manejador para ver la Foto al pulsar en la etiqueta
+	 */
 	private void addManejadorFoto(JLabel lbl) {
 		lbl.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				verFoto(ruta);
-		
 			}
 		});
 	}
-	
+
+	/**
+	 * Manejador del botón de Me gusta -> +1 me gusta
+	 */
 	private void addManejadorBotonMeGusta(JButton btn) {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -147,7 +151,11 @@ public class PanelPublicacion extends JPanel {
 			}
 		});
 	}
-	
+
+	/**
+	 * Manejador para el botón de comentarios -> nueva VentanaComentarios con los
+	 * comentarios que tiene la foto
+	 */
 	private void addManejadorBotonVerComentarios(JButton btn) {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -157,38 +165,41 @@ public class PanelPublicacion extends JPanel {
 			}
 		});
 	}
-	
+
+	/**
+	 * Manejador para el botón de comentario -> se abre un JDialog para
+	 * añadir un comentario a la publicación
+	 */
 	private void addManejadorBotonComentario(JButton btn) {
 		btn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JDialog ventanaTexto = new JDialog();
-				
+
 				JLabel etiqueta = new JLabel("Escribe tu comentario (máx 120)");
 				etiqueta.setForeground(Constantes.LILA);
 				etiqueta.setFont(Constantes.NORMAL_15);
-				
+
 				ventanaTexto.getContentPane().setLayout(new FlowLayout());
 				JTextArea texto = new JTextArea(5, 23);
-				
+
 				texto.addKeyListener(new KeyAdapter() {
 					@Override
 					public void keyTyped(KeyEvent e) {
 						if(texto.getText().length() >= 120)
-					    {
-					        e.consume();
-					    }
+						{
+							e.consume();
+						}
 					}
 				});
-				
-				
+
 				texto.setLineWrap(true);
 				texto.setWrapStyleWord(true);
-				
+
 				ventanaTexto.getContentPane().add(etiqueta);
-			
+
 				ventanaTexto.getContentPane().add(texto);
-				
+
 				JButton aceptar = new JButton("Aceptar");
 				aceptar.setForeground(Constantes.LILA);
 				aceptar.setFont(Constantes.NEGRITA_15);
@@ -201,20 +212,20 @@ public class PanelPublicacion extends JPanel {
 						btnVerComentarios.setText(foto.getComentarios().size() + " Comentarios");
 					}
 				});
-				
+
 				ventanaTexto.getContentPane().add(aceptar);
-				
+
 				ventanaTexto.setSize(230, 180);
 				ventanaTexto.setLocationRelativeTo(null);
 				ventanaTexto.setVisible(true);
 			}			
 		});
-	}	
-	
-	public int getIndex() {
-		return this.pos;
 	}
-	
+
+	/**
+	 * Abre un JDialog para ver la foto correspondiente al PanelPublicacion
+	 * en un tamaño más grande
+	 */
 	private void verFoto(String ruta) {
 		JDialog dialog = new JDialog(frame, false);
 		dialog.setSize(460, 400);
@@ -228,8 +239,10 @@ public class PanelPublicacion extends JPanel {
 		dialog.setLocationRelativeTo(null);
 		dialog.setVisible(true);
 	}
-	
-	
+
+	/**
+	 * Escala la imagen al tamaño de la etiqueta dada
+	 */
 	private Icon escalarImagen(JLabel lbl, String ruta) {
 		ImageIcon image = new ImageIcon(ruta);
 		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
@@ -238,7 +251,7 @@ public class PanelPublicacion extends JPanel {
 				Image.SCALE_DEFAULT));
 		return icono;
 	}
-	
+
 	/**
 	 * Fija el tamaño de un componente
 	 */

@@ -29,71 +29,73 @@ public class VentanaComentarios extends JFrame {
 
 	private JPanel contentPane;
 	private Foto foto;
-	
+
 	private JPanel panelLista;
 	private List<Comentario> comentarios;
 	private JList<Comentario> listaComentarios;
 	private JScrollPane scrollPane;
 
-	/**
-	 * Create the frame.
-	 */
 	public VentanaComentarios(Foto f) {
 		setBounds(100, 100, 280, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		
+
 		this.foto = f;
 
-		setContentPane(contentPane);
-		
+		setContentPane(contentPane);	
 		this.addListaComentarios();
-	
 	}
-	
+
+	/**
+	 * Crea la JList de comentarios de la foto f
+	 */
 	private void addListaComentarios() {
-		
+
 		panelLista = new JPanel();
 		contentPane.add(panelLista);
-		
+
 		comentarios = foto.getComentarios();
 		listaComentarios = new JList<Comentario>(comentarios.toArray(new Comentario[comentarios.size()]));
-		
+
 		listaComentarios.setCellRenderer(createListRenderer());
 		listaComentarios.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
+
 		scrollPane = new JScrollPane(listaComentarios);
 		this.fixedSize(scrollPane, 270, 240);
 		panelLista.add(scrollPane);
 
 	}
 
-	
+	/**
+	 * CellRenderer para la lista de comentarios 
+	 */
 	private static ListCellRenderer<? super Comentario> createListRenderer(){
 		return new DefaultListCellRenderer() {
-		    public Component getListCellRendererComponent(JList<?> list, Object value,
-		            int index, boolean isSelected, boolean cellHasFocus) {
-		        JPanel panelCom = new JPanel();
-		        panelCom.setLayout(new BoxLayout(panelCom, BoxLayout.X_AXIS));
-		        
-		        Comentario comentario = (Comentario) value;
-		        
-		        Icon icono = escalarImagen(comentario.getUsuario().getFotoPerfil().getPath());
-		        JLabel iconoLabel = new JLabel(icono);
-		        panelCom.add(iconoLabel);
-		        
-		        JTextArea textoArea = new JTextArea(comentario.getTexto());
-		        textoArea.setLineWrap(true);
-		        textoArea.setWrapStyleWord(true);
-		        textoArea.setSize(new Dimension(200, 100));
-		        panelCom.add(textoArea);
-		        
-		        return panelCom;
-		    }
+			public Component getListCellRendererComponent(JList<?> list, Object value,
+					int index, boolean isSelected, boolean cellHasFocus) {
+				JPanel panelCom = new JPanel();
+				panelCom.setLayout(new BoxLayout(panelCom, BoxLayout.X_AXIS));
+
+				Comentario comentario = (Comentario) value;
+
+				Icon icono = escalarImagen(comentario.getUsuario().getFotoPerfil().getPath());
+				JLabel iconoLabel = new JLabel(icono);
+				panelCom.add(iconoLabel);
+
+				JTextArea textoArea = new JTextArea(comentario.getTexto());
+				textoArea.setLineWrap(true);
+				textoArea.setWrapStyleWord(true);
+				textoArea.setSize(new Dimension(200, 100));
+				panelCom.add(textoArea);
+
+				return panelCom;
+			}
 		};
 	}
 
-	
+	/**
+	 * Escala la imagen para añadir a la JList de comentarios
+	 */
 	private static Icon escalarImagen(String ruta) {
 		ImageIcon image = new ImageIcon(ruta);
 		Icon icono = new ImageIcon(image.getImage().getScaledInstance(
@@ -102,6 +104,10 @@ public class VentanaComentarios extends JFrame {
 				Image.SCALE_DEFAULT));
 		return icono;
 	}
+
+	/**
+	 * Fija el tamaño de un componente
+	 */
 	public void fixedSize(JComponent o, int x, int y) {
 		Dimension d = new Dimension(x, y);
 		o.setMinimumSize(d);
@@ -109,5 +115,5 @@ public class VentanaComentarios extends JFrame {
 		o.setPreferredSize(d);
 		o.setSize(d);
 	}
-	
+
 }

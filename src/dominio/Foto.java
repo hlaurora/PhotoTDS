@@ -34,7 +34,6 @@ public class Foto extends Publicacion {
 	        return false;
 	    }
 	    Foto other = (Foto) obj;
-	    // Comparar atributos específicos de Foto
 	    return Objects.equals(ruta, other.ruta);
 	}
 }
