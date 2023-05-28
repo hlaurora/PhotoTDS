@@ -3,7 +3,7 @@ package dominio;
 import java.time.LocalDate;
 import java.time.Period;
 
-public class DescuentoEdad {
+public class DescuentoEdad extends Descuento {
 
 	public boolean aplicarDescuento(Usuario usuario) {
 		LocalDate fechaActual = LocalDate.now();
