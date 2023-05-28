@@ -580,9 +580,14 @@ public class Controlador implements IFotosListener{
 	@Override
 	public void enterarCambioFotos(FotosEvent event) {
 		Fotos fotos = event.getFotos();
-		for (umu.tds.fotos.Foto foto : fotos.getFoto()) {
-			registrarFoto(usuarioActual.getNombreUsuario(), foto.getPath(), foto.getDescripcion());
-		}
+		List<String> hashtags = new ArrayList<String>();
+		fotos.getFoto().forEach(foto -> {
+		    foto.getHashTags().forEach(h -> {
+		        h.getHashTag().forEach(s -> hashtags.add("#" + s));
+		    });
+		    String comentario = foto.getDescripcion() + " " + String.join(" ", hashtags);
+		    registrarFoto(usuarioActual.getNombreUsuario(), foto.getPath(), comentario);
+		});
 	}
 
 	////////////////////
