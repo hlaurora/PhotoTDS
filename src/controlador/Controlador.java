@@ -18,6 +18,8 @@ import dao.IAdaptadorPublicacionDAO;
 import dao.IAdaptadorUsuarioDAO;
 import dominio.Album;
 import dominio.Comentario;
+import dominio.DescuentoEdad;
+import dominio.DescuentoPopularidad;
 import dominio.Foto;
 import dominio.Notificacion;
 import dominio.Publicacion;
@@ -595,7 +597,22 @@ public class Controlador implements IFotosListener{
 		u.getNotificaciones().clear();
 		adaptadorUsuario.modificarUsuario(u);
 	}
-
+	
+	////////////////
+	///Descuentos///
+	////////////////
+	public boolean aplicarDescuentoEdad(String nombreUsuario) {
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
+		DescuentoEdad d = new DescuentoEdad();
+		return d.aplicarDescuento(u);
+	}
+	
+	public boolean aplicarDescuentoPpoularidad(String nombreUsuario) {
+		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
+		DescuentoPopularidad d = new DescuentoPopularidad();
+		return d.aplicarDescuento(u);
+	}
+	
 
 	///////////////
 	///Servicios///

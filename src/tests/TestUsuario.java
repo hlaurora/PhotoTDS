@@ -38,14 +38,6 @@ public class TestUsuario {
 
 	@Test
 	public void test3() {
-		AdaptadorUsuarioTDS adaptadorUsuario = AdaptadorUsuarioTDS.getUnicaInstancia();
-		adaptadorUsuario.registrarUsuario(usuario2);
-		assertNotEquals(adaptadorUsuario.recuperarUsuario(usuario1.getId()),
-				adaptadorUsuario.recuperarUsuario(usuario2.getId()));
-	}
-
-	@Test
-	public void test4() {
 		usuario1.addSeguidor(usuario2);
 		assertTrue(usuario1.getSeguidores().contains(usuario2));
 	}

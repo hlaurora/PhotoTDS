@@ -30,8 +30,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.EventObject;
 import java.util.LinkedList;
 import java.util.List;
@@ -255,8 +253,7 @@ public class VentanaPrincipal extends JPanel{
 	// Crea la lista con los distintos descuentos
 	private void addListaDescuentos() {		
 		List<String> listaDescuentos = new LinkedList<String>();
-		listaDescuentos.add("Descuento por edad: jóvenes(18-35)");
-		listaDescuentos.add("Descuento por edad: mayores de 65");
+		listaDescuentos.add("Descuento por edad");
 		listaDescuentos.add("Descuento por MeGustas");
 
 		jListaDescuentos = new JList<String>(listaDescuentos.toArray
@@ -278,16 +275,25 @@ public class VentanaPrincipal extends JPanel{
 				int indice = jListaDescuentos.getSelectedIndex();
 				if (indice != -1) {
 					String mensaje = null;
+					boolean descuento = false;
 					if (indice == 0) {
-						mensaje = "Tras aplicar descuento de jóvenes vas a pagar 15€";
+						if (Controlador.getUnicaInstancia().aplicarDescuentoEdad(usuarioActual)) {
+							mensaje = "Tras aplicar descuento por edad vas a pagar 15€";
+							descuento = true;
+						}
+						else
+							mensaje = "No ha sido posible aplicar el descuento por edad";
 					} else if(indice == 1) {
-						mensaje = "Tras aplicar descuento para mayores de 65 vas a pagar 12€";
-					} else if(indice == 2) {
-						mensaje = "Tras aplicar descuento por me gustas vas a pagar 10 €";
-					}
+						if (Controlador.getUnicaInstancia().aplicarDescuentoPpoularidad(usuarioActual)) {
+							mensaje = "Tras aplicar descuento por me gustas vas a pagar 10 €";
+							descuento = true;
+						}
+						else
+							mensaje = "No ha sido posible aplicar el descuento, tus fotos no superan la cantidad de me gustas";
+					} 
 					int result = JOptionPane.showConfirmDialog(frmPrincipal, mensaje,
 							"Confirm Dialog", JOptionPane.CANCEL_OPTION);	
-					if (result == JOptionPane.YES_OPTION) {
+					if (result == JOptionPane.YES_OPTION && descuento) {
 						dialog.setVisible(false);
 						Controlador.getUnicaInstancia().hacerPremium(usuarioActual);
 					} 
