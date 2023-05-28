@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<fotos xmlns="http://www.tds.es/fotos" xmlns:xs="http://www.w3.org/2001/
+XMLSchema-instance"
+xs:schemaLocation="http://www.tds.es/fotos fotos.xsd">
+<foto titulo="amigos">
+  <Path><![CDATA[fotos/amigos.jpg]]></Path>
+  <Descripcion>Prueba de Imagen1</Descripcion>
+  <HashTags>
+    <HashTag>TDS</HashTag>
+    <HashTag>Cargador</HashTag>
+  </HashTags>
+</foto>
+<foto titulo="paisaje">
+  <Path><![CDATA[fotos/paisaje.jpg]]></Path>
+  <Descripcion>Prueba de Imagen2</Descripcion>
+  <HashTags>
+    <HashTag>TDS</HashTag>
+    <HashTag>Cargador</HashTag>
+  </HashTags>
+</foto>
+<foto titulo="piscina">
+  <Path><![CDATA[fotos/piscina.jpg]]></Path>
+  <Descripcion>Prueba de Imagen3</Descripcion>
+  <HashTags>
+    <HashTag>TDS</HashTag>
+    <HashTag>Cargador</HashTag>
+  </HashTags>
+</foto>
+</fotos>

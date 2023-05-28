@@ -61,7 +61,7 @@ public class VentanaRegistro extends JDialog {
 	private JButton btnCancelar;
 
 	private JFileChooser fileChooser;
-	private File fotoPerfil;
+	private File fotoPerfil = new File(getClass().getResource("/imagenes/perfilBlanco.png").getFile());
 
 	private int seleccion = 5;
 
@@ -385,8 +385,8 @@ public class VentanaRegistro extends JDialog {
 							fechaNacimiento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 					if (seleccion == 0) {
 						fotoPerfil = fileChooser.getSelectedFile();
-						Controlador.getUnicaInstancia().registrarFotoPerfil(nombreUsuario, fotoPerfil);
-					}
+					}  
+					Controlador.getUnicaInstancia().registrarFotoPerfil(nombreUsuario, fotoPerfil);
 
 					if (abreTextArea) {
 						textoPresentacion = ventanaTexto.getTexto();

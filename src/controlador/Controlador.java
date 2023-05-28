@@ -601,12 +601,21 @@ public class Controlador implements IFotosListener{
 	////////////////
 	///Descuentos///
 	////////////////
+	
+	/**
+	 * Crea un Descueto por edad para el usuario y devuelve el resultado
+	 * de aplicar el descuento
+	 */
 	public boolean aplicarDescuentoEdad(String nombreUsuario) {
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
 		DescuentoEdad d = new DescuentoEdad();
 		return d.aplicarDescuento(u);
 	}
 	
+	/**
+	 * Crea un Descueto por popularidad para el usuario y devuelve el resultado
+	 * de aplicar el descuento
+	 */
 	public boolean aplicarDescuentoPpoularidad(String nombreUsuario) {
 		Usuario u = RepoUsuarios.getUnicaInstancia().getUsuario(nombreUsuario);
 		DescuentoPopularidad d = new DescuentoPopularidad();
