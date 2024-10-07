@@ -6,10 +6,10 @@ Registro, en la que aparecen los campos que hay que rellenar para crear una
 cuenta. Si todo es correcto y no hay ningún usuario con ese nombre de usuario se creará el perfil correctamente.
 
 
-![image](https://github.com/user-attachments/assets/1c51a080-7432-47f1-b875-d804680e502a)
-![image](https://github.com/user-attachments/assets/40bfee44-48ec-497a-be37-d01c06c3a104)
+![image](https://github.com/user-attachments/assets/93daab5d-ed21-4791-9c9f-d7137ded7abc)
 
-Al iniciar sesión aparece la** Ventana Principa**l. Aquí se muestran las 20
+
+Al iniciar sesión aparece la **Ventana Principal**. Aquí se muestran las 20
 fotos publicadas más recientemente por el usuario que inició sesión y los usuarios a los que sigue. 
 Al pulsar sobre el corazón se da *me gusta* a la publicación, al pulsar en el bocadillo se abre una ventana para añadir un **comentario**. Al pulsar en el botón `comentarios` aparece una ventana con los comentarios que tiene la foto.
 
