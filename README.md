@@ -2,6 +2,7 @@
 
 Proyecto realizado para la asignatura Tecnologías de Desarrollo de Software (TDS) en la Universidad de Murcia, curso 2022-2023. 
 Se trata de una aplicación para compartir fotos que incluye funciones como registrar usuarios, subir fotos, seguir a otros usuarios para ver sus fotos, darles *me gusta* o añadir comentarios, crear álbumes con varias fotos y buscar usuarios para visualizar su perfil.
+
 Consulta el [MANUAL.md](MANUAL.md) para obtener una guía detallada sobre cómo interactuar con la interfaz de la aplicación.
 
 ## Diagrama de clases
